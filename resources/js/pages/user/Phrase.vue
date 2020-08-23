@@ -75,7 +75,6 @@ export default {
             this.$modal.show('review', { categoryId: 1 });
         },
         onSeach(value) {
-            console.log("hihihi");
             alert(value);
         }
     },

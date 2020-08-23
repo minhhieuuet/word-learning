@@ -24,12 +24,12 @@
                 <div class="styles__conName___2JHZN">
                     <div class="styles__viewName___2PQg6">{{category.title}}</div>
                 </div>
-                <div class="styles__txtDate___1BKAV">23-08-2020</div>
+                <div class="styles__txtDate___1BKAV">{{category.created_at}}</div>
                 <div class="styles__txtNum___39eD4">12 words</div>
             </div>
         </div>
     </div>
-    <category-model></category-model>
+    <category-model @refresh="refresh()"></category-model>
 </div>
 </template>
 
@@ -57,6 +57,9 @@ export default {
         },
         goToPhrase() {
             this.$router.push({name: 'Phrase'})
+        },
+        refresh() {
+            this.getCategories();
         }
     },
     mounted() {

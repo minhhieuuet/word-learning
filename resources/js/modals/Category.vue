@@ -1,5 +1,5 @@
 <template>
-<modal name="category" height="auto" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
+<modal name="category" height="auto" width="400px" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
 
     <div class="content">
         <div slot="top-right">
@@ -16,21 +16,23 @@
             </div>
         </md-field>
 
-        <md-field>
-            <label>Tiêu đề</label>
-            <md-input type="text" :name="`${_uid}_name`" data-vv-validate-on="none" data-vv-as="name" v-validate="'required|max:30'" data-vv-scope="general" v-model="category.title" :class="errors.has(`general.${_uid}_title`) ? 'is-invalid' : ''" md-counter="30">
-            </md-input>
-            <div v-if="errors.has(`general.${_uid}_name`)">
-                <md-icon class="md-accent">warning</md-icon>
-                {{errors.first(`general.${_uid}_name`)}}
-            </div>
-        </md-field>
+        <a-row>
+            Trạng thái
+            <a-switch default-checked @change="onStatusChange" />
+        </a-row>
+
+        <a-row style="margin-top: 20px;">
+            Ảnh bìa
+            <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" @vdropzone-success="uploadSuccess" @vdropzone-complete="afterComplete">
+
+            </vue-dropzone>
+        </a-row>
 
     </div>
 
     <div class="md-right">
-        <md-button class="md-raised md-primary" @click="submit">Thêm</md-button>
-        <md-button class="md-raised md-accent" @click="cancel">Bỏ qua</md-button>
+        <a-button type="primary" @click="submit">Thêm</a-button>
+        <a-button type="dashed" @click="cancel">Bỏ qua</a-button>
     </div>
 </modal>
 </template>
@@ -44,8 +46,18 @@ export default {
             editingId: '',
             category: {
                 title: '',
-                image: '',
-                active: false,
+                cover: '',
+                is_visible: true,
+            },
+            dropzoneOptions: {
+                url: 'http://localhost:8000/api/image/store',
+                thumbnailWidth: null,
+                maxFiles: 1,
+                maxFilesize: 1000,
+                addRemoveLinks: true,
+                headers: {
+                    "My-Awesome-Header": "header value"
+                }
             }
         }
     },
@@ -59,47 +71,18 @@ export default {
                 });
             }
         },
-        beforeClose() {
-            this.editingId = '';
-            this.isEditPassword = false,
-                this.category = {
-                    name: '',
-                    full_name: '',
-                    email: '',
-                };
+        beforeClose() {},
+        afterComplete(file, response) {
+            // console.log(response);
+        },
+        uploadSuccess(file, response) {
+            this.category.cover = response;
+        },
+        onStatusChange(isVisible) {
+            this.category.is_visible = isVisible;
         },
         async submit() {
-            Promise.all([
-                this.$validator.validateAll('general'),
-            ]).then(() => {
-                if (this.errors.any()) {
-                    return;
-                }
-                if (this.editingId) {
-                    this.updateOneCategory();
-                } else {
-                    this.createOneCategory();
-                }
-            });
-        },
-        updateOneCategory() {
-            let params = this.category;
-            if (!this.isEditPassword) {
-                params = {};
-                params.name = this.category.name;
-                params.full_name = this.category.full_name;
-                params.email = this.category.email;
-            }
-            rf.getRequest('CategoryRequest').update(this.editingId, params).then((res) => {
-                this.$modal.hide('category');
-                this.$emit('refresh');
-            });
-            this.$toasted.show('Cập nhật sinh viên thành công!', {
-                theme: 'bubble',
-                position: 'top-right',
-                duration: 1500,
-                type: 'success'
-            });
+            this.createOneCategory();
         },
         createOneCategory() {
             rf.getRequest('CategoryRequest').store(this.category).then((res) => {

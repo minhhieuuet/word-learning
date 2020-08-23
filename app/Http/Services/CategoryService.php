@@ -25,11 +25,9 @@ class CategoryService
     public function storeCategory($params)
     {
         $category = Category::create([
-            'category_id' => 1,
-            'category' => array_get($params, 'category'),
-            'hint' => array_get($params, 'hint'),
-            'meaning' => array_get($params, 'meaning'),
-            'image' => array_get($params, 'image')
+            'title' => array_get($params, 'title'),
+            'cover' => array_get($params, 'cover'),
+            'is_visible' => array_get($params, 'is_visible'),
         ]);
 
         return $this->getOneCategory($category);

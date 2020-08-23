@@ -10,7 +10,7 @@ export default class CategoryRequest extends BaseModelRequest {
         return this.get(url);
     }
     store(params) {
-        const url = '/word';
+        const url = '/category';
         return this.post(url, params);
     }
 

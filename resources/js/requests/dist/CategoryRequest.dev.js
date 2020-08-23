@@ -53,7 +53,7 @@ function (_BaseModelRequest) {
   }, {
     key: "store",
     value: function store(params) {
-      var url = '/word';
+      var url = '/category';
       return this.post(url, params);
     }
   }]);
