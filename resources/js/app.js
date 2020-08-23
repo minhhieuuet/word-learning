@@ -60,7 +60,7 @@ Object.defineProperty(Vue.prototype, '$Chartist', {
 const router = new VueRouter(Routers);
 
 router.beforeEach((to, from, next) => {
-    document.title = 'ExamReg';
+    document.title = 'Vocabulary Learning';
     if (to.matched.some((record) => record.meta.requiresAuth === true) &&
         !window.isAuthenticated) {
 

@@ -1,4 +1,4 @@
-ExamReg project
+Vocabulary project
 
 Comes with:
 - web-app: `Laravel/PHP-7.2`
