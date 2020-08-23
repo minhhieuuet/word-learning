@@ -17,8 +17,10 @@ Route::get('/translate', 'TranslatorController@translate');
 
 Route::get('/speech', 'TranslatorController@textToSpeech');
 Route::resource('/word', 'WordController');
+Route::get('/word-by-category/{id}', 'CategoryController@getAllWordsByCategory');
 Route::resource('category', 'CategoryController');
 Route::get('random-word', 'WordController@getRandomWord');
+Route::get('phrases', 'WordController@getAllPhrases');
 
 Route::group(['middleware' => ['auth:api', 'isAdmin'], 'prefix' => 'admin'], function () {
       Route::get('/students', 'StudentController@getStudents');

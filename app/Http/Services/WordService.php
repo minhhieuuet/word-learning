@@ -24,6 +24,10 @@ class WordService
         return Word::inRandomOrder()->limit(8)->get();;
     }
 
+    public function getAllPhrases() {
+        return Word::where('category_id', 1)->get();
+    }
+
     public function storeWord($params)
     {
         $word = Word::create([

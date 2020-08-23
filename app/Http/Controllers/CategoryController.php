@@ -22,6 +22,9 @@ class CategoryController extends Controller
         return $this->categoryService->getCategories($request->all());
     }
 
+    public function getAllWordsByCategory($id) {
+        return $this->categoryService->getAllWordsByCategory($id);
+    }
     /**
      * Show the form for creating a new resource.
      *

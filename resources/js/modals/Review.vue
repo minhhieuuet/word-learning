@@ -1,0 +1,158 @@
+<template>
+<modal name="review" height="auto" width="620px" style="overflow: visible;" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
+
+    <div class="content">
+        <div class="tool-bar">
+            <a-button type="default" shape="circle" icon="star" size="large" />
+
+            <a-button type="primary" shape="circle" icon="drag" size="large" />
+
+            <a-button type="danger" shape="circle" icon="delete" size="large" />
+        </div>
+        <div>
+            <a-row style="padding-top: 17px;">
+                <a-col span="12">
+                    <img class="word-img" :src="currentWord['image']" :alt="currentWord['meaning']">
+                </a-col>
+                <a-col span="12">
+                    <h2>{{currentWord['word']}}</h2>
+                    <h4>[ 'mɑnə,lɔɡ ]</h4>
+                    <div class="word-info">
+                        <a-button type="default" shape="circle" icon="edit" size="normal" style="float: right;" />
+                        <h4>{{currentWord['meaning']}}</h4>
+                        <p><b>Gợi ý:</b> {{currentWord['hint']}}</p>
+                    </div>
+                </a-col>
+            </a-row>
+        </div>
+        <!-- Left button -->
+        <div v-show="currentWordIndex != 0" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowLeft___OPxnB" @click="previousWord()">
+            <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
+                <path d="M802.8 448h-428l166-158.8c23.8-25 23.8-65.4 0-90.4s-62.4-25-86.4 0l-276.4 268c-12 11.6-18 27.4-18 44.8v0.8c0 17.4 6 33.2 18 44.8l276.2 268c24 25 62.6 25 86.4 0s23.8-65.4 0-90.4l-166-158.8h428c33.8 0 61.2-28.6 61.2-64 0.2-36-27.2-64-61-64z"></path>
+            </svg>
+        </div>
+        <!-- Right button -->
+        <div v-show="currentWordIndex+1 != words.length" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowRight___xJqg7" @click="nextWord()">
+            <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
+                <path d="M569.8 825.2l276.2-268c12-11.6 18-27.4 18-44.8v-0.8c0-17.4-6-33.2-18-44.8l-276.2-268c-24-25-62.6-25-86.4 0s-23.8 65.4 0 90.4l166 158.8h-428c-34-0-61.4 28.6-61.4 64 0 36 27.4 64 61.2 64h428l-166 158.8c-23.8 25-23.8 65.4 0 90.4 24 25 62.6 25 86.6 0z"></path>
+            </svg>
+        </div>
+    </div>
+</modal>
+</template>
+
+<script>
+import rf from '../requests/RequestFactory';
+export default {
+    data() {
+        return {
+            categoryId: 1,
+            category: {
+                title: '',
+                image: '',
+                active: false,
+            },
+            words: [],
+            currentWordIndex: 0,
+            currentWord: {}
+        }
+    },
+    methods: {
+        beforeOpen(event) {
+            this.categoryId = event.params.categoryId;
+            rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
+                this.words = res;
+                this.currentWord = res[0];
+            });
+        },
+        beforeClose() {},
+        cancel() {
+            this.$modal.hide('category');
+        },
+        nextWord() {
+            if(this.currentWordIndex < this.words.length) {
+                this.currentWordIndex++
+                this.currentWord = this.words[this.currentWordIndex];
+            }
+        },
+        previousWord() {
+            this.currentWordIndex--;
+            this.currentWord = this.words[this.currentWordIndex];
+        }
+    }
+}
+</script>
+
+<style lang="css" scoped>
+.content {
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    flex-direction: column;
+    height: 100%;
+    background: #fff;
+    border-radius: 1.75rem;
+    width: 38rem;
+    height: 31.9375rem;
+    padding: 26px;
+}
+
+.tool-bar {
+    text-align: right;
+}
+
+.word-img {
+    width: 15rem;
+    margin-left: 15px;
+    height: 20rem;
+}
+
+.word-info {
+    width: 14rem;
+    background-color: #d8d8d8;
+    height: 9rem;
+    border-radius: 15px;
+    color: black;
+    padding: 10px;
+}
+
+.styles__viewArrowLeft___OPxnB {
+    left: 0.25rem;
+}
+
+.v--modal {
+    border-radius: 1.75 rem;
+}
+
+.styles__viewArrow___18Fs7 {
+    width: 3.5rem;
+    height: 3.5rem;
+    position: absolute;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #d8d8d8;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
+}
+
+.v--modal-box {
+    overflow: visible !important;
+}
+
+.styles__viewArrowRight___xJqg7 {
+    right: 0rem;
+}
+
+.arrow-btn:hover {
+    box-shadow: 0 2px #666;
+}
+
+.arrow-btn :active {
+    box-shadow: 0 2px #666;
+    transform: translateY(4px);
+}
+</style>

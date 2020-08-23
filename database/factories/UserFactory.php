@@ -18,7 +18,7 @@ use Faker\Generator as Faker;
 $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->numberBetween(10000000,20000000),
-        'full_name' => $faker->name,
+        'full_name' => $faker->name,fo
         'email' => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
         'password' => bcrypt(123456), // password

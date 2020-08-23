@@ -6,7 +6,7 @@ use App\User;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-
+use App\Models\Word;
 class CategoryService
 {
     public function getCategories($params)
@@ -16,6 +16,10 @@ class CategoryService
             $search = array_get($params, 'search');
             return $query->where('title', 'like', "%$search%");
         })->orderBy('created_at', 'desc')->paginate($limit);
+    }
+
+    public function getAllWordsByCategory($categoryId) {
+        return Word::where('category_id', $categoryId)->get();
     }
 
     public function storeCategory($params)

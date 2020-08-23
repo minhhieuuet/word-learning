@@ -11,6 +11,7 @@ import WordList from '@/pages/user/WordList.vue';
 import Category from '@/pages/user/Category.vue';
 import MemoryGame from '@/pages/user/MemoryGame.vue';
 import MemoryGame2 from '@/pages/user/MemoryGame2.vue';
+import Phrase from '@/pages/user/Phrase.vue';
 
 export default {
     mode: 'history',
@@ -45,6 +46,10 @@ export default {
                     path: 'category',
                     name: 'Category',
                     component: Category,
+                }, {
+                    path: 'category/phrase',
+                    name: 'Phrase',
+                    component: Phrase
                 },
                 {
                     path: 'memory-game',

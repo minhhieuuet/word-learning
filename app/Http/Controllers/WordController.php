@@ -23,6 +23,10 @@ class WordController extends Controller
         //
     }
 
+    public function getAllPhrases() {
+        return $this->wordService->getAllPhrases();
+    }
+
     public function getRandomWord() {
         return $this->wordService->getRandomWord();
     }

@@ -11,4 +11,9 @@ export default class TranslateRequest extends BaseModelRequest {
         return this.get(url);
     }
 
+    getAllPhrases() {
+        const url = '/phrases';
+        return this.get(url);
+    }
+
 }
