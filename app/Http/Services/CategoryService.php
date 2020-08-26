@@ -11,11 +11,7 @@ class CategoryService
 {
     public function getCategories($params)
     {
-        $limit = array_get($params, 'limit', 10);
-        return Category::when(!empty(array_get($params, 'search')), function ($query) use ($params) {
-            $search = array_get($params, 'search');
-            return $query->where('title', 'like', "%$search%");
-        })->orderBy('created_at', 'desc')->paginate($limit);
+        return Category::orderBy('created_at', 'desc')->get();
     }
 
     public function getAllWordsByCategory($categoryId) {
@@ -51,7 +47,7 @@ class CategoryService
         return $category;
     }
 
-    public function deleteOneCategory(User $category)
+    public function deleteOneCategory(Category $category)
     {
         $category->delete();
 

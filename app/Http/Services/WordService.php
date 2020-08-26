@@ -31,11 +31,12 @@ class WordService
     public function storeWord($params)
     {
         $word = Word::create([
-            'category_id' => 1,
+            'category_id' => array_get($params, 'category_id'),
             'word' => array_get($params, 'word'),
             'hint' => array_get($params, 'hint'),
             'meaning' => array_get($params, 'meaning'),
-            'image' => array_get($params, 'image')
+            'image' => array_get($params, 'image'),
+            'is_important' => array_get($params, 'is_important')
         ]);
 
         return $this->getOneWord($word);

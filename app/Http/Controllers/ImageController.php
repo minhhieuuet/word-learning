@@ -20,6 +20,6 @@ class ImageController extends Controller
          return $this->imageService->storeImageToFolder($request, 'images');
        }
 
-       return response()->json(['error' => 'Something went wrong'], 500);
+       return response()->json(['error' => 'Đã xảy ra lỗi gì đó, vui lòng kiểm tra lại'], 500);
     }
 }

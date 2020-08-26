@@ -12,7 +12,7 @@
                 <a-button type="primary" style="background-color: #921cb9;" icon="eye" @click="openReviewModal()">
                     Trình chiếu
                 </a-button>
-                <a-button type="primary" style="background-color: #31b108;" icon="plus-circle">
+                <a-button type="primary" style="background-color: #31b108;" icon="plus-circle" @click="createWord()">
                     Thêm từ
                 </a-button>
                 <div class="styles__viewBtnPlay___3lqzv" style="padding-top: 20px">
@@ -47,6 +47,7 @@
             </a-col>
         </a-row>
         <review-modal></review-modal>
+        <word-modal @refresh="refresh()"></word-modal>
     </div>
 </div>
 </template>
@@ -54,15 +55,23 @@
 <script>
 import rf from './../../requests/RequestFactory';
 import ReviewModal from './../../modals/Review';
+import WordModal from './../../modals/Word';
 
 export default {
     components: {
-        ReviewModal
+        ReviewModal,
+        WordModal
     },
     data() {
         return {
             phrases: [],
-            seachKey: ''
+            seachKey: '',
+            newWord: {
+                word: '',
+                image: '',
+                hint: '',
+                meaning: ''
+            }
         }
     },
     methods: {
@@ -76,6 +85,18 @@ export default {
         },
         onSeach(value) {
             alert(value);
+        },
+        createWord() {
+            this.$modal.show('word', { categoryId: 1, title: 'Thêm cụm từ mới' });
+        },
+        refresh() {
+            this.newWord = {
+                word: '',
+                image: '',
+                hint: '',
+                meaning: ''
+            }
+            this.getAllPhrases();
         }
     },
     mounted() {

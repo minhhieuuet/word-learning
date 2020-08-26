@@ -3,11 +3,12 @@
 
     <div class="content">
         <div class="tool-bar">
-            <a-button type="default" shape="circle" icon="star" size="large" />
+            
+            <a-button class="star-btn" type="default" shape="circle" icon="star-o" size="large"  @ />
 
-            <a-button type="primary" shape="circle" icon="drag" size="large" />
+            <a-button  type="primary" shape="circle" icon="drag" size="large" />
 
-            <a-button type="danger" shape="circle" icon="delete" size="large" />
+            <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()"/>
         </div>
         <div>
             <a-row style="padding-top: 17px;">
@@ -78,12 +79,16 @@ export default {
         previousWord() {
             this.currentWordIndex--;
             this.currentWord = this.words[this.currentWordIndex];
+        },
+        removeWord() {
+            this.words = this.words.filter((_, index) => index!= this.currentWordIndex);
+            this.currentWord = this.words[this.currentWordIndex];
         }
     }
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .content {
     align-items: center;
     justify-content: center;
@@ -152,7 +157,13 @@ export default {
 }
 
 .arrow-btn :active {
-    box-shadow: 0 2px #666;
-    transform: translateY(4px);
+    /* box-shadow: 0 2px #666;
+    transform: translateY(4px); */
+}
+.star-btn {
+    &:hover {
+        background-color: yellow;
+        outline: none;
+    }
 }
 </style>

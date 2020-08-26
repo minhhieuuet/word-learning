@@ -15,17 +15,17 @@
                 <div class="styles__conName___Jiq61">
                     <div class="styles__viewName___3mvLd">Cụm từ</div>
                 </div>
-                <div class="styles__txtNum___3JT46">0 cụm từ</div>
+                <div class="styles__txtNum___3JT46">{{categories[0].total_word}} cụm từ</div>
             </div>
         </div>
 
-        <div v-for="category in categories" :key="category.id" v-if="category.is_visible" class="styles__container___2c6eo inline-flex" v-bind:style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }">
-            <div class="styles__overLay___1WcJB">
+        <div v-for="category in categories" :key="category.id" v-if="category.is_visible" class="styles__container___2c6eo inline-flex" >
+            <div :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" class="styles__overLay___1WcJB" @click="goToCategory(category.id)">
                 <div class="styles__conName___2JHZN">
                     <div class="styles__viewName___2PQg6">{{category.title}}</div>
                 </div>
-                <div class="styles__txtDate___1BKAV">{{category.created_at}}</div>
-                <div class="styles__txtNum___39eD4">12 words</div>
+                <!-- <div class="styles__txtDate___1BKAV">{{category.created_at}}</div> -->
+                <div class="styles__txtNum___39eD4">{{category.total_word}} từ</div>
             </div>
         </div>
     </div>
@@ -49,7 +49,7 @@ export default {
     methods: {
         getCategories(params) {
             rf.getRequest('CategoryRequest').getCategories().then(res => {
-                this.categories = res.data;
+                this.categories = res;
             })
         },
         createCategory() {
@@ -57,6 +57,9 @@ export default {
         },
         goToPhrase() {
             this.$router.push({name: 'Phrase'})
+        },
+        goToCategory(id) {
+            this.$router.push(`/category/${id}`);
         },
         refresh() {
             this.getCategories();
@@ -69,7 +72,7 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .category {
     height: 25rem;
     width: 100%;
@@ -124,7 +127,7 @@ export default {
 
 .styles__txtNum___3JT46 {
     font-size: 12px;
-    font-weight: 100;
+    font-weight: bold;
     font-style: normal;
     font-stretch: normal;
     line-height: 1.33;
@@ -210,6 +213,12 @@ export default {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, .5);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    &:hover {
+    //    opacity: 0.5;
+    }
 }
 
 .styles__conName___2JHZN {
@@ -220,7 +229,7 @@ export default {
 .styles__txtDate___1BKAV,
 .styles__txtNum___39eD4 {
     font-size: 15px;
-    font-weight: 300;
+    font-weight: bold;
     font-style: normal;
     font-stretch: normal;
     line-height: 1.33;
@@ -232,7 +241,7 @@ export default {
 .styles__txtNum___39eD4 {
     padding: 0 1rem;
     font-size: 12px;
-    font-weight: 100;
+    font-weight: bold;
     font-style: normal;
     font-stretch: normal;
     line-height: 1.33;
@@ -243,7 +252,7 @@ export default {
 
 .styles__viewName___2PQg6 {
     padding: 0 .5rem 0 1rem;
-    font-size: 2.3rem;
+    font-size: 1.5rem;
     font-weight: 600;
     font-style: normal;
     font-stretch: normal;

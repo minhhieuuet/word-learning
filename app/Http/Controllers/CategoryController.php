@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Services\CategoryService;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -52,9 +53,9 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+        return $this->categoryService->getOneCategory($category);
     }
 
     /**

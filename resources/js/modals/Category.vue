@@ -53,7 +53,7 @@ export default {
                 url: 'http://localhost:8000/api/image/store',
                 thumbnailWidth: null,
                 maxFiles: 1,
-                maxFilesize: 1000,
+                maxFilesize: 100000,
                 addRemoveLinks: true,
                 headers: {
                     "My-Awesome-Header": "header value"

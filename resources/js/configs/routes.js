@@ -12,6 +12,7 @@ import Category from '@/pages/user/Category.vue';
 import MemoryGame from '@/pages/user/MemoryGame.vue';
 import MemoryGame2 from '@/pages/user/MemoryGame2.vue';
 import Phrase from '@/pages/user/Phrase.vue';
+import CategoryDetail from '@/pages/user/CategoryDetail.vue';
 
 export default {
     mode: 'history',
@@ -26,6 +27,11 @@ export default {
             redirect: '/',
             children: [{
                     path: '/',
+                    name: 'Dashboard',
+                    component: Category,
+                },
+                {
+                    path: '/test',
                     name: 'Dashboard',
                     component: UserDashboard,
                 },
@@ -50,6 +56,11 @@ export default {
                     path: 'category/phrase',
                     name: 'Phrase',
                     component: Phrase
+                }, {
+                    path: 'category/:id',
+                    name: 'CategoryDetail',
+                    component: CategoryDetail,
+                    props: true
                 },
                 {
                     path: 'memory-game',

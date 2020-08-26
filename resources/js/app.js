@@ -18,6 +18,8 @@ import Toasted from 'vue-toasted';
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import 'vue-material/dist/vue-material.min.css';
+import VueDraggable from 'vue-draggable';
+
 // import GlobalComponents from './globalComponents';
 // import GlobalDirectives from './globalDirectives';
 // import Notifications from './components/NotificationPlugin';
@@ -31,6 +33,7 @@ import 'ant-design-vue/dist/antd.css';
 import Antd from 'ant-design-vue';
 import VueSwal from 'vue-swal'
 
+Vue.use(VueDraggable)
 Vue.config.productionTip = true;
 
 

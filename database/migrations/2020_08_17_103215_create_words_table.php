@@ -19,7 +19,8 @@ class CreateWordsTable extends Migration
             $table->string('word');
             $table->string('meaning')->nullable();
             $table->string('hint')->nullable();
-            $table->string('image')->nullable();
+            $table->string('image')->nullable()->default('/images/default-placeholder.png');
+            $table->boolean('is_important')->default(false);
             $table->timestamps();
         });
     }
