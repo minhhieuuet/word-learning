@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Services\WordService;
+use App\Models\Word;
 
 class WordController extends Controller
 {
@@ -83,7 +84,7 @@ class WordController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->wordService->updateWord(Word::find($id), $request->all());
     }
 
     /**
@@ -92,8 +93,8 @@ class WordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Word $word)
     {
-        //
+        return $this->wordService->deleteOneWord($word);
     }
 }

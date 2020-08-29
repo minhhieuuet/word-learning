@@ -85,7 +85,16 @@ export default {
             this.title = event.params.title;
             this.word.category_id = event.params.categoryId;
         },
-        beforeClose() {},
+        beforeClose() {
+            this.word = {
+                word: '',
+                hint: '',
+                image: '',
+                meaning: '',
+                is_important: false,
+                category_id: 1
+            }
+        },
         afterComplete(file, response) {
             // console.log(response);
         },

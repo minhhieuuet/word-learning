@@ -42,16 +42,12 @@ class WordService
         return $this->getOneWord($word);
     }
 
-    public function updateWord(User $word, $params)
+    public function updateWord(Word $word, $params)
     {
         $word->update([
-          'full_name' => array_get($params, 'full_name'),
-          'name' => array_get($params, 'name'),
-          'email' => array_get($params, 'email'),
+          'meaning' => array_get($params, 'meaning'),
+          'hint' => array_get($params, 'hint'),
         ]);
-        if(array_get($params, 'password')) {
-          $word->update(['password' => bcrypt(array_get($params, 'password'))]);
-        }
         return $word;
     }
 
@@ -60,7 +56,7 @@ class WordService
         return $word;
     }
 
-    public function deleteOneWord(User $word)
+    public function deleteOneWord(Word $word)
     {
         $word->delete();
 

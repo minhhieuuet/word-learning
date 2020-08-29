@@ -29,11 +29,9 @@
                 <div class="styles__container___AS5GT" v-for="word in words">
                     <div class="styles__center___1alr7">
                         <div class="styles__viewTitle___trc68">
-                            <div class="styles__soundIcon___3F62k">
-                                <div class="styles__sound_icon___2JvL9 styles__sound_icon_auto_width___3KkW9 [object Object]"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                        <path fill="none" stroke="rgb(122, 199, 12)" d="M4.931 9.714l5.686-3.939v13.442L4.934 15.28H.5V9.714h4.431zm7.103-1.792l.814-.474a7.628 7.628 0 0 1 1.908 5.048 7.628 7.628 0 0 1-1.908 5.048l-.814-.474a6.702 6.702 0 0 0 1.802-4.574c0-1.77-.688-3.375-1.802-4.574zm3.806-2.21l.804-.47a11.99 11.99 0 0 1 2.43 7.254c0 2.728-.909 5.244-2.436 7.26l-.804-.467a11.06 11.06 0 0 0 2.321-6.793c0-2.556-.866-4.91-2.315-6.785zM20.496 3a16.45 16.45 0 0 1 3.004 9.496A16.45 16.45 0 0 1 20.49 22l-.8-.466a15.523 15.523 0 0 0 2.89-9.038 15.52 15.52 0 0 0-2.884-9.03l.8-.466z"></path>
-                                    </svg></div>
-                            </div>
+
+                            <SpeakButton :word="word.word"/>
+
                             <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="word.hint">
                                 </span><span>{{word.word}}</span>
                             </div>
@@ -48,7 +46,7 @@
                 </div>
             </a-col>
         </a-row>
-        <review-modal></review-modal>
+        <review-modal @reload="refresh()"></review-modal>
         <word-modal @refresh="refresh()"></word-modal>
     </div>
 </div>
@@ -58,11 +56,13 @@
 import rf from './../../requests/RequestFactory';
 import ReviewModal from './../../modals/Review';
 import WordModal from './../../modals/Word';
+import SpeakButton from './../../components/SpeakButton';
 
 export default {
     components: {
         ReviewModal,
-        WordModal
+        WordModal,
+        SpeakButton
     },
     data() {
         return {
@@ -111,6 +111,8 @@ export default {
         this.categoryId = this.$route.params.id;
         this.getWordsByCategory(this.categoryId);
         this.getCategory(this.categoryId);
+            this.$modal.show('review', { categoryId: this.categoryId });
+
     }
 
 }
@@ -127,10 +129,14 @@ export default {
 
 .phrase-img {
     height: 300px;
+    box-shadow: 5px 7px 7px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
 }
 
 .word-side {
-    border-left: 1px solid #b3b3b3;
+    border: 1px solid rgb(99 99 99 / 20%);
+    padding: 34px;
     height: 550px;
     // overflow: scroll;
     min-height: 101%;
@@ -197,7 +203,6 @@ export default {
     justify-content: center;
     align-items: center;
     box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .1);
-    margin: 0 1rem;
     padding: .0625rem 0;
     height: 6rem;
 }
@@ -217,14 +222,6 @@ export default {
     align-items: center;
 }
 
-.styles__soundIcon___3F62k {
-    padding-right: .5rem;
-}
-
-.styles__sound_icon___2JvL9 {
-    cursor: pointer;
-    display: flex;
-}
 
 .styles__textTitle___3ne0o {
     font-weight: 600;
@@ -275,58 +272,15 @@ export default {
 ::-webkit-scrollbar {
     -webkit-appearance: none;
     width: 10px;
+    opacity: 0.5;
 }
 
 ::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    background-color: rgba(0, 0, 0, .5);
+    background: rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
-
 .frame {
-    background-color: #ddc;
-    border: solid 3vmin #eee;
-    border-bottom-color: #fff;
-    border-left-color: #eee;
-    border-radius: 2px;
-    border-right-color: #eee;
-    border-top-color: #ddd;
-    box-shadow: 0 0 5px 0 rgba(0, 0, 0, .25) inset, 0 5px 10px 5px rgba(0, 0, 0, .25);
-    box-sizing: border-box;
-    display: inline-block;
-    position: relative;
     text-align: center;
-
-    &:before {
-        border-radius: 2px;
-        bottom: -2vmin;
-        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25) inset;
-        content: "";
-        left: -2vmin;
-        position: absolute;
-        right: -2vmin;
-        top: -2vmin;
-    }
-
-    &:after {
-        border-radius: 2px;
-        bottom: -2.5vmin;
-        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .25);
-        content: "";
-        left: -2.5vmin;
-        position: absolute;
-        right: -2.5vmin;
-        top: -2.5vmin;
-    }
-
-    img {
-        border: solid 2px;
-        border-bottom-color: #ffe;
-        border-left-color: #eed;
-        border-right-color: #eed;
-        border-top-color: #ccb;
-        max-height: 100%;
-        max-width: 100%;
-    }
 }
 </style>

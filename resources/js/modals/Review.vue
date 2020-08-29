@@ -3,25 +3,38 @@
 
     <div class="content">
         <div class="tool-bar">
-            
-            <a-button class="star-btn" type="default" shape="circle" icon="star-o" size="large"  @ />
 
-            <a-button  type="primary" shape="circle" icon="drag" size="large" />
+            <!-- <md-icon class="Rec">mic</md-icon> -->
+            <Recorder :word="currentWord['word']"/>
 
-            <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()"/>
+            <md-icon style="color: yellow;">star</md-icon>
+
+            <a-button type="primary" shape="circle" icon="drag" size="large" />
+
+            <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
         </div>
         <div>
             <a-row style="padding-top: 17px;">
                 <a-col span="12">
                     <img class="word-img" :src="currentWord['image']" :alt="currentWord['meaning']">
+                    <a-icon class="camera-icon" type="camera" />
                 </a-col>
                 <a-col span="12">
-                    <h2>{{currentWord['word']}}</h2>
-                    <h4>[ 'mɑnə,lɔɡ ]</h4>
+                    <h2 style="display: inline-flex">
+                        <SpeakButton :word="currentWord['word']" /> {{currentWord['word']}} </h2>
                     <div class="word-info">
-                        <a-button type="default" shape="circle" icon="edit" size="normal" style="float: right;" />
-                        <h4>{{currentWord['meaning']}}</h4>
-                        <p><b>Gợi ý:</b> {{currentWord['hint']}}</p>
+
+                        <a-button v-if="editMode" type="default" shape="circle" icon="check" size="normal" style="float: right;" @click="handleEdit" />
+                        <a-button v-else type="default" shape="circle" icon="edit" size="normal" style="float: right;" @click="handleEdit" />
+
+                        <h4 v-if="!editMode">{{currentWord['meaning']}}</h4>
+                        <md-field class="meaning-edit" v-else>
+                            <md-input v-model="editWord.meaning"></md-input>
+                        </md-field>
+                        <p><b>Gợi ý:</b> {{editMode ? '' : currentWord['hint']}}</p>
+                        <md-field class="hint-edit" v-if="editMode">
+                            <md-input type="text" v-model="editWord.hint"></md-input>
+                        </md-field>
                     </div>
                 </a-col>
             </a-row>
@@ -44,7 +57,13 @@
 
 <script>
 import rf from '../requests/RequestFactory';
+import SpeakButton from '../components/SpeakButton';
+import Recorder from '../components/Recorder';
 export default {
+    components: {
+        SpeakButton,
+        Recorder
+    },
     data() {
         return {
             categoryId: 1,
@@ -52,6 +71,10 @@ export default {
                 title: '',
                 image: '',
                 active: false,
+            },
+            editMode: false,
+            editWord: {
+
             },
             words: [],
             currentWordIndex: 0,
@@ -71,23 +94,62 @@ export default {
             this.$modal.hide('category');
         },
         nextWord() {
-            if(this.currentWordIndex < this.words.length) {
+            this.editMode = false;
+            if (this.currentWordIndex < this.words.length) {
                 this.currentWordIndex++
                 this.currentWord = this.words[this.currentWordIndex];
             }
         },
         previousWord() {
+            this.editMode = false;
             this.currentWordIndex--;
             this.currentWord = this.words[this.currentWordIndex];
         },
         removeWord() {
-            this.words = this.words.filter((_, index) => index!= this.currentWordIndex);
-            this.currentWord = this.words[this.currentWordIndex];
+            this.$swal({
+                icon: "error",
+                title: "Cảnh báo",
+                text: "Bạn có chắc chắn muốn xoá từ này ?",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["Huỷ", "Xoá"],
+                className: "swal-delete-word"
+            }).then((value) => {
+                if (value) {
+                    rf.getRequest('WordRequest').removeWord(this.currentWord.id).then(res => {
+                        if (this.currentWordIndex == (this.words.length - 1)) {
+                            this.words = this.words.filter((_, index) => index != this.currentWordIndex);
+                            this.currentWord = this.words[this.words.length - 1];
+                            return;
+                        }
+                        this.words = this.words.filter((_, index) => index != this.currentWordIndex);
+                        this.currentWord = this.words[this.currentWordIndex];
+                        this.$emit('reload');
+                    })
+                }
+            })
+
+        },
+        handleEdit() {
+            this.editMode = !this.editMode;
+            if (this.editMode) {
+                this.editWord = this.currentWord;
+                return;
+            }
+
+            rf.getRequest('WordRequest').updateWord(this.editWord.id, this.editWord).then(res => {
+                this.currentWord = res;
+            })
         }
     }
 }
 </script>
 
+<style lang="scss">
+.swal-delete-word {
+    border: 1px solid rgb(115 59 59 / 50%) !important;
+}
+</style>
 <style lang="scss" scoped>
 .content {
     align-items: center;
@@ -100,6 +162,27 @@ export default {
     width: 38rem;
     height: 31.9375rem;
     padding: 26px;
+}
+
+.camera-icon {
+    position: absolute;
+    right: 23px;
+    font-size: 20px;
+    background: darkgrey;
+    padding: 2px;
+    border-radius: 0px 0px 0px 7px;
+    cursor: pointer;
+}
+
+.meaning-edit {
+    width: 167px;
+    margin-top: -13px;
+
+    input {
+        font-size: 17px !important;
+        font-weight: bold;
+        width: 167px;
+    }
 }
 
 .tool-bar {
@@ -119,6 +202,7 @@ export default {
     border-radius: 15px;
     color: black;
     padding: 10px;
+    display: table-cell;
 }
 
 .styles__viewArrowLeft___OPxnB {
@@ -160,10 +244,19 @@ export default {
     /* box-shadow: 0 2px #666;
     transform: translateY(4px); */
 }
+
 .star-btn {
     &:hover {
         background-color: yellow;
         outline: none;
     }
+}
+
+.styles__soundIcon___3F62k {
+    margin-top: 16px;
+}
+
+.hint-edit {
+    margin-top: -20px;
 }
 </style>

@@ -46,7 +46,7 @@
                 </div>
             </a-col>
         </a-row>
-        <review-modal></review-modal>
+        <review-modal @reload="refresh()"></review-modal>
         <word-modal @refresh="refresh()"></word-modal>
     </div>
 </div>

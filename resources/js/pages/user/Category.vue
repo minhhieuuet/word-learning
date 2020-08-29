@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div v-for="category in categories" :key="category.id" v-if="category.is_visible" class="styles__container___2c6eo inline-flex" >
+        <div v-for="category in categories" :key="category.id" v-if="category.is_visible" class="styles__container___2c6eo inline-flex">
             <div :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" class="styles__overLay___1WcJB" @click="goToCategory(category.id)">
                 <div class="styles__conName___2JHZN">
                     <div class="styles__viewName___2PQg6">{{category.title}}</div>
@@ -56,7 +56,7 @@ export default {
             this.$modal.show('category', { title: 'Thêm danh mục mới' });
         },
         goToPhrase() {
-            this.$router.push({name: 'Phrase'})
+            this.$router.push({ name: 'Phrase' })
         },
         goToCategory(id) {
             this.$router.push(`/category/${id}`);
@@ -188,7 +188,7 @@ export default {
 }
 
 .effectScale:hover {
-    transform: scale(1.2); 
+    transform: scale(1.2);
     /* transform: scale(1); */
 }
 
@@ -216,8 +216,9 @@ export default {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+
     &:hover {
-    //    opacity: 0.5;
+        //    opacity: 0.5;
     }
 }
 
@@ -236,6 +237,8 @@ export default {
     letter-spacing: normal;
     text-align: left;
     color: #fff;
+    text-shadow: 3px 3px 7px #000000;
+
 }
 
 .styles__txtNum___39eD4 {
@@ -264,6 +267,7 @@ export default {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    text-shadow: 3px 3px 7px #000000;
 }
 
 .styles__txtDate___1BKAV {
