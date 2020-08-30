@@ -7,6 +7,7 @@ use App\Models\Word;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
+
 class WordService
 {
     public function getWords($params)
@@ -26,6 +27,20 @@ class WordService
 
     public function getAllPhrases() {
         return Word::where('category_id', 1)->get();
+    }
+
+    public function updateImage(Word $word, $imageUrl) {
+        $word->update([
+            'image' => $imageUrl
+        ]);
+        return $word;
+    }
+
+    public function changeImportant(Word $word) {
+        $word->update([
+            'is_important' => !$word->is_important
+        ]);
+        return $word;
     }
 
     public function storeWord($params)

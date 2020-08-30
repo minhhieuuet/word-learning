@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Services\WordService;
+use App\Http\Services\ImageService;
 use App\Models\Word;
 
 class WordController extends Controller
 {
-    protected $wordService;
+    protected $wordService, $imageService;
 
-    public function __construct(WordService $wordService)
+    public function __construct(WordService $wordService, ImageService $imageService)
     {
         $this->wordService = $wordService;
+        $this->imageService = $imageService;
     }
     /**
      * Display a listing of the resource.
@@ -30,6 +32,19 @@ class WordController extends Controller
 
     public function getRandomWord() {
         return $this->wordService->getRandomWord();
+    }
+
+    public function changeImportant($wordId) {
+        $word = Word::findOrFail($wordId);
+        return $this->wordService->changeImportant($word);
+    }
+
+    public function updateImage($wordId, Request $request) {
+        if($request->hasFile('file')) {
+            $word = Word::findOrFail($wordId);
+            $imageUrl = $this->imageService->storeImageToFolder($request, 'images');
+            return $this->wordService->updateImage($word, $imageUrl);
+        }
     }
     /**
      * Show the form for creating a new resource.

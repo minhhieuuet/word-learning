@@ -13,6 +13,8 @@ import MemoryGame from '@/pages/user/MemoryGame.vue';
 import MemoryGame2 from '@/pages/user/MemoryGame2.vue';
 import Phrase from '@/pages/user/Phrase.vue';
 import CategoryDetail from '@/pages/user/CategoryDetail.vue';
+import GameList from '@/pages/user/GameList.vue';
+import AboutMe from '@/pages/user/AboutMe.vue';
 
 export default {
     mode: 'history',
@@ -41,12 +43,15 @@ export default {
                     component: WordList,
                 },
                 {
-                    path: 'user',
-                    name: 'User Profile',
-                    component: UserProfile,
-                    meta: {
-                        requiresAuth: false
-                    }
+                    path: 'games',
+                    name: 'Game',
+                    component: GameList,
+                },
+                {
+                    path: 'me',
+                    name: 'AboutMe',
+                    component: AboutMe,
+                    
                 },
                 {
                     path: 'category',

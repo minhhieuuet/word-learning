@@ -23,7 +23,7 @@
 
         <a-row style="margin-top: 20px;">
             Ảnh bìa
-            <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" @vdropzone-success="uploadSuccess" @vdropzone-complete="afterComplete">
+            <vue-dropzone ref="myVueDropzone" id="dropzone" accepted-file-types=".jpg,.png,.jpeg" :options="dropzoneOptions" @vdropzone-success="uploadSuccess" @vdropzone-complete="afterComplete">
 
             </vue-dropzone>
         </a-row>
@@ -57,7 +57,8 @@ export default {
                 addRemoveLinks: true,
                 headers: {
                     "My-Awesome-Header": "header value"
-                }
+                },
+                dictDefaultMessage: 'Nhấn vào đây hoặc kéo ảnh vào để tải lên',
             }
         }
     },

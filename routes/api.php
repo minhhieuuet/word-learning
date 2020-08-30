@@ -15,9 +15,14 @@ Route::group(['prefix' => 'auth'], function () {
 Route::post('/image/store', 'ImageController@store');
 Route::get('/translate', 'TranslatorController@translate');
 
-Route::get('/speech', 'TranslatorController@textToSpeech');
 Route::resource('/word', 'WordController');
+Route::group(['prefix' => 'word'], function () {
+  Route::get('/change-important/{wordId}', 'WordController@changeImportant');
+  Route::post('/update-image/{wordId}', 'WordController@updateImage');
+});
+
 Route::get('/word-by-category/{id}', 'CategoryController@getAllWordsByCategory');
+
 Route::resource('category', 'CategoryController');
 Route::get('random-word', 'WordController@getRandomWord');
 Route::get('phrases', 'WordController@getAllPhrases');

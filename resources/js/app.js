@@ -6,8 +6,12 @@
 
 require('./bootstrap');
 
+
 import Vue from 'vue';
 Vue.config.silent = true
+
+import './common/filters';
+
 import VeeValidate, { Validator } from 'vee-validate';
 import draggable from 'vuedraggable'
 import VueRouter from 'vue-router';
@@ -18,7 +22,6 @@ import Toasted from 'vue-toasted';
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import 'vue-material/dist/vue-material.min.css';
-import VueDraggable from 'vue-draggable';
 
 // import GlobalComponents from './globalComponents';
 // import GlobalDirectives from './globalDirectives';
@@ -32,11 +35,13 @@ import DataTable from './components/datatable/DataTable';
 import 'ant-design-vue/dist/antd.css';
 import Antd from 'ant-design-vue';
 import VueSwal from 'vue-swal'
+import Multiselect from 'vue-multiselect'
 
-Vue.use(VueDraggable)
+// register globally
 Vue.config.productionTip = true;
 
 
+Vue.component('multiselect', Multiselect)
 Vue.use(VueSwal)
 Vue.use(VueMaterial);
 Vue.use(VeeValidate);
@@ -46,12 +51,11 @@ Vue.use(VueRouter);
 Vue.use(Antd);
 Vue.component('data-table', DataTable);
 Vue.component('vue-dropzone', vue2Dropzone)
-Vue.component('draggable', draggable);
 Vue.use(VueRouter)
 Vue.use(MaterialDashboard)
-    // Vue.use(GlobalComponents)
-    // Vue.use(GlobalDirectives)
-    // Vue.use(Notifications)
+// Vue.use(GlobalComponents)
+// Vue.use(GlobalDirectives)
+// Vue.use(Notifications)
 
 // global library setup
 Object.defineProperty(Vue.prototype, '$Chartist', {
@@ -59,7 +63,6 @@ Object.defineProperty(Vue.prototype, '$Chartist', {
         return this.$root.Chartist
     }
 })
-
 const router = new VueRouter(Routers);
 
 router.beforeEach((to, from, next) => {

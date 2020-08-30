@@ -9,6 +9,8 @@ exports["default"] = void 0;
 
 var _vue = _interopRequireDefault(require("vue"));
 
+require("./common/filters");
+
 var _veeValidate = _interopRequireWildcard(require("vee-validate"));
 
 var _vuedraggable = _interopRequireDefault(require("vuedraggable"));
@@ -55,6 +57,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 require('./bootstrap');
 
 _vue["default"].config.silent = true;
+
+_vue["default"].use(VueDraggable);
+
 _vue["default"].config.productionTip = true;
 
 _vue["default"].use(_vueSwal["default"]);

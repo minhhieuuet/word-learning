@@ -5,23 +5,38 @@
         <div class="tool-bar">
 
             <!-- <md-icon class="Rec">mic</md-icon> -->
-            <Recorder :word="currentWord['word']"/>
+            <Recorder :word="currentWord['word']" />
 
-            <md-icon style="color: yellow;">star</md-icon>
+            <StarButton :word="currentWord" @refresh="getWordsByCategory()" />
 
             <a-button type="primary" shape="circle" icon="drag" size="large" />
 
-            <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
+            <div class="remove-btn" title="Xoá từ này">
+                <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
+            </div>
         </div>
         <div>
             <a-row style="padding-top: 17px;">
                 <a-col span="12">
-                    <img class="word-img" :src="currentWord['image']" :alt="currentWord['meaning']">
-                    <a-icon class="camera-icon" type="camera" />
+
+                    <template v-if="editImageMode">
+                        <img class="word-img" :src="tempImageUrl ? tempImageUrl : currentWord['image']" :title="currentWord['meaning']">
+                        <a-icon title="Huỷ bỏ" @click="discardImageChange" type="close-circle" theme="filled" class="discard-image-icon" />
+                        <a-icon title="Lưu thay đổi" @click="saveImageChange" type="check-circle" theme="filled" class="submit-image-icon" />
+                    </template>
+                    <template v-else>
+                        <img class="word-img" :src="currentWord['image']" :title="currentWord['meaning']">
+
+                        <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
+                    </template>
+
+                    <input type="file" ref="image" @change="onImageChange" style="display: none" />
                 </a-col>
                 <a-col span="12">
                     <h2 style="display: inline-flex">
-                        <SpeakButton :word="currentWord['word']" /> {{currentWord['word']}} </h2>
+                        <SpeakButton :word="currentWord['word']" />
+                        {{currentWord['word'] | capitalize}}
+                    </h2>
                     <div class="word-info">
 
                         <a-button v-if="editMode" type="default" shape="circle" icon="check" size="normal" style="float: right;" @click="handleEdit" />
@@ -59,10 +74,13 @@
 import rf from '../requests/RequestFactory';
 import SpeakButton from '../components/SpeakButton';
 import Recorder from '../components/Recorder';
+import StarButton from '../components/StarButton';
+
 export default {
     components: {
         SpeakButton,
-        Recorder
+        Recorder,
+        StarButton
     },
     data() {
         return {
@@ -77,6 +95,9 @@ export default {
 
             },
             words: [],
+            editImageMode: false,
+            tempImageUrl: '',
+            tempImage: {},
             currentWordIndex: 0,
             currentWord: {}
         }
@@ -140,6 +161,37 @@ export default {
             rf.getRequest('WordRequest').updateWord(this.editWord.id, this.editWord).then(res => {
                 this.currentWord = res;
             })
+        },
+        handleEditImage() {
+            this.$refs.image.click();
+        },
+        onImageChange(e) {
+            const file = e.target.files[0];
+            this.tempImage = file;
+            this.tempImageUrl = URL.createObjectURL(file);
+            if (this.tempImageUrl) {
+                this.editImageMode = true;
+
+            }
+        },
+        discardImageChange() {
+            this.editImageMode = false;
+        },
+        saveImageChange() {
+            let formData = new FormData();
+            formData.append('file', this.tempImage);
+            rf.getRequest('WordRequest').updateWordImage(this.currentWord.id, formData).then(res => {
+                this.currentWord.image = res.image;
+                this.words[this.currentWordIndex].image = res.image;
+                this.editImageMode = false;
+                this.$emit('reload');
+            })
+        },
+        getWordsByCategory() {
+            rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
+                this.words = res;
+                this.currentWord = this.words[this.currentWordIndex];
+            });
         }
     }
 }
@@ -168,10 +220,32 @@ export default {
     position: absolute;
     right: 23px;
     font-size: 20px;
-    background: darkgrey;
+    background: beige;
     padding: 2px;
     border-radius: 0px 0px 0px 7px;
     cursor: pointer;
+    color: darkblue;
+}
+
+.submit-image-icon {
+    position: absolute;
+    right: 47px;
+    font-size: 20px;
+    background: beige;
+    padding: 2px;
+    cursor: pointer;
+    border-radius: 0px 0px 0px 7px;
+    color: #2f9a2f;
+}
+
+.discard-image-icon {
+    position: absolute;
+    right: 23px;
+    font-size: 20px;
+    background: beige;
+    padding: 2px;
+    cursor: pointer;
+    color: red;
 }
 
 .meaning-edit {
@@ -193,6 +267,7 @@ export default {
     width: 15rem;
     margin-left: 15px;
     height: 20rem;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
 
 .word-info {
@@ -245,11 +320,8 @@ export default {
     transform: translateY(4px); */
 }
 
-.star-btn {
-    &:hover {
-        background-color: yellow;
-        outline: none;
-    }
+.remove-btn {
+    display: inline;
 }
 
 .styles__soundIcon___3F62k {

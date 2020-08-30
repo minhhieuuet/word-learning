@@ -34,7 +34,9 @@
 
                             <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="word.hint">
                                 </span><span>{{word.word}}</span>
+
                             </div>
+                            <StarButton :word="word"/>
                         </div>
                         <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
                         <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
@@ -57,12 +59,14 @@ import rf from './../../requests/RequestFactory';
 import ReviewModal from './../../modals/Review';
 import WordModal from './../../modals/Word';
 import SpeakButton from './../../components/SpeakButton';
+import StarButton from './../../components/StarButton';
 
 export default {
     components: {
         ReviewModal,
         WordModal,
-        SpeakButton
+        SpeakButton,
+        StarButton
     },
     data() {
         return {
@@ -111,8 +115,6 @@ export default {
         this.categoryId = this.$route.params.id;
         this.getWordsByCategory(this.categoryId);
         this.getCategory(this.categoryId);
-            this.$modal.show('review', { categoryId: this.categoryId });
-
     }
 
 }
@@ -121,6 +123,10 @@ export default {
 <style lang="scss" scoped>
 .desc-side {
     padding-right: 20px;
+}
+
+.star-btn {
+    margin-left: 5px;
 }
 
 .main-content {
@@ -141,6 +147,7 @@ export default {
     // overflow: scroll;
     min-height: 101%;
     overflow-y: scroll;
+    width: 550px;
 }
 
 .phrase-desc {

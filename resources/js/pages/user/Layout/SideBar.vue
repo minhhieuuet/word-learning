@@ -4,16 +4,16 @@
     <a-menu theme="dark" mode="vertical" @click="handleClick">
 
         <a-menu-item key="1">
-            <a-icon type="user" />
+            <a-icon type="book" />
             <span class="nav-text">Quản lý từ</span>
         </a-menu-item>
         <a-menu-item key="2">
-            <a-icon type="video-camera" />
-            <span class="nav-text">Danh sách từ</span>
+            <a-icon type="sketch" />
+            <span class="nav-text">Trò chơi</span>
         </a-menu-item>
         <a-menu-item key="3">
-            <a-icon type="upload" />
-            <span class="nav-text">Quản lý danh mục</span>
+            <a-icon type="user" />
+            <span class="nav-text">Tôi</span>
         </a-menu-item>
         <!-- <a-menu-item key="5">
             <a-icon type="cloud-o" />
@@ -45,11 +45,11 @@ export default {
                 },
                 {
                     key: 2,
-                    routerName: 'WordList'
+                    routerName: 'Game'
                 },
                 {
                     key: 3,
-                    routerName: 'Category'
+                    routerName: 'AboutMe'
                 }
             ]
         }

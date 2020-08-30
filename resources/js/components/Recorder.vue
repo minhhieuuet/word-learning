@@ -1,8 +1,8 @@
 <template>
-<div class="record-btn" @click="handleRecord()">
+<div class="record-btn" title="Nhấn vào đây để kiểm tra kĩ năng đọc của bạn" @click="handleRecord()">
     <md-icon :class="{'recording': isRecording}">mic</md-icon>
     {{text}}
-    <span :style="{color: scoreColor, fontWeight: 'bold'}">{{this.score}}%</span>
+    <a-tag v-show="score" :color="scoreColor" :style="{fontWeight: 'bold'}">{{this.score}}%</a-tag>
 </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
     },
     watch: {
         word: {
-            immediate: true, 
+            immediate: true,
             handler() {
                 this.score = 0;
                 this.scoreColor = 'inherit';
@@ -34,6 +34,7 @@ export default {
         handleRecord() {
             this.isRecording = !this.isRecording;
             if (this.isRecording) {
+                this.text = 'Đang ghi âm ...';
                 this.speechRecognizer.start();
                 setTimeout(() => {
                     this.stopRecord();
@@ -54,10 +55,10 @@ export default {
                     this.text = finalTranscripts + interimTranscripts;
                     this.score = this.similarity(this.$props.word.toLowerCase(), this.text.toLowerCase());
                     this.scoreColor = this.getGreenToRed(this.score);
-                    if(this.score == 100) {
+                    if (this.score == 100) {
                         this.stopRecord();
+                        this.text = finalTranscripts + interimTranscripts;
                     }
-                    console.log(this.text);
                 };
                 this.speechRecognizer.onerror = function (event) {
 
@@ -67,8 +68,12 @@ export default {
             }
         },
         stopRecord() {
-             this.speechRecognizer.stop();
-             this.isRecording = false;
+            this.speechRecognizer.stop();
+            this.isRecording = false;
+            if(this.text == 'Đang ghi âm ...') {
+                this.text = '';
+            }
+
         },
         similarity(s1, s2) {
             var longer = s1;
@@ -81,7 +86,7 @@ export default {
             if (longerLength == 0) {
                 return 1.0;
             }
-            return Math.floor(((longerLength - this.editDistance(longer, shorter)) / parseFloat(longerLength))*100);
+            return Math.floor(((longerLength - this.editDistance(longer, shorter)) / parseFloat(longerLength)) * 100);
         },
         editDistance(s1, s2) {
             s1 = s1.toLowerCase();
@@ -109,10 +114,10 @@ export default {
             }
             return costs[s2.length];
         },
-        getGreenToRed(percent){
-            let g = percent<50 ? 255 : Math.floor(255-(percent*2-100)*255/100);
-            let r = percent>50 ? 255 : Math.floor((percent*2)*255/100);
-            return 'rgb('+r+','+g+',0)';
+        getGreenToRed(percent) {
+            let g = percent < 50 ? 255 : Math.floor(255 - (percent * 2 - 100) * 255 / 100);
+            let r = percent > 50 ? 255 : Math.floor((percent * 2) * 255 / 100);
+            return 'rgb(' + r + ',' + g + ',0)';
         }
     },
     mounted() {

@@ -16,6 +16,16 @@ export default class TranslateRequest extends BaseModelRequest {
         return this.put(url, params);
     }
     
+    updateWordImage(wordId, params) {
+        const url =`/word/update-image/${wordId}`;
+        return this.post(url, params);
+    }
+
+    changeImportant(wordId) {
+        const url = `/word/change-important/${wordId}`;
+        return this.get(url);
+    }
+
     getRandomWord() {
         const url = '/random-word';
         return this.get(url);

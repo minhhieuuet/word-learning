@@ -79,58 +79,28 @@ class DatabaseSeeder extends Seeder
         DB::table('words')->insert([
         [
           "category_id" => 1,
-          "word" => "orange",
-          "meaning" => "Cam",
-          "hint" => "Quả màu cam ăn ngọt ",
-          "image" => "https://pngimg.com/uploads/orange/orange_PNG791.png"
+          "word" => "raining cats and dogs",
+          "meaning" => "Mưa nặng hạt",
+          "hint" => "Rain heavily",
+          "image" => "https://image.shutterstock.com/image-photo/heavy-rain-tree-parking-260nw-676963948.jpg"
         ],[
           "category_id" => 1,
-          "word" => "apple",
-          "meaning" => "Táo",
-          "hint" => "Newton bị quả này rơi trúng đầu",
-          "image" => "https://purepng.com/public/uploads/large/purepng.com-fresh-applefoodsweettastyhealthyfruitappleleaf-981524677946vfurf.png"
+          "word" => "CHALK AND CHEESE",
+          "meaning" => "rất khác nhau",
+          "hint" => "very different from each other",
+          "image" => "https://christianmomthoughts.com//wp-content/uploads/christianencouragementsecularencouragement.jpg"
         ],[
           "category_id" => 1,
-          "word" => "jack fruit",
-          "meaning" => "Mít",
-          "hint" => "Loại quả màu vàng, vị ngọt, quả có gai bé",
-          "image" => "https://cdn.i-scmp.com/sites/default/files/d8/images/methode/2020/02/02/188907e2-4327-11ea-9fd9-ecfbb38a9743_image_hires_075147.jpg"
+          "word" => "HERE AND THERE",
+          "meaning" => "Ở mọi nơi",
+          "hint" => "Everywhere",
+          "image" => "https://images-na.ssl-images-amazon.com/images/I/81zNzaSAW+L.jpg"
         ],[
           "category_id" => 1,
-          "word" => "dragon fruit",
-          "meaning" => "Thanh long",
-          "hint" => "Loại quả có nhiều hạt nhỏ màu đen, vỏ đỏ có râu rất đẹp",
-          "image" => "https://savingdinner.com/wp-content/uploads/2020/02/Dragon-Fruit.jpg"
-        ],[
-          "category_id" => 1,
-          "word" => "lemon",
-          "meaning" => "Chanh",
-          "hint" => "Qủa có vị chua dùng để pha nước uống",
-          "image" => "https://natashaskitchen.com/wp-content/uploads/2019/06/What-To-Do-With-Lemons.jpg"
-        ],[
-          "category_id" => 1,
-          "word" => "grapes",
-          "meaning" => "Nho",
-          "hint" => "Quả tròn, nhỏ có thể ngâm rươụ",
-          "image" => "https://cdn-b.medlife.com/2019/02/grapes-health-benefits.png"
-        ],[
-          "category_id" => 1,
-          "word" => "pineapple",
-          "meaning" => "Dứa",
-          "hint" => "Quả có ruột màu vàng, ngọt, ăn nhiều dễ rát lưỡi",
-          "image" => "https://i5.walmartimages.ca/images/Enlarge/198/506/6000200198506.jpg"
-        ],[
-          "category_id" => 1,
-          "word" => "coconut",
-          "meaning" => "Dừa",
-          "hint" => "Loại quả có vỏ cứng, nước ở trong rất ngọt",
-          "image" => "https://www.plantgrower.org/uploads/6/5/5/4/65545169/published/coconut-white-balsamic-condimento.jpg"
-        ],[
-          "category_id" => 1,
-          "word" => "guava",
-          "meaning" => "Ổi",
-          "hint" => "Vỏ màu xanh, khi chín thì màu vàng ăn rất khoẻ răng :))",
-          "image" => "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Guava_ID.jpg/1200px-Guava_ID.jpg"
+          "word" => " A HOT POTATO",
+          "meaning" => "vấn đề nan giải",
+          "hint" => "something that is difficulut or dangerous to deal with",
+          "image" => "https://previews.123rf.com/images/capeman29/capeman292003/capeman29200300003/142420788-a-hot-potato-cartoon-character-screaming-while-burning-with-hot-fire.jpg"
         ]]);
 
     }

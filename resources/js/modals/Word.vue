@@ -15,7 +15,7 @@
                 {{errors.first(`general.${_uid}_name`)}}
             </div>
         </md-field>
-         <md-field>
+        <md-field>
             <label>Nghĩa</label>
             <md-input type="text" :name="`${_uid}_name`" data-vv-validate-on="none" data-vv-as="name" v-validate="'required|max:30'" data-vv-scope="general" v-model="word.meaning" :class="errors.has(`general.${_uid}_title`) ? 'is-invalid' : ''" md-counter="30">
             </md-input>
@@ -24,7 +24,7 @@
                 {{errors.first(`general.${_uid}_name`)}}
             </div>
         </md-field>
-         <md-field>
+        <md-field>
             <label>Gợi ý</label>
             <md-input type="text" :name="`${_uid}_name`" data-vv-validate-on="none" data-vv-as="name" v-validate="'required|max:30'" data-vv-scope="general" v-model="word.hint" :class="errors.has(`general.${_uid}_title`) ? 'is-invalid' : ''" md-counter="30">
             </md-input>
@@ -40,7 +40,11 @@
 
         <a-row style="margin-top: 20px;">
             Ảnh
-            <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" @vdropzone-success="uploadSuccess" @vdropzone-complete="afterComplete">
+            <vue-dropzone ref="myVueDropzone" id="dropzone" 
+            :options="dropzoneOptions"
+            accepted-file-types=".jpg,.png,.jpeg"
+             @vdropzone-success="uploadSuccess" 
+            @vdropzone-complete="afterComplete">
 
             </vue-dropzone>
         </a-row>
@@ -76,7 +80,8 @@ export default {
                 addRemoveLinks: true,
                 headers: {
                     "My-Awesome-Header": "header value"
-                }
+                },
+                dictDefaultMessage: 'Nhấn vào đây hoặc kéo ảnh vào để tải lên',
             }
         }
     },

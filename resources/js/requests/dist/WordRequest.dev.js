@@ -45,6 +45,24 @@ function (_BaseModelRequest) {
       return this.post(url, params);
     }
   }, {
+    key: "removeWord",
+    value: function removeWord(wordId) {
+      var url = "/word/".concat(wordId);
+      return this.del(url);
+    }
+  }, {
+    key: "updateWord",
+    value: function updateWord(wordId, params) {
+      var url = "/word/".concat(wordId);
+      return this.put(url, params);
+    }
+  }, {
+    key: "changeImportant",
+    value: function changeImportant(wordId) {
+      var url = "/word/change-important/".concat(wordId);
+      return this.get(url);
+    }
+  }, {
     key: "getRandomWord",
     value: function getRandomWord() {
       var url = '/random-word';

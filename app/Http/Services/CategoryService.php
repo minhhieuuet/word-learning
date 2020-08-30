@@ -11,7 +11,7 @@ class CategoryService
 {
     public function getCategories($params)
     {
-        return Category::orderBy('created_at', 'desc')->get();
+        return Category::orderBy('created_at', 'asc')->get();
     }
 
     public function getAllWordsByCategory($categoryId) {
