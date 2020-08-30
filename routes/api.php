@@ -12,20 +12,23 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-Route::post('/image/store', 'ImageController@store');
-Route::get('/translate', 'TranslatorController@translate');
-
-Route::resource('/word', 'WordController');
-Route::group(['prefix' => 'word'], function () {
-  Route::get('/change-important/{wordId}', 'WordController@changeImportant');
-  Route::post('/update-image/{wordId}', 'WordController@updateImage');
+Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
+  Route::post('/image/store', 'ImageController@store');
+  Route::get('/translate', 'TranslatorController@translate');
+  
+  Route::resource('/word', 'WordController');
+  Route::group(['prefix' => 'word'], function () {
+    Route::get('/change-important/{wordId}', 'WordController@changeImportant');
+    Route::post('/update-image/{wordId}', 'WordController@updateImage');
+  });
+  
+  Route::get('/word-by-category/{id}', 'CategoryController@getAllWordsByCategory');
+  
+  Route::resource('category', 'CategoryController');
+  Route::get('random-word', 'WordController@getRandomWord');
+  Route::get('phrases', 'WordController@getAllPhrases');
 });
 
-Route::get('/word-by-category/{id}', 'CategoryController@getAllWordsByCategory');
-
-Route::resource('category', 'CategoryController');
-Route::get('random-word', 'WordController@getRandomWord');
-Route::get('phrases', 'WordController@getAllPhrases');
 
 Route::group(['middleware' => ['auth:api', 'isAdmin'], 'prefix' => 'admin'], function () {
       Route::get('/students', 'StudentController@getStudents');

@@ -54,6 +54,11 @@
 <script>
 import rf from '../../requests/RequestFactory';
 export default {
+    watch: {
+        value(newValue, oldValue) {
+            console.log(this.value);
+        }
+    },
     data() {
         return {
             totalSelectedWord: 10,

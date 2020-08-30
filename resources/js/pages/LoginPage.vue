@@ -4,25 +4,23 @@
 
       <div class="title">
         <img src="https://vuematerial.io/assets/logo-color.png">
-        <div class="md-title">Vue Material</div>
-        <div class="md-body-1">Build beautiful apps with Material Design and Vue.js</div>
+        <div class="md-title">Vocabulary Learning</div>
       </div>
 
       <div class="form">
         <md-field>
-          <label>Username</label>
+          <label>Tên đăng nhập</label>
           <md-input v-model="name" @keyup.enter="submit"  autofocus></md-input>
         </md-field>
 
         <md-field md-has-password>
-          <label>Password</label>
+          <label>Mật khẩu</label>
           <md-input v-model="password" type="password" @keyup.enter="submit"></md-input>
         </md-field>
       </div>
 
-      <div class="actions md-layout md-alignment-center-space-between">
-        <a href="/resetpassword">Reset password</a>
-        <md-button class="md-raised md-primary" @click="submit">Log in</md-button>
+      <div class="actions md-layout md-alignment-center-space-between" style="float: right;">
+        <a-button type="primary" size="large" @click="submit">Đăng nhập</a-button>
       </div>
 
       <div class="loading-overlay" v-if="loading">

@@ -11,15 +11,37 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('users')->truncate();
+        DB::table('users')->insert([[
+          "name" => "admin",
+          "full_name" => "admin",
+          "email" => "admin@gmail.com",
+          "password" => bcrypt('123456'),
+          "role" => 2
+        ],[
+          "name" => "user1",
+          "full_name" => "User 1",
+          "email" => "user1@gmail.com",
+          "password" => bcrypt('123456'),
+          "role" => 1
+        ]]);
+        DB::table('buckets')->truncate();
+        DB::table('buckets')->insert([
+          [
+            "user_id" => 2
+          ]
+        ]);
         DB::table('categories')->truncate();
         DB::table('categories')->insert([
          [
           "title" => "Phrase",
           "cover" => "https://pbs.twimg.com/profile_images/972055567035883520/8uCAWl8v.jpg",
+          "bucket_id" => 1,
           "is_visible" => false
          ], [
           "title" => "Fruit",
           "cover" => "https://i.pinimg.com/600x315/00/02/73/000273215edf92b43dce81039da97cf4.jpg",
+          "bucket_id" => 1,
           "is_visible" => true
          ]
         ]);

@@ -31,41 +31,65 @@ export default {
                     path: '/',
                     name: 'Dashboard',
                     component: Category,
+                    meta: {
+                        requiresAuth: true
+                    }
                 },
                 {
                     path: '/test',
                     name: 'Dashboard',
                     component: UserDashboard,
+                    meta: {
+                        requiresAuth: true
+                    }
                 },
                 {
                     path: 'word-list',
                     name: 'WordList',
                     component: WordList,
+                    meta: {
+                        requiresAuth: true
+                    }
                 },
                 {
                     path: 'games',
                     name: 'Game',
                     component: GameList,
+                    meta: {
+                        requiresAuth: true
+                    }
                 },
                 {
                     path: 'me',
                     name: 'AboutMe',
                     component: AboutMe,
+                    meta: {
+                        requiresAuth: true
+                    }
                     
                 },
                 {
                     path: 'category',
                     name: 'Category',
                     component: Category,
+                    meta: {
+                        requiresAuth: true
+                    }
                 }, {
                     path: 'category/phrase',
                     name: 'Phrase',
-                    component: Phrase
+                    component: Phrase,
+                    meta: {
+                        requiresAuth: true
+                    }
                 }, {
                     path: 'category/:id',
                     name: 'CategoryDetail',
                     component: CategoryDetail,
-                    props: true
+                    props: true,
+                    meta: {
+                        requiresAuth: true
+                    }
                 },
                 {
                     path: 'memory-game',
