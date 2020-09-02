@@ -4,8 +4,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\User;
+use App\Models\Bucket;
+use App\Http\Services\BucketService;
+
 class AuthController extends Controller
 {
+    protected $bucketService;
+    
+    public function __construct(BucketService $bucketService) {
+        $this->bucketService = $bucketService;
+    }
     /**
      * Create user
      *
@@ -15,19 +23,24 @@ class AuthController extends Controller
      * @param  [string] password_confirmation
      * @return [string] message
      */
-    public function signup(Request $request)
+    public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|unique:users',
+            'full_name' => 'required|string',
             'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|confirmed'
+            'password' => 'required|string'
         ]);
         $user = new User([
             'name' => $request->name,
+            'full_name' => $request->full_name,
             'email' => $request->email,
             'password' => bcrypt($request->password)
         ]);
         $user->save();
+        
+        return $this->bucketService->initBucketUser($user->id);
+
         return response()->json([
             'message' => 'Successfully created user!'
         ], 201);

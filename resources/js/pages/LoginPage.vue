@@ -19,6 +19,10 @@
         </md-field>
       </div>
 
+      <div class="actions md-layout md-alignment-center-space-between" style="float: left;">
+        <a style="color: black;" @click="redirectToRegister()">Đăng ký tài khoản</a>
+      </div>
+
       <div class="actions md-layout md-alignment-center-space-between" style="float: right;">
         <a-button type="primary" size="large" @click="submit">Đăng nhập</a-button>
       </div>
@@ -50,6 +54,9 @@ export default {
       this.name = this.$route.query.name;
     },
     methods: {
+      redirectToRegister() {
+        this.$router.push({name: 'Register'});
+      },
       submit () {
           const params = {
             name: this.name,

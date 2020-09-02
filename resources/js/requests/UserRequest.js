@@ -9,14 +9,8 @@ export default class UserRequest extends BaseModelRequest {
     return this.post('/auth/login', params);
   }
 
-  register (email, password, recaptcha, referrer_code) {
-    const params = {
-      email,
-      password,
-      recaptcha,
-      password_confirmation: password,
-    };
-    return this.post('/auth/users', params);
+  register (params) {
+    return this.post('/auth/register', params);
   }
 
   resendConfirmEmail (email, recaptcha) {

@@ -188,6 +188,7 @@ export default {
             })
         },
         getWordsByCategory() {
+            this.$emit('reload');
             rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
                 this.words = res;
                 this.currentWord = this.words[this.currentWordIndex];

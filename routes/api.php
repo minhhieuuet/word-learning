@@ -2,7 +2,7 @@
 use Illuminate\Http\Request;
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
-    Route::post('signup', 'AuthController@signup');
+    Route::post('register', 'AuthController@register');
 
     Route::group([
       'middleware' => ['auth:api']
@@ -12,19 +12,23 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+Route::post('/image/store', 'ImageController@store');
+
 Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
-  Route::post('/image/store', 'ImageController@store');
-  Route::get('/translate', 'TranslatorController@translate');
+  
+  Route::get('/category/total-word', 'CategoryController@getTotalWordByCategories');
+  Route::resource('category', 'CategoryController');
   
   Route::resource('/word', 'WordController');
   Route::group(['prefix' => 'word'], function () {
     Route::get('/change-important/{wordId}', 'WordController@changeImportant');
     Route::post('/update-image/{wordId}', 'WordController@updateImage');
+    Route::get('/translate', 'TranslatorController@translate');
   });
   
   Route::get('/word-by-category/{id}', 'CategoryController@getAllWordsByCategory');
   
-  Route::resource('category', 'CategoryController');
+
   Route::get('random-word', 'WordController@getRandomWord');
   Route::get('phrases', 'WordController@getAllPhrases');
 });

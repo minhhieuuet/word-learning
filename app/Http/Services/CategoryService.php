@@ -7,23 +7,33 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\Word;
+use App\Models\Bucket;
+
 class CategoryService
 {
-    public function getCategories($params)
+    public function getCategories($userId)
     {
-        return Category::orderBy('created_at', 'asc')->get();
+        return Bucket::where('user_id', $userId)->first()->categories()->get();
     }
 
     public function getAllWordsByCategory($categoryId) {
         return Word::where('category_id', $categoryId)->get();
     }
 
-    public function storeCategory($params)
+    public function getTotalWordByCategories($ids) {
+        return Category::whereIn('id', $ids)->get()->reduce(function($carry, $item){
+            return $carry + $item["total_word"];
+        }, 0);
+    }
+
+    public function storeCategory($userId, $params)
     {
+        $bucket = Bucket::where('user_id', $userId)->first();
         $category = Category::create([
             'title' => array_get($params, 'title'),
             'cover' => array_get($params, 'cover'),
             'is_visible' => array_get($params, 'is_visible'),
+            'bucket_id' => $bucket->id
         ]);
 
         return $this->getOneCategory($category);

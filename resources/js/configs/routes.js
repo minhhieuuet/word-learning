@@ -1,27 +1,30 @@
 import Login from '@/pages/LoginPage.vue';
+import Register from '@/pages/RegisterPage.vue';
 
 import AdminDashboardLayout from '@/pages/admin/Layout/DashboardLayout.vue'
 import AdminDashboard from '@/pages/admin/Dashboard.vue';
 import AdminStudent from '@/pages/admin/Student.vue';
 
 import UserDashboardLayout from '@/pages/user/Layout/DashboardLayout.vue'
-import UserDashboard from '@/pages/user/Dashboard.vue';
-import UserProfile from '@/pages/user/UserProfile.vue';
 import WordList from '@/pages/user/WordList.vue';
 import Category from '@/pages/user/Category.vue';
-import MemoryGame from '@/pages/user/MemoryGame.vue';
-import MemoryGame2 from '@/pages/user/MemoryGame2.vue';
 import Phrase from '@/pages/user/Phrase.vue';
 import CategoryDetail from '@/pages/user/CategoryDetail.vue';
 import GameList from '@/pages/user/GameList.vue';
 import AboutMe from '@/pages/user/AboutMe.vue';
-
+import Game1 from '@/pages/user/game/Game1.vue';
+import Game3 from '@/pages/user/game/Game3.vue';
 export default {
     mode: 'history',
     routes: [{
             path: '/login',
             name: 'Login',
             component: Login
+        },
+        {
+            path: '/register',
+            name: 'Register',
+            component: Register
         },
         {
             path: '/',
@@ -31,14 +34,6 @@ export default {
                     path: '/',
                     name: 'Dashboard',
                     component: Category,
-                    meta: {
-                        requiresAuth: true
-                    }
-                },
-                {
-                    path: '/test',
-                    name: 'Dashboard',
-                    component: UserDashboard,
                     meta: {
                         requiresAuth: true
                     }
@@ -90,16 +85,9 @@ export default {
                     meta: {
                         requiresAuth: true
                     }
-                },
-                {
-                    path: 'memory-game',
-                    name: 'MemoryGame',
-                    component: MemoryGame
-                },
-                {
-                    path: 'memory-game2',
-                    name: 'MemoryGame',
-                    component: MemoryGame2
+                }, {
+                    path: 'game1',
+                    component: Game3
                 }
             ]
         },

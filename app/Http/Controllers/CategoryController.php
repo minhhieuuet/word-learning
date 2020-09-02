@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Services\CategoryService;
 use App\Models\Category;
-
 class CategoryController extends Controller
 {
     protected $categoryService;
@@ -20,11 +19,18 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->categoryService->getCategories($request->all());
+        $userId = $request->user()->id;
+        return $this->categoryService->getCategories($userId);
     }
 
     public function getAllWordsByCategory($id) {
         return $this->categoryService->getAllWordsByCategory($id);
+    }
+
+    public function getTotalWordByCategories(Request $request) {
+        $ids = $request->get('ids');
+        return $this->categoryService->getTotalWordByCategories($ids);
+
     }
     /**
      * Show the form for creating a new resource.
@@ -44,7 +50,8 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->categoryService->storeCategory($request);
+        $userId = $request->user()->id;
+        return $this->categoryService->storeCategory($userId, $request->all());
     }
 
     /**

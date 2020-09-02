@@ -1,73 +1,104 @@
 <template>
-<div class="game-list">
-    <h3>Trò chơi</h3>
-    <div>
-        <label class="typo__label">Trước khi bắt đầu, vui lòng chọn một hoặc nhiều danh mục từ</label>
-        <multiselect v-model="value" placeholder="Vui lòng chọn" style="width: 500px" label="title" track-by="id" :options="categories" :multiple="true" :taggable="true"></multiselect>
-        <span>Tổng số từ được chọn: {{totalSelectedWord}}</span>
-    </div>
-    <br>
-    <a-row>
-        <a-col :span="8">
-            <a-card class="game-1" hoverable>
-                <img slot="cover" alt="example" class="game-background" src="https://4.bp.blogspot.com/-QK3j84ngpOw/Wgs-z_g9bXI/AAAAAAAALAs/JNwgQX38s-AKlithq--9YD_5VvWmv0v_gCLcBGAs/s640/ai-la-trieu-phu-01.jpg" />
-                <template slot="actions" class="ant-card-actions">
-                    <a-icon v-if="totalSelectedWord >= 15" width="3em" type="play-circle" theme="filled" />
-                    <a-icon v-else type="lock" />
-                </template>
-                <a-card-meta title="Ai là triệu phú" description="Mô phỏng dựa trên game show Ai là triệu phú">
+<div>
+    <transition name="custom-classes-transition" enter-active-class="animated bounceInUp" leave-active-class="animated bounceOutUp">
+        <div class="game-list" v-show="mode == 'list'">
+            <h3>Trò chơi</h3>
+            <div>
+                <label class="typo__label">Trước khi bắt đầu, vui lòng chọn một hoặc nhiều danh mục từ</label>
+                <multiselect v-model="selectedCategories" select-label=" Nhấn để chọn" deselect-label=" Nhấn để bỏ chọn" placeholder="Vui lòng chọn" style="width: 500px" label="title" track-by="id" :options="categories" :multiple="true" :taggable="true"></multiselect>
+                <span>Tổng số từ được chọn: {{totalSelectedWord}}</span>
+            </div>
+            <br>
+            <a-row>
+                <a-col :span="8">
+                    <a-card class="game-1" hoverable>
+                        <img slot="cover" alt="example" class="game-background" src="/images/ai-la-trieu-phu-01.jpg" />
+                        <template slot="actions" class="ant-card-actions">
+                            <a-icon v-if="totalSelectedWord >= 15" width="3em" type="play-circle" theme="filled" @click="playGame(1)" />
+                            <a-icon v-else class="lock-icon" type="lock" />
+                        </template>
+                        <a-card-meta title="Ai là triệu phú" description="Mô phỏng dựa trên game show Ai là triệu phú">
 
-                </a-card-meta>
-                <span>Yêu cầu tối thiểu: 15 từ</span>
-            </a-card>
-        </a-col>
-        <a-col class="game-2" :span="8">
-            <a-card hoverable>
-                <img slot="cover" alt="example" class="game-background" src="/images/word-complete.jpg" />
-                <template slot="actions" class="ant-card-actions">
-                    <a-icon v-if="totalSelectedWord >= 5"  type="play-circle" theme="filled" />
-                    <a-icon v-else type="lock" />
+                        </a-card-meta>
+                        <span>Yêu cầu tối thiểu: 15 từ</span>
+                    </a-card>
+                </a-col>
+                <a-col class="game-2" :span="8">
+                    <a-card hoverable>
+                        <img slot="cover" alt="example" class="game-background" src="/images/word-complete.jpg" />
+                        <template slot="actions" class="ant-card-actions">
+                            <a-icon v-if="totalSelectedWord >= 5" type="play-circle" theme="filled" @click="playGame(2)" />
+                            <a-icon v-else class="lock-icon" type="lock" />
 
-                </template>
-                <a-card-meta title="Hoàn thành câu" description="Hoàn thành câu bằng gợi ý">
-                </a-card-meta>
-                <span>Yêu cầu tối thiểu: 5 từ</span>
-            </a-card>
-        </a-col>
-        <a-col class="game-3" :span="8">
-            <a-card hoverable>
-                <img slot="cover" alt="example" class="game-background" src="/images/memory-card.jpeg" />
-                <template slot="actions" class="ant-card-actions">
-                    <a-icon v-if="totalSelectedWord >= 8" type="play-circle" theme="filled" />
-                    <a-icon v-else type="lock" />
+                        </template>
+                        <a-card-meta title="Hoàn thành câu" description="Hoàn thành câu bằng gợi ý">
+                        </a-card-meta>
+                        <span>Yêu cầu tối thiểu: 5 từ</span>
+                    </a-card>
+                </a-col>
+                <a-col class="game-3" :span="8">
+                    <a-card hoverable>
+                        <img slot="cover" alt="example" class="game-background" src="/images/memory-card.jpeg" />
+                        <template slot="actions" class="ant-card-actions">
+                            <a-icon v-if="totalSelectedWord >= 8" type="play-circle" theme="filled" @click="playGame(3)" />
+                            <a-icon v-else class="lock-icon" type="lock" />
 
-                </template>
-                <a-card-meta title="Trò chơi trí nhớ" description="Trò chơi luyện trí nhớ tìm cặp hình và từ giống nhau">
-                </a-card-meta>
-                <span>Yêu cầu tối thiểu: 8 từ</span>
-            </a-card>
-        </a-col>
-    </a-row>
+                        </template>
+                        <a-card-meta title="Trò chơi trí nhớ" description="Trò chơi luyện trí nhớ tìm cặp hình và từ giống nhau">
+                        </a-card-meta>
+                        <span>Yêu cầu tối thiểu: 8 từ</span>
+                    </a-card>
+                </a-col>
+            </a-row>
+        </div>
+    </transition>
+    <transition name="custom-classes-transition" enter-active-class="animated bounceInUp" leave-active-class="animated backOutUp">
+        <div class="game-zone" v-show="mode == 'gamezone'">
+            <a-button type="primary" @click="backToGameList()">
+                <a-icon type="left" />Trở về
+            </a-button>
+            <Game1 v-if="currentGameId == 1" />
+            <Game2 v-if="currentGameId == 2" />
+            <Game3 v-if="currentGameId == 3" />
+        </div>
+    </transition>
 </div>
 </template>
 
 <script>
 import rf from '../../requests/RequestFactory';
+
+import Game1 from '../user/game/Game1';
+import Game2 from '../user/game/Game2';
+import Game3 from '../user/game/Game3';
 export default {
+    components: {
+        Game1,
+        Game2,
+        Game3
+    },
     watch: {
         value(newValue, oldValue) {
             console.log(this.value);
+        },
+        selectedCategories() {
+            let ids = this.selectedCategories.map(category => category.id);
+            rf.getRequest('CategoryRequest').getTotalWordByCategories({ ids: ids }).then(res => {
+                this.totalSelectedWord = res;
+            })
         }
     },
     data() {
         return {
-            totalSelectedWord: 10,
-            value: [
+            totalSelectedWord: 0,
+            selectedCategories: [
 
             ],
             categories: [
 
-            ]
+            ],
+            mode: 'list',
+            currentGameId: 1
         }
     },
     methods: {
@@ -75,6 +106,19 @@ export default {
             rf.getRequest('CategoryRequest').getCategories().then(categories => {
                 this.categories = categories;
             })
+        },
+        playGame(gameId) {
+            this.mode = '';
+            setTimeout(() => {
+                this.mode = 'gamezone';
+            }, 1000)
+            this.currentGameId = gameId;
+        },
+        backToGameList() {
+            this.mode = '';
+            setTimeout(() => {
+                this.mode = 'list';
+            }, 1000)
         }
     },
     mounted() {
@@ -83,12 +127,26 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.multiselect__tag {
+    background: #3d9fe8 !important;
+}
+</style>
 <style lang="scss" scoped>
+.game-zone {
+    height: 700px;
+}
+
 .game-list {
     .anticon-play-circle {
         font-size: 31px !important;
         line-height: 22px;
         color: #33d433;
+    }
+
+    .lock-icon {
+        font-size: 31px !important;
+        color: #2b2a06;
     }
 
     .ant-card {

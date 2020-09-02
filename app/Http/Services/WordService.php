@@ -6,7 +6,7 @@ use App\User;
 use App\Models\Word;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-
+use App\Models\Bucket;
 
 class WordService
 {
@@ -25,8 +25,12 @@ class WordService
         return Word::inRandomOrder()->limit(8)->get();;
     }
 
-    public function getAllPhrases() {
-        return Word::where('category_id', 1)->get();
+    public function getAllPhrases($userId) {
+        $phraseId = Bucket::where('user_id', $userId)->first()->categories()->where('title', 'Phrase')->first()->id;
+        return [
+            'id' => $phraseId,
+            'data' => Word::where('category_id', $phraseId)->get()
+        ];
     }
 
     public function updateImage(Word $word, $imageUrl) {

@@ -33,10 +33,10 @@
                             <SpeakButton :word="word.word"/>
 
                             <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="word.hint">
-                                </span><span>{{word.word}}</span>
+                                </span><span>{{word.word | capitalize}}</span>
 
                             </div>
-                            <StarButton :word="word"/>
+                            <StarButton :word.sync="word" @refresh="refresh()"/>
                         </div>
                         <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
                         <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>

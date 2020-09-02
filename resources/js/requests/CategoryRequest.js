@@ -18,4 +18,9 @@ export default class CategoryRequest extends BaseModelRequest {
         return this.post(url, params);
     }
 
+    getTotalWordByCategories(params) {
+        const url = '/category/total-word';
+        return this.get(url, params);
+    }
+
 }

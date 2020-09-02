@@ -66,6 +66,7 @@ export default {
     data() {
         return {
             phrases: [],
+            phraseId: 1,
             seachKey: '',
             newWord: {
                 word: '',
@@ -78,17 +79,18 @@ export default {
     methods: {
         getAllPhrases() {
             rf.getRequest('WordRequest').getAllPhrases().then(res => {
-                this.phrases = res;
+                this.phraseId = res.id;
+                this.phrases = res.data;
             })
         },
         openReviewModal() {
-            this.$modal.show('review', { categoryId: 1 });
+            this.$modal.show('review', { categoryId: this.phraseId });
         },
         onSeach(value) {
             alert(value);
         },
         createWord() {
-            this.$modal.show('word', { categoryId: 1, title: 'Thêm cụm từ mới' });
+            this.$modal.show('word', { categoryId: this.phraseId, title: 'Thêm cụm từ mới' });
         },
         refresh() {
             this.newWord = {

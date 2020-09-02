@@ -26,8 +26,8 @@ class WordController extends Controller
         //
     }
 
-    public function getAllPhrases() {
-        return $this->wordService->getAllPhrases();
+    public function getAllPhrases(Request $request) {
+        return $this->wordService->getAllPhrases($request->user()->id);
     }
 
     public function getRandomWord() {
