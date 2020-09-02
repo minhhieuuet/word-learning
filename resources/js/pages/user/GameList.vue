@@ -38,7 +38,7 @@
                 </a-col>
                 <a-col class="game-3" :span="8">
                     <a-card hoverable>
-                        <img slot="cover" alt="example" class="game-background" src="/images/memory-card.jpeg" />
+                        <img slot="cover" alt="example" class="game-background" src="/images/card-list.jpg" />
                         <template slot="actions" class="ant-card-actions">
                             <a-icon v-if="totalSelectedWord >= 8" type="play-circle" theme="filled" @click="playGame(3)" />
                             <a-icon v-else class="lock-icon" type="lock" />
@@ -56,7 +56,7 @@
         <div class="game-zone" v-show="mode == 'gamezone'">
             <Game1 v-if="currentGameId == 1" />
             <Game2 v-if="currentGameId == 2" />
-            <Game3 v-if="currentGameId == 3" />
+            <Game3 v-if="currentGameId == 3" @backToList="backToGameList()"/>
         </div>
     </transition>
 </div>
@@ -94,8 +94,8 @@ export default {
             categories: [
 
             ],
-            mode: 'gamezone',
-            currentGameId: 3
+            mode: 'list',
+            currentGameId: 1
         }
     },
     methods: {

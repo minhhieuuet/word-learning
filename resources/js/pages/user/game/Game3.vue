@@ -5,8 +5,8 @@
     <audio loop id="harry" ref="harry" src='/sound/harryporter.mp3'></audio>
     <a-row>
         <a-col span="19" style="margin-bottom: 20px;">
-            <div class="hs-wrapper silver">
-                <a class="hs-button silver" href="">
+            <div class="hs-wrapper silver" @click="backToGameList()">
+                <a class="hs-button silver">
                     <span class="hs-border silver">
                         <span class="hs-text silver">
                             <a-icon type="left" />
@@ -258,7 +258,7 @@ export default {
             this.isFlipped = 0;
             this.score = 0;
             this.matchedWords = [];
-
+        
         },
         getWords() {
             rf.getRequest('WordRequest').getRandomWord().then(res => {
@@ -287,6 +287,11 @@ export default {
             msg.text = word;
             window.speechSynthesis.speak(msg);
         },
+        backToGameList() {
+            this.stopSound('harry');
+            this.isPlaying = false;
+            this.$emit('backToList');
+        }
     },
     created() {
         this.getWords();
