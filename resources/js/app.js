@@ -20,7 +20,6 @@ import VueMaterial from 'vue-material';
 import VModal from 'vue-js-modal';
 import Toasted from 'vue-toasted';
 import vue2Dropzone from 'vue2-dropzone';
-import VueResizeText from 'vue-resize-text';
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import 'vue-material/dist/vue-material.min.css';
 
@@ -54,7 +53,6 @@ Vue.component('data-table', DataTable);
 Vue.component('vue-dropzone', vue2Dropzone)
 Vue.use(VueRouter)
 Vue.use(MaterialDashboard)
-Vue.use(VueResizeText)
 // Vue.use(GlobalComponents)
 // Vue.use(GlobalDirectives)
 // Vue.use(Notifications)
