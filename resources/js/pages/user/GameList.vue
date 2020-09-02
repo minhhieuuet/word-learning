@@ -54,9 +54,6 @@
     </transition>
     <transition name="custom-classes-transition" enter-active-class="animated bounceInUp" leave-active-class="animated backOutUp">
         <div class="game-zone" v-show="mode == 'gamezone'">
-            <a-button type="primary" @click="backToGameList()">
-                <a-icon type="left" />Trở về
-            </a-button>
             <Game1 v-if="currentGameId == 1" />
             <Game2 v-if="currentGameId == 2" />
             <Game3 v-if="currentGameId == 3" />
@@ -97,8 +94,8 @@ export default {
             categories: [
 
             ],
-            mode: 'list',
-            currentGameId: 1
+            mode: 'gamezone',
+            currentGameId: 3
         }
     },
     methods: {

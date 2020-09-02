@@ -6,6 +6,11 @@ Vue.filter('capitalize', function (value) {
     return value.charAt(0).toUpperCase() + value.slice(1)
 })
 
+Vue.filter('uppercase', function (value) {
+    if (!value) return ''
+    return value.toUpperCase();
+})
+
 Vue.filter('toIpa', function(value) {
     // return TextToIPA.lookup(value);
 });
