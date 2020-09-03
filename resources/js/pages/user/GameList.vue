@@ -54,7 +54,7 @@
     </transition>
     <transition name="custom-classes-transition" enter-active-class="animated bounceInUp" leave-active-class="animated backOutUp">
         <div class="game-zone" v-show="mode == 'gamezone'">
-            <Game1 v-if="currentGameId == 1" />
+            <Game1 v-if="currentGameId == 1" :categoryIds="ids"/>
             <Game2 v-if="currentGameId == 2" />
             <Game3 v-if="currentGameId == 3" @backToList="backToGameList()"/>
         </div>

@@ -38,8 +38,6 @@
     <div id="app">
       <router-view></router-view>
     </div>
-    <script src="https://unpkg.com/vue"></script>
-    <script src="https://unpkg.com/vue-material"></script>
     <script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>

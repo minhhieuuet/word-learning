@@ -150,6 +150,9 @@ import SpeakButton from '../../../components/SpeakButton';
 import Game3Model from '../../../modals/Game3';
 
 export default {
+    props: {
+        categoryIds: Array
+    },
     components: {
         SpeakButton,
         Game3Model
@@ -297,7 +300,7 @@ export default {
         this.getWords();
     },
     mounted() {
-
+        console.log(this.$props.categoryIds);
     },
 }
 </script>
