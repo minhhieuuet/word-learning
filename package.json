@@ -26,6 +26,8 @@
   "dependencies": {
     "@toast-ui/vue-editor": "^1.0.3",
     "@types/node": "^14.6.2",
+    "animate.css": "^4.1.0",
+    "animated-vue": "^0.5.3",
     "ant-design-vue": "^1.6.4",
     "axios": "^0.16.2",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",

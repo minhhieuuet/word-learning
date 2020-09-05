@@ -1,5 +1,5 @@
 <template>
-<div class="game3">
+<div :class="{game3: true, 'full-screen': fullScreen}">
     <audio id="success" ref="success" src='/sound/success.mp3'></audio>
     <audio id="error" ref="error" src='/sound/error.mp3'></audio>
     <audio loop id="harry" ref="harry" src='/sound/harryporter.mp3'></audio>
@@ -14,6 +14,10 @@
                         </span>
                     </span>
                 </a>
+            </div>
+            <div style="width: 27px" class="hs-button-screen" @click="changeFullScreenMode()">
+                <a-icon type="fullscreen" v-if="!fullScreen" />
+                <a-icon v-else type="fullscreen-exit" />
             </div>
             <div class="container">
                 <div class="timer" style="margin-bottom: 20px;">
@@ -108,7 +112,7 @@
                     <img width="200px" height="200px" src="/images/treasure.gif" alt="">
                 </div>
                 <div class="start-btn">
-                    <div v-show="!isPlaying" @click="startTimer(180)" class="hs-wrapper classic">
+                    <div v-show="!isPlaying" @click="startTimer(120)" class="hs-wrapper classic">
                         <a class="hs-button classic">
                             <span class="hs-border classic">
                                 <span class="hs-text classic">
@@ -151,7 +155,7 @@ import Game3Model from '../../../modals/Game3';
 
 export default {
     props: {
-        categoryIds: Array
+        ids: Array
     },
     components: {
         SpeakButton,
@@ -168,9 +172,20 @@ export default {
             matchedWords: [],
             isPlaying: false,
             deadline: Date.now(),
+            categoryIds: [],
+            fullScreen: false
         }
     },
     watch: {
+        watch: {
+            myProp: {
+                // the callback will be called immediately after the start of the observation
+                immediate: true,
+                handler(val, oldVal) {
+                    // do your stuff
+                }
+            }
+        },
         matchedWords() {
 
             if (this.matchedWords.length == 8) {
@@ -204,6 +219,9 @@ export default {
             this.isPlaying = false;
             this.stopSound('harry');
             this.$modal.show('game3', { title: 'Bạn đã thua cuộc' });
+        },
+        changeFullScreenMode() {
+            this.fullScreen = !this.fullScreen;
         },
         flipCard(wordIndex) {
             // console.log(this.wordList);
@@ -261,24 +279,22 @@ export default {
             this.isFlipped = 0;
             this.score = 0;
             this.matchedWords = [];
-        
+
         },
-        getWords() {
-            rf.getRequest('WordRequest').getRandomWord().then(res => {
+        getWords(categoryIds) {
+            rf.getRequest('GameRequest').getGame3Resource(this.$props.ids).then(res => {
                 let image = JSON.parse(JSON.stringify(res)).map(word => {
                     word.type = 'image';
                     word.flip = false;
                     word.isDisable = false;
                     return word;
                 });
-                console.log(image);
                 let word = JSON.parse(JSON.stringify(res)).map(word => {
                     word.type = 'word';
                     word.flip = false;
                     word.isDisable = false;
                     return word;
                 })
-                console.log(word);
 
                 // this.matchedWords = word;
 
@@ -300,7 +316,8 @@ export default {
         this.getWords();
     },
     mounted() {
-        console.log(this.$props.categoryIds);
+        // console.log(this.$props.ids);
+        this.getWords(this.$props.ids);
     },
 }
 </script>
@@ -310,6 +327,14 @@ export default {
     width: 148px;
     height: 149px;
     border-radius: 30%;
+}
+
+.full-screen {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    bottom: -100px;
 }
 
 .trans-mask {
@@ -363,6 +388,24 @@ export default {
         text-align: center;
         border-radius: 2px;
         border: solid 3px #795548;
+    }
+
+    .hs-button-screen {
+        text-align: center;
+        border-radius: 2px;
+        width: 74px;
+        right: -230px;
+        position: absolute;
+        top: 0px;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        z-index: 100;
+        background: linear-gradient(to bottom,
+                #fe8b56,
+                #af3019 5%,
+                #ae4305 59%,
+                #91361f);
     }
 
     .hs-text {
@@ -560,7 +603,7 @@ li {
 
 .front-face {
     font-family: 'Balsamiq Sans', cursive;
-    background-image: url('/images/card2.png');
+    background-image: url('/images/card-front.png');
     transform: rotateY(180deg);
 }
 

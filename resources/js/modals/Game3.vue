@@ -1,5 +1,5 @@
 <template>
-<modal name="game3" height="300px" width="400px" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
+<modal name="game3" height="300px" width="400px" @before-open="beforeOpen" @before-close="beforeClose">
     <div class="main-model">
         <h1 class="title">{{title}}</h1>
         <div class="hs-wrapper gold">
@@ -31,7 +31,9 @@ export default {
             this.$modal.hide('game3');
             this.$emit('playagain');
         },
-        beforeClose() {},
+        beforeClose() {
+            this.$emit('playagain');
+        },
         afterComplete(file, response) {
             // console.log(response);
         },

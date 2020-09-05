@@ -29,6 +29,12 @@ Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
   Route::get('/word-by-category/{id}', 'CategoryController@getAllWordsByCategory');
   
 
+  Route::group(['prefix' => 'game'], function () {
+      Route::post('game3', 'GameController@getGame3Resource');
+      Route::post('game2', 'GameController@getGame2Resource');
+
+  });
+
   Route::get('random-word', 'WordController@getRandomWord');
   Route::get('phrases', 'WordController@getAllPhrases');
 });

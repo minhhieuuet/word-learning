@@ -36,7 +36,10 @@ import 'ant-design-vue/dist/antd.css';
 import Antd from 'ant-design-vue';
 import VueSwal from 'vue-swal'
 import Multiselect from 'vue-multiselect'
+import AnimatedVue from 'animated-vue'
+import 'animate.css/animate.css'
 
+Vue.use(AnimatedVue)
 // register globally
 Vue.config.productionTip = true;
 

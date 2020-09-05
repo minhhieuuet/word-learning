@@ -39,6 +39,11 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: "Mario";
+  src: local("Mario"),
+   url(../../../fonts/SuperMario256.ttf) format("truetype");
+}
 #components-layout-demo-fixed-sider .logo {
     height: 32px;
     background: rgba(255, 255, 255, 0.2);

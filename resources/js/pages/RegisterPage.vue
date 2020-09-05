@@ -3,7 +3,7 @@
     <md-content class="md-elevation-3">
 
       <div class="title">
-        <img src="https://vuematerial.io/assets/logo-color.png">
+        <img src="/images/login-logo.png">
         <div class="md-title">Vocabulary Learning</div>
       </div>
 

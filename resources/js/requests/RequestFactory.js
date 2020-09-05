@@ -3,13 +3,15 @@ import StudentRequest from './StudentRequest';
 import TranslateRequest from './TranslateRequest';
 import WordRequest from './WordRequest';
 import CategoryRequest from './CategoryRequest';
+import GameRequest from './GameRequest';
 
 const requestMap = {
     UserRequest,
     StudentRequest,
     TranslateRequest,
     WordRequest,
-    CategoryRequest
+    CategoryRequest,
+    GameRequest
 };
 
 const instances = {};

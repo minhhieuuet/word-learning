@@ -30,6 +30,10 @@
   crossorigin="anonymous"></script>
 </head>
 <style>
+  @font-face {
+  font-family: Mario;
+  src: url(/fonts/SuperMario256.ttf);
+}
 #app {
     height: 100%;
 }

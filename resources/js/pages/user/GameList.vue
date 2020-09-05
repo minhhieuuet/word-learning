@@ -54,9 +54,9 @@
     </transition>
     <transition name="custom-classes-transition" enter-active-class="animated bounceInUp" leave-active-class="animated backOutUp">
         <div class="game-zone" v-show="mode == 'gamezone'">
-            <Game1 v-if="currentGameId == 1" :categoryIds="ids"/>
-            <Game2 v-if="currentGameId == 2" />
-            <Game3 v-if="currentGameId == 3" @backToList="backToGameList()"/>
+            <Game1 v-if="currentGameId == 1" :ids="selectedIds"/>
+            <Game2 v-if="currentGameId == 2" :ids="selectedIds"/>
+            <Game3 v-if="currentGameId == 3" :ids="selectedIds" @backToList="backToGameList()"/>
         </div>
     </transition>
 </div>
@@ -75,11 +75,9 @@ export default {
         Game3
     },
     watch: {
-        value(newValue, oldValue) {
-            console.log(this.value);
-        },
         selectedCategories() {
             let ids = this.selectedCategories.map(category => category.id);
+            this.selectedIds = ids;
             rf.getRequest('CategoryRequest').getTotalWordByCategories({ ids: ids }).then(res => {
                 this.totalSelectedWord = res;
             })
@@ -87,6 +85,7 @@ export default {
     },
     data() {
         return {
+            selectedIds: [],
             totalSelectedWord: 0,
             selectedCategories: [
 
