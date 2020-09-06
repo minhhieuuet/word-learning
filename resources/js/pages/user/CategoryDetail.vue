@@ -27,16 +27,24 @@
             <a-col class="word-side" :span="10">
 
                 <div class="styles__container___AS5GT" v-for="word in words">
+                    <div style="margin-right: 10px;">
+                        <a-tooltip>
+                            <template slot="title">
+                                Độ thông thạo {{word.priority | formatPriorityToPercent}} %
+                            </template>
+                            <a-progress type="circle" :percent="word.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                        </a-tooltip>
+                    </div>
                     <div class="styles__center___1alr7">
                         <div class="styles__viewTitle___trc68">
 
-                            <SpeakButton :word="word.word"/>
+                            <SpeakButton :word="word.word" />
 
                             <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="word.hint">
                                 </span><span>{{word.word | capitalize}}</span>
 
                             </div>
-                            <StarButton :word.sync="word" @refresh="refresh()"/>
+                            <StarButton :word.sync="word" @refresh="refresh()" />
                         </div>
                         <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
                         <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
@@ -230,7 +238,6 @@ export default {
     align-items: center;
 }
 
-
 .styles__textTitle___3ne0o {
     font-weight: 600;
     line-height: 1.5rem;
@@ -288,6 +295,7 @@ export default {
     background: rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
+
 .frame {
     text-align: center;
 }

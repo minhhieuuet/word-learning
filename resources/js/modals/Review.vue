@@ -2,8 +2,13 @@
 <modal name="review" height="auto" width="620px" style="overflow: visible;" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
 
     <div class="content">
-        <div class="plus-btn" v-if="showAddBtn" @click="showWordModal()">
-            <img src="https://img.icons8.com/bubbles/2x/plus.png" alt="">
+        <div class="plus-btn" v-if="showAddBtn">
+            <a-tooltip>
+                <template slot="title">
+                    Thêm từ
+                </template>
+                <img @click="showWordModal()" src="/images/plus.png" alt="">
+            </a-tooltip>
         </div>
         <template v-else>
             <div class="tool-bar">
@@ -334,7 +339,7 @@ export default {
     margin-left: 15px;
     height: 20rem;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
-    border: 0.5px solid;
+    border: 0.5px solid rgba(0, 0, 0, 0.2);
 }
 
 .word-info {

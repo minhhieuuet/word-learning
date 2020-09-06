@@ -11,6 +11,16 @@ Vue.filter('uppercase', function (value) {
     return value.toUpperCase();
 })
 
+Vue.filter('formatPriorityToPercent', function (value) {
+    if(value >= 0) {
+        return 0;
+    } else if(value >= -5) {
+        return (Math.abs(value)/ 5) * 100;
+    } else {
+        return 100;
+    }
+});
+
 Vue.filter('toIpa', function(value) {
     // return TextToIPA.lookup(value);
 });

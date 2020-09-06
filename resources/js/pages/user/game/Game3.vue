@@ -165,6 +165,7 @@ export default {
         return {
             timer: '',
             wordList: [],
+            words: [],
             firstCardIndex: 0,
             secondCardIndex: 0,
             isFlipped: false,
@@ -189,8 +190,7 @@ export default {
         matchedWords() {
 
             if (this.matchedWords.length == 8) {
-                this.isPlaying = false;
-                this.$modal.show('game3', { title: 'Bạn đã chiến thắng' })
+                this.loseGame();
             }
         }
     },
@@ -203,6 +203,18 @@ export default {
         stopSound(ref) {
             this.$refs[ref].pause();
             this.$refs[ref].src = this.$refs[ref].src;
+        },
+        increasePriority(wordIds) {
+            // let wordIds = this.words.map(word => word.id);
+            rf.getRequest('WordRequest').increasePriority(wordIds).then((res) => {
+                console.log(res);
+            })
+        },
+        decreasePriority(wordIds) {
+            // let wordIds = this.words.map(word => word.id);
+            rf.getRequest('WordRequest').decreasePriority(wordIds).then((res) => {
+                console.log('Descreased');
+            })
         },
         getFontSize(word) {
             return 20 + (word.length - 11) * (0.12);
@@ -218,7 +230,13 @@ export default {
         onFinish() {
             this.isPlaying = false;
             this.stopSound('harry');
+            this.increasePriority([...this.words.map(word => word.id)]);
             this.$modal.show('game3', { title: 'Bạn đã thua cuộc' });
+        },
+        loseGame() {
+            this.isPlaying = false;
+            this.decreasePriority([...this.words.map(word => word.id)]);
+            this.$modal.show('game3', { title: 'Bạn đã chiến thắng' })
         },
         changeFullScreenMode() {
             this.fullScreen = !this.fullScreen;
@@ -283,6 +301,7 @@ export default {
         },
         getWords(categoryIds) {
             rf.getRequest('GameRequest').getGame3Resource(this.$props.ids).then(res => {
+                this.words = res;
                 let image = JSON.parse(JSON.stringify(res)).map(word => {
                     word.type = 'image';
                     word.flip = false;

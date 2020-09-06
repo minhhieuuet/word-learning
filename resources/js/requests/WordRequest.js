@@ -21,6 +21,14 @@ export default class TranslateRequest extends BaseModelRequest {
         return this.post(url, params);
     }
 
+    increasePriority(ids) {
+        return this.post('/word/priority/increase', {ids: ids});
+    }
+
+    decreasePriority(ids) {
+        return this.post('/word/priority/decrease', {ids: ids});
+    }
+
     changeImportant(wordId) {
         const url = `/word/change-important/${wordId}`;
         return this.get(url);

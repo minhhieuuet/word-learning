@@ -3,7 +3,12 @@
     <side-bar></side-bar>
     <a-layout :style="{ marginLeft: '200px' }">
         <a-layout-header :style="{ background: '#fff', padding: 0 }">
-            <a-icon type="logout" class="logout-btn" title="Đăng xuất" @click="logout()" />
+            <a-tooltip>
+                <template slot="title">
+                    Đăng xuất
+                </template>
+                <a-icon type="logout" class="logout-btn" @click="logout()" />
+            </a-tooltip>
         </a-layout-header>
         <a-layout-content :style="{ margin: '24px 16px 0', overflow: 'initial' }">
             <div :style="{ padding: '24px', background: '#fff', textAlign: 'left' }">
@@ -13,7 +18,7 @@
             </div>
         </a-layout-content>
         <a-layout-footer :style="{ textAlign: 'center' }">
-            Ant Design ©2018 Created by Ant UED
+            Vocabulary Learining ©2020 Created with <a-icon type="heart"></a-icon>
         </a-layout-footer>
     </a-layout>
 </a-layout>
@@ -30,10 +35,10 @@ export default {
         DashboardContent
     },
     methods: {
-      logout() {
-         AuthenticationUtils.logout();
-         this.$router.push({ path: '/login' });
-      }
+        logout() {
+            AuthenticationUtils.logout();
+            this.$router.push({ path: '/login' });
+        }
     },
 }
 </script>

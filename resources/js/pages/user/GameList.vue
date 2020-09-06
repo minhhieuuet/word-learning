@@ -193,6 +193,6 @@ export default {
 }
 
 .game-background {
-    height: 230px;
+    height: 330px;
 }
 </style>

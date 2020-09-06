@@ -21,6 +21,23 @@ class WordService
         })->orderBy('created_at', 'desc')->paginate($limit);
     }
 
+    public function increasePriority($ids) {
+        foreach($ids as $id) {
+            $word = Word::find($id);
+            $word->priority ++;
+            $word->update();
+        }
+    }
+
+    public function decreasePriority($ids) {
+        foreach($ids as $id) {
+            $word = Word::find($id);
+            $word->priority --;
+            $word->update();
+        }
+    }
+
+
     public function getRandomWord() {
         return Word::inRandomOrder()->limit(8)->get();;
     }

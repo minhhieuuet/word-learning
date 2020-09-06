@@ -29,8 +29,8 @@
                 <div class="shutdown" title="Trở về danh sách trò chơi" @click="backToList()">
                     <img src="/images/mario-shutdown.png" alt="">
                 </div>
-                <img v-if="fullScreen"  @click="changeScreenMode()" class="min-icon" src="/images/min-icon.png" width="30px" height="30px" alt="">
-                <img v-else  @click="changeScreenMode()" class="max-icon" src="/images/max-icon.png" width="30px" height="30px" alt="">
+                <img v-if="fullScreen" @click="changeScreenMode()" class="min-icon" src="/images/min-icon.png" width="30px" height="30px" alt="">
+                <img v-else @click="changeScreenMode()" class="max-icon" src="/images/max-icon.png" width="30px" height="30px" alt="">
             </div>
 
         </div>
@@ -102,7 +102,7 @@ export default {
             words: [],
             currentScreen: 'start',
             currentWord: {},
-            currentCorrectWordIndex: 0,
+            currentCorrectCharacterIndex: 0,
             currentWordIndex: 0,
             inputCharacter: '',
             characters: [],
@@ -132,6 +132,7 @@ export default {
                     if (!isRemainingChar) {
 
                         this.currentWordIndex = this.currentWordIndex + 1;
+                        //Win the game
                         if (!this.words[this.currentWordIndex]) {
                             this.currentScreen = 'result-win';
                             this.stopSound('mario');
@@ -139,7 +140,8 @@ export default {
                             this.winGame();
                             return;
                         }
-
+                        //Move to new word
+                        this.decreasePriority([this.currentWord.id]);
                         this.playSound('correct');
                         this.isCompletedWord = true;
                         setTimeout(() => {
@@ -158,11 +160,7 @@ export default {
         lifeScore: {
             handler() {
                 if (this.lifeScore == 0) {
-                    this.playSound('die');
-                    this.isLoser = true;
-                    this.stopSound('mario');
-                    this.playSound('over');
-                    this.currentScreen = 'result-over';
+                    this.loseGame();
                 }
             }
         }
@@ -177,32 +175,44 @@ export default {
             this.$refs[ref].pause();
             this.$refs[ref].src = this.$refs[ref].src;
         },
+        increasePriority(wordIds) {
+            // let wordIds = this.words.map(word => word.id);
+            rf.getRequest('WordRequest').increasePriority(wordIds).then((res) => {
+                console.log(res);
+            })
+        },
+        decreasePriority(wordIds) {
+            // let wordIds = this.words.map(word => word.id);
+            rf.getRequest('WordRequest').decreasePriority(wordIds).then((res) => {
+                console.log('Descreased');
+            })
+        },
         onSelectCharacter(character, index) {
-            if (character.content == this.characters[this.currentCorrectWordIndex].content) {
-                this.characters[this.currentCorrectWordIndex].jump = true;
-
-                let wordIndex = Number.parseInt(this.currentCorrectWordIndex);
+            if (character.content == this.characters[this.currentCorrectCharacterIndex].content) {
+                this.characters[this.currentCorrectCharacterIndex].jump = true;
+                let wordIndex = Number.parseInt(this.currentCorrectCharacterIndex);
                 setTimeout(() => {
                     this.characters[wordIndex].isVisible = true;
                     this.characters[wordIndex].jump = false;
                 }, 500);
 
                 this.shufferCharacters[index].isVisible = false;
-                this.currentCorrectWordIndex++;
+                this.currentCorrectCharacterIndex++;
                 this.playSound('coin');
-                // this.shufferCharacters.splice(index, 1);
-            } else if (this.characters[this.currentCorrectWordIndex].content == ' ') {
-                if (character.content == this.characters[this.currentCorrectWordIndex + 1].content) {
-                    this.characters[this.currentCorrectWordIndex].jump = true;
 
-                    let wordIndex = Number.parseInt(this.currentCorrectWordIndex + 1);
+                // this.shufferCharacters.splice(index, 1);
+            } else if (this.characters[this.currentCorrectCharacterIndex].content == ' ') {
+                if (character.content == this.characters[this.currentCorrectCharacterIndex + 1].content) {
+                    this.characters[this.currentCorrectCharacterIndex].jump = true;
+
+                    let wordIndex = Number.parseInt(this.currentCorrectCharacterIndex + 1);
                     setTimeout(() => {
                         this.characters[wordIndex].isVisible = true;
                         this.characters[wordIndex].jump = false;
                     }, 500);
 
                     this.shufferCharacters[index].isVisible = false;
-                    this.currentCorrectWordIndex = this.currentCorrectWordIndex + 2;
+                    this.currentCorrectCharacterIndex = this.currentCorrectCharacterIndex + 2;
                     this.playSound('coin');
                 }
             } else {
@@ -216,7 +226,7 @@ export default {
             }
         },
         setCharacters(word) {
-            this.currentCorrectWordIndex = 0;
+            this.currentCorrectCharacterIndex = 0;
             this.characters = word.split('').map(word => {
                 return {
                     content: word.toLowerCase(),
@@ -240,10 +250,18 @@ export default {
         winGame() {
             this.isWinner = true;
         },
+        loseGame() {
+            this.increasePriority([...this.words.map(word => word.id)]);
+            this.playSound('die');
+            this.isLoser = true;
+            this.stopSound('mario');
+            this.playSound('over');
+            this.currentScreen = 'result-over';
+        },
         resetWord() {
             this.lifeScore = 5;
             this.isVisibleWrong = false;
-            this.currentCorrectWordIndex = 0;
+            this.currentCorrectCharacterIndex = 0;
         },
         showAllCharacter() {
             this.characters = this.characters.map(character => {
@@ -263,7 +281,7 @@ export default {
         getWords(ids) {
             rf.getRequest('GameRequest').getGame2Resource({ ids: ids }).then((res) => {
                 this.words = res;
-                this.currentWord = this.words[this.currentCorrectWordIndex];
+                this.currentWord = this.words[this.currentCorrectCharacterIndex];
                 this.characters = this.setCharacters(this.currentWord.word);
             })
         },
@@ -272,8 +290,9 @@ export default {
                 this.currentScreen = 'start';
                 this.words = res;
                 this.lifeScore = 5;
-                this.currentCorrectWordIndex = 0;
-                this.currentWord = this.words[this.currentCorrectWordIndex];
+                this.currentCorrectCharacterIndex = 0;
+                this.currentWordIndex = 0;
+                this.currentWord = this.words[this.currentCorrectCharacterIndex];
                 this.characters = this.setCharacters(this.currentWord.word);
             })
         },
@@ -285,7 +304,7 @@ export default {
     },
     mounted() {
         this.currentScreen = 'start',
-        this.getWords(this.$props.ids);
+            this.getWords(this.$props.ids);
     }
 }
 </script>
@@ -422,7 +441,7 @@ a {
     .mario-model {
         position: relative;
         width: 122px;
-        bottom: 90px;
+        bottom: 80px;
         float: left;
     }
 
@@ -484,7 +503,7 @@ a {
     .mario-model {
         position: relative;
         width: 141px;
-        bottom: 0px;
+        bottom: -20px;
         float: right;
     }
 }

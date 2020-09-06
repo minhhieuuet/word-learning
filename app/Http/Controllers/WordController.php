@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\WordRequest;
 use App\Http\Services\WordService;
 use App\Http\Services\ImageService;
 use App\Models\Word;
@@ -24,6 +25,14 @@ class WordController extends Controller
     public function index()
     {
         //
+    }
+
+    public function increasePriority(Request $request) {
+        return $this->wordService->increasePriority($request->ids);
+    }
+
+    public function decreasePriority(Request $request) {
+        return $this->wordService->decreasePriority($request->ids);
     }
 
     public function getAllPhrases(Request $request) {
@@ -62,7 +71,7 @@ class WordController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(WordRequest $request)
     {
         return $this->wordService->storeWord($request);
         // return $request;

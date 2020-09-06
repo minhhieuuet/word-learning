@@ -37,15 +37,15 @@ class GameService
 
        $words = $categories->map(function ($category) {
            return Word::where('category_id', $category->id)->inRandomOrder()->get();
-       })->flatten()->shuffle()->filter(function ($word) {
+       })->flatten()->sortByDesc('priority')->filter(function ($word) {
             return strlen($word->word) <= 16;
        });
 
        if($words->count() >=5) {
-           return $words->take(5);
+           return $words->take(5)->shuffle();
        }
 
-       return $words->all();
+       return $words->all()->shuffle();
     }
 
 }

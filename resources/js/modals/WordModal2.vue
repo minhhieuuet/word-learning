@@ -8,31 +8,37 @@
 
         <md-field>
             <label>Từ</label>
-            <md-input type="text" :name="`${_uid}_name`" data-vv-validate-on="none" data-vv-as="name" v-validate="'required|max:30'" data-vv-scope="general" v-model="word.word" :class="errors.has(`general.${_uid}_title`) ? 'is-invalid' : ''" md-counter="30">
+            <md-input type="text" :name="`${_uid}_word`" @keyup.enter="translate()" data-vv-validate-on="none" data-vv-as="name" v-validate="'required|max:30'" data-vv-scope="general" v-model="word.word" :class="errors.has(`general.${_uid}_word`) ? 'is-invalid' : ''" md-counter="30">
             </md-input>
-            <div v-if="errors.has(`general.${_uid}_name`)">
-                <md-icon class="md-accent">warning</md-icon>
-                {{errors.first(`general.${_uid}_name`)}}
-            </div>
+            <a-tooltip @click="translate()">
+                <template slot="title">
+                    Nhấn để dịch
+                </template>
+                <md-icon style="cursor: pointer;">translate</md-icon>
+            </a-tooltip>
         </md-field>
+        <div v-if="errors.has(`general.${_uid}_word`)">
+            <md-icon class="md-accent">warning</md-icon>
+            {{errors.first(`general.${_uid}_word`)}}
+        </div>
         <md-field>
             <label>Nghĩa</label>
-            <md-input type="text" :name="`${_uid}_name`" data-vv-validate-on="none" data-vv-as="name" v-validate="'required|max:30'" data-vv-scope="general" v-model="word.meaning" :class="errors.has(`general.${_uid}_title`) ? 'is-invalid' : ''" md-counter="30">
+            <md-input type="text" :name="`${_uid}_meaning`" data-vv-validate-on="none" data-vv-as="nghĩa" v-validate="'required|max:300'" data-vv-scope="general" v-model="word.meaning" md-counter="300">
             </md-input>
-            <div v-if="errors.has(`general.${_uid}_name`)">
-                <md-icon class="md-accent">warning</md-icon>
-                {{errors.first(`general.${_uid}_name`)}}
-            </div>
         </md-field>
+        <div v-if="errors.has(`general.${_uid}_meaning`)">
+            <md-icon class="md-accent">warning</md-icon>
+            {{errors.first(`general.${_uid}_meaning`)}}
+        </div>
         <md-field>
             <label>Gợi ý</label>
-            <md-input type="text" :name="`${_uid}_name`" data-vv-validate-on="none" data-vv-as="name" v-validate="'required|max:30'" data-vv-scope="general" v-model="word.hint" :class="errors.has(`general.${_uid}_title`) ? 'is-invalid' : ''" md-counter="30">
+            <md-input type="text" :name="`${_uid}_hint`" data-vv-validate-on="none" data-vv-as="gợi ý" v-validate="'required|max:300'" data-vv-scope="general" v-model="word.hint" md-counter="300">
             </md-input>
-            <div v-if="errors.has(`general.${_uid}_name`)">
-                <md-icon class="md-accent">warning</md-icon>
-                {{errors.first(`general.${_uid}_name`)}}
-            </div>
         </md-field>
+        <div v-if="errors.has(`general.${_uid}_hint`)">
+            <md-icon class="md-accent">warning</md-icon>
+            {{errors.first(`general.${_uid}_hint`)}}
+        </div>
         <a-row>
             Quan trọng
             <a-switch @change="onIsImportantChange" />
@@ -40,11 +46,7 @@
 
         <a-row style="margin-top: 20px;">
             Ảnh
-            <vue-dropzone ref="myVueDropzone" id="dropzone" 
-            :options="dropzoneOptions"
-            accepted-file-types=".jpg,.png,.jpeg"
-             @vdropzone-success="uploadSuccess" 
-            @vdropzone-complete="afterComplete">
+            <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" accepted-file-types=".jpg,.png,.jpeg" @vdropzone-success="uploadSuccess" @vdropzone-complete="afterComplete">
 
             </vue-dropzone>
         </a-row>
@@ -125,6 +127,11 @@ export default {
                 //   type: 'danger'
                 // });
             });
+        },
+        translate() {
+            rf.getRequest('TranslateRequest').translate({ text: this.word.word }).then(res => {
+                this.word.meaning = res;
+            })
         },
         cancel() {
             this.$modal.hide('word2');

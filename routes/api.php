@@ -13,6 +13,7 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::post('/image/store', 'ImageController@store');
+Route::get('/translate', 'TranslatorController@translate');
 
 Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
   
@@ -23,7 +24,11 @@ Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
   Route::group(['prefix' => 'word'], function () {
     Route::get('/change-important/{wordId}', 'WordController@changeImportant');
     Route::post('/update-image/{wordId}', 'WordController@updateImage');
-    Route::get('/translate', 'TranslatorController@translate');
+    Route::group(['prefix' => 'priority'], function () {
+        Route::post('increase', 'WordController@increasePriority');
+        Route::post('decrease', 'WordController@decreasePriority');
+
+    });
   });
   
   Route::get('/word-by-category/{id}', 'CategoryController@getAllWordsByCategory');

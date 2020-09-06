@@ -10,6 +10,7 @@
             <label>Từ</label>
             <md-input type="text" :name="`${_uid}_name`" data-vv-validate-on="none" data-vv-as="name" v-validate="'required|max:30'" data-vv-scope="general" v-model="word.word" :class="errors.has(`general.${_uid}_title`) ? 'is-invalid' : ''" md-counter="30">
             </md-input>
+            
             <div v-if="errors.has(`general.${_uid}_name`)">
                 <md-icon class="md-accent">warning</md-icon>
                 {{errors.first(`general.${_uid}_name`)}}
