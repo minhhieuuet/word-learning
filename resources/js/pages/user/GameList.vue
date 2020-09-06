@@ -25,13 +25,13 @@
                 </a-col>
                 <a-col class="game-2" :span="8">
                     <a-card hoverable>
-                        <img slot="cover" alt="example" class="game-background" src="/images/word-complete.jpg" />
+                        <img slot="cover" alt="example" class="game-background" src="/images/mario-game.png" />
                         <template slot="actions" class="ant-card-actions">
                             <a-icon v-if="totalSelectedWord >= 5" type="play-circle" theme="filled" @click="playGame(2)" />
                             <a-icon v-else class="lock-icon" type="lock" />
 
                         </template>
-                        <a-card-meta title="Hoàn thành câu" description="Hoàn thành câu bằng gợi ý">
+                        <a-card-meta title="Hoàn thành từ" description="Hoàn thành từ bằng nghĩa và gợi ý">
                         </a-card-meta>
                         <span>Yêu cầu tối thiểu: 5 từ</span>
                     </a-card>
@@ -55,7 +55,7 @@
     <transition name="custom-classes-transition" enter-active-class="animated bounceInUp" leave-active-class="animated backOutUp">
         <div class="game-zone" v-show="mode == 'gamezone'">
             <Game1 v-if="currentGameId == 1" :ids="selectedIds"/>
-            <Game2 v-if="currentGameId == 2" :ids="selectedIds"/>
+            <Game2 v-if="currentGameId == 2" :ids="selectedIds" @backToList="backToGameList()"/>
             <Game3 v-if="currentGameId == 3" :ids="selectedIds" @backToList="backToGameList()"/>
         </div>
     </transition>

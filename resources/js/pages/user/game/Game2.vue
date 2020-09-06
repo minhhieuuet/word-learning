@@ -2,13 +2,18 @@
 <div>
     <audio loop id="mario" ref="mario" src='/sound/mario-theme.mp3'></audio>
     <audio ref="over" src="/sound/mario-over.wav"></audio>
-    <div v-if="currentScreen == 'start'" :class="{'start-screen': true}">
+    <audio ref="win" src="/sound/mario-win.wav"></audio>
+
+    <div v-show="currentScreen == 'start'" :class="{'start-screen': true}">
+        <div class="shutdown" title="Trở về danh sách trò chơi" @click="backToList()">
+            <img src="/images/mario-shutdown.png" alt="">
+        </div>
         <h1 class="banner">Nhấn <b style="font-family: Mario;">Start</b>để bắt đầu!</h1>
         <div class="start-button" @click="start()">
             <img src="/images/mario-start.png" alt="">
         </div>
     </div>
-    <div v-else-if="currentScreen == 'game' " :class="{mario: true, 'full-screen': fullScreen}">
+    <div v-show="currentScreen == 'game' " :class="{mario: true, 'full-screen': fullScreen}">
         <audio id="coin" ref="coin" src='/sound/coin.mp3'></audio>
         <audio id="fail" ref="fail" src='/sound/fail.mp3'></audio>
         <audio id="die" ref="die" src='/sound/die.wav'></audio>
@@ -20,9 +25,12 @@
                 <a-icon class="heart-icon" v-for="i in lifeScore" :key="i" type="heart" theme="filled" two-tone-color="#e60965" />
                 <a-icon class="heart-disabled-icon" v-for="i in (5-lifeScore)" :key="i" type="heart" theme="twoTone" two-tone-color="#40012c" />
             </div>
-            <div @click="changeScreenMode()">
-                <img v-if="fullScreen" class="min-icon" src="/images/min-icon.png" width="30px" height="30px" alt="">
-                <img v-else class="max-icon" src="/images/max-icon.png" width="30px" height="30px" alt="">
+            <div>
+                <div class="shutdown" title="Trở về danh sách trò chơi" @click="backToList()">
+                    <img src="/images/mario-shutdown.png" alt="">
+                </div>
+                <img v-if="fullScreen"  @click="changeScreenMode()" class="min-icon" src="/images/min-icon.png" width="30px" height="30px" alt="">
+                <img v-else  @click="changeScreenMode()" class="max-icon" src="/images/max-icon.png" width="30px" height="30px" alt="">
             </div>
 
         </div>
@@ -62,15 +70,21 @@
             <img src="/images/mario.gif" alt="">
         </div>
     </div>
-    <div v-if="currentScreen == 'result-over'" :class="{'result-screen': true}">
+    <div v-show="currentScreen == 'result-over'" :class="{'result-screen': true}">
+        <div class="shutdown" title="Trở về danh sách trò chơi" @click="backToList()">
+            <img src="/images/mario-shutdown.png" alt="">
+        </div>
         <h1 class="banner" style="font-family: Mario">GAME <br> OVER</h1>
         <div class="replay" @click="replay()">
             <img src="/images/replay.png" alt="">
         </div>
     </div>
-    <div v-if="currentScreen == 'result-win'" :class="{'result-screen': true}">
+    <div v-show="currentScreen == 'result-win'" :class="{'result-screen': true}">
+        <div class="shutdown" title="Trở về danh sách trò chơi" @click="backToList()">
+            <img src="/images/mario-shutdown.png" alt="">
+        </div>
         <h1 class="banner" style="font-family: Mario">YOU <br> WIN</h1>
-         <div class="replay" @click="replay()">
+        <div class="replay" @click="replay()">
             <img src="/images/replay.png" alt="">
         </div>
     </div>
@@ -111,7 +125,6 @@ export default {
             immediate: true,
             deep: true,
             handler(newValue, oldValue) {
-                console.log(this.characters);
                 if (this.characters && this.characters.length) {
                     let isRemainingChar = !!this.characters.find((character) => {
                         return character.isVisible == false && character.content != ' ';
@@ -121,6 +134,8 @@ export default {
                         this.currentWordIndex = this.currentWordIndex + 1;
                         if (!this.words[this.currentWordIndex]) {
                             this.currentScreen = 'result-win';
+                            this.stopSound('mario');
+                            this.playSound('win');
                             this.winGame();
                             return;
                         }
@@ -131,7 +146,6 @@ export default {
                             this.currentWord = this.words[this.currentWordIndex];
                             this.isCompletedWord = false;
                         }, 2000);
-                        console.log(this.currentWordIndex);
                     }
                 }
             }
@@ -249,15 +263,28 @@ export default {
         getWords(ids) {
             rf.getRequest('GameRequest').getGame2Resource({ ids: ids }).then((res) => {
                 this.words = res;
-                this.currentWord = this.words[this.currentWordIndex];
+                this.currentWord = this.words[this.currentCorrectWordIndex];
                 this.characters = this.setCharacters(this.currentWord.word);
             })
         },
         replay() {
-            this.currentScreen = 'start';
+            rf.getRequest('GameRequest').getGame2Resource({ ids: this.$props.ids }).then((res) => {
+                this.currentScreen = 'start';
+                this.words = res;
+                this.lifeScore = 5;
+                this.currentCorrectWordIndex = 0;
+                this.currentWord = this.words[this.currentCorrectWordIndex];
+                this.characters = this.setCharacters(this.currentWord.word);
+            })
+        },
+        backToList() {
+            this.stopSound('mario');
+            this.$emit('backToList');
+            this.replay();
         }
     },
     mounted() {
+        this.currentScreen = 'start',
         this.getWords(this.$props.ids);
     }
 }
@@ -289,6 +316,13 @@ a {
     }
 }
 
+.shutdown {
+    width: 60px;
+    height: 60px;
+    float: right;
+    cursor: pointer;
+}
+
 .start-screen {
     margin: 0 auto;
     text-align: center;
@@ -311,6 +345,7 @@ a {
     .start-button {
         animation: pulse 1.5s infinite;
     }
+
 }
 
 .result-screen {
@@ -411,14 +446,21 @@ a {
     }
 
     .max-icon {
-        margin-right: 22px;
+        // margin-right: 22px;
         float: right;
         cursor: pointer;
     }
 
     .min-icon {
-        margin-right: 22px;
+        // margin-right: 22px;
         float: right;
+        cursor: pointer;
+    }
+
+    .shutdown {
+        margin-right: 20px;
+        width: 46px;
+        margin-top: -2px;
         cursor: pointer;
     }
 }
@@ -593,6 +635,7 @@ p {
 .word {
     display: block;
     white-space: nowrap;
+    padding-left: 0px;
 
     li {
         text-transform: uppercase;

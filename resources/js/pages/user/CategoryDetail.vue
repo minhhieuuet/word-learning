@@ -49,7 +49,7 @@
             </a-col>
         </a-row>
         <review-modal @reload="refresh()"></review-modal>
-        <word-modal @refresh="refresh()"></word-modal>
+        <WordModal2 @refresh="refresh()"></WordModal2>
     </div>
 </div>
 </template>
@@ -57,14 +57,14 @@
 <script>
 import rf from './../../requests/RequestFactory';
 import ReviewModal from './../../modals/Review';
-import WordModal from './../../modals/Word';
+import WordModal2 from './../../modals/WordModal2';
 import SpeakButton from './../../components/SpeakButton';
 import StarButton from './../../components/StarButton';
 
 export default {
     components: {
         ReviewModal,
-        WordModal,
+        WordModal2,
         SpeakButton,
         StarButton
     },
@@ -99,7 +99,7 @@ export default {
             alert(value);
         },
         createWord() {
-            this.$modal.show('word', { categoryId: this.categoryId, title: 'Thêm cụm từ mới' });
+            this.$modal.show('word2', { categoryId: this.categoryId, title: 'Thêm từ mới' });
         },
         refresh() {
             this.newWord = {
@@ -113,6 +113,7 @@ export default {
     },
     mounted() {
         this.categoryId = this.$route.params.id;
+        // this.$modal.show('review', { categoryId: this.categoryId });
         this.getWordsByCategory(this.categoryId);
         this.getCategory(this.categoryId);
     }

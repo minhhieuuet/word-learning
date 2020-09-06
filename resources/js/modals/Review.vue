@@ -2,71 +2,75 @@
 <modal name="review" height="auto" width="620px" style="overflow: visible;" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
 
     <div class="content">
-        <div class="tool-bar">
+        <div class="plus-btn" v-if="showAddBtn" @click="showWordModal()">
+            <img src="https://img.icons8.com/bubbles/2x/plus.png" alt="">
+        </div>
+        <template v-else>
+            <div class="tool-bar">
+                <Recorder :word="currentWord['word']" />
 
-            <!-- <md-icon class="Rec">mic</md-icon> -->
-            <Recorder :word="currentWord['word']" />
+                <StarButton :word="currentWord" @refresh="getWordsByCategory()" />
 
-            <StarButton :word="currentWord" @refresh="getWordsByCategory()" />
+                <a-button type="primary" shape="circle" icon="drag" size="large" />
 
-            <a-button type="primary" shape="circle" icon="drag" size="large" />
-
-            <div class="remove-btn" title="Xoá từ này">
-                <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
+                <div class="remove-btn" title="Xoá từ này">
+                    <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
+                </div>
             </div>
-        </div>
-        <div>
-            <a-row style="padding-top: 17px;">
-                <a-col span="12">
+            <div>
+                <a-row style="padding-top: 17px;">
+                    <a-col span="12">
 
-                    <template v-if="editImageMode">
-                        <img class="word-img" :src="tempImageUrl ? tempImageUrl : currentWord['image']" :title="currentWord['meaning']">
-                        <a-icon title="Huỷ bỏ" @click="discardImageChange" type="close-circle" theme="filled" class="discard-image-icon" />
-                        <a-icon title="Lưu thay đổi" @click="saveImageChange" type="check-circle" theme="filled" class="submit-image-icon" />
-                    </template>
-                    <template v-else>
-                        <img class="word-img" :src="currentWord['image']" :title="currentWord['meaning']">
+                        <template v-if="editImageMode">
+                            <img class="word-img" :src="tempImageUrl ? tempImageUrl : currentWord['image']" :title="currentWord['meaning']">
+                            <a-icon title="Huỷ bỏ" @click="discardImageChange" type="close-circle" theme="filled" class="discard-image-icon" />
+                            <a-icon title="Lưu thay đổi" @click="saveImageChange" type="check-circle" theme="filled" class="submit-image-icon" />
+                        </template>
+                        <template v-else>
+                            <img class="word-img" :src="currentWord['image']" :title="currentWord['meaning']">
 
-                        <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
-                    </template>
+                            <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
+                        </template>
 
-                    <input type="file" ref="image" @change="onImageChange" style="display: none" />
-                </a-col>
-                <a-col span="12">
-                    <h2 style="display: inline-flex">
-                        <SpeakButton :word="currentWord['word']" />
-                        {{currentWord['word'] | capitalize}}
-                    </h2>
-                    <div class="word-info">
+                        <input type="file" ref="image" @change="onImageChange" style="display: none" />
+                    </a-col>
+                    <a-col span="12">
+                        <h2 style="display: inline-flex">
+                            <SpeakButton :word="currentWord['word']" />
+                            {{currentWord['word'] | capitalize}}
+                        </h2>
+                        <div class="word-info">
 
-                        <a-button v-if="editMode" type="default" shape="circle" icon="check" size="normal" style="float: right;" @click="handleEdit" />
-                        <a-button v-else type="default" shape="circle" icon="edit" size="normal" style="float: right;" @click="handleEdit" />
+                            <a-button v-if="editMode" type="default" shape="circle" icon="check" size="normal" style="float: right;" @click="handleEdit" />
+                            <a-button v-else type="default" shape="circle" icon="edit" size="normal" style="float: right;" @click="handleEdit" />
 
-                        <h4 v-if="!editMode">{{currentWord['meaning']}}</h4>
-                        <md-field class="meaning-edit" v-else>
-                            <md-input v-model="editWord.meaning"></md-input>
-                        </md-field>
-                        <p><b>Gợi ý:</b> {{editMode ? '' : currentWord['hint']}}</p>
-                        <md-field class="hint-edit" v-if="editMode">
-                            <md-input type="text" v-model="editWord.hint"></md-input>
-                        </md-field>
-                    </div>
-                </a-col>
-            </a-row>
-        </div>
+                            <h4 v-if="!editMode">{{currentWord['meaning']}}</h4>
+                            <md-field class="meaning-edit" v-else>
+                                <md-input v-model="editWord.meaning"></md-input>
+                            </md-field>
+                            <p><b>Gợi ý:</b> {{editMode ? '' : currentWord['hint']}}</p>
+                            <md-field class="hint-edit" v-if="editMode">
+                                <md-input type="text" v-model="editWord.hint"></md-input>
+                            </md-field>
+                        </div>
+                    </a-col>
+                </a-row>
+            </div>
+        </template>
         <!-- Left button -->
-        <div v-show="currentWordIndex != 0" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowLeft___OPxnB" @click="previousWord()">
+        <div v-show="currentWordIndex != 0 || showAddBtn" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowLeft___OPxnB" @click="previousWord()">
             <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
                 <path d="M802.8 448h-428l166-158.8c23.8-25 23.8-65.4 0-90.4s-62.4-25-86.4 0l-276.4 268c-12 11.6-18 27.4-18 44.8v0.8c0 17.4 6 33.2 18 44.8l276.2 268c24 25 62.6 25 86.4 0s23.8-65.4 0-90.4l-166-158.8h428c33.8 0 61.2-28.6 61.2-64 0.2-36-27.2-64-61-64z"></path>
             </svg>
         </div>
         <!-- Right button -->
-        <div v-show="currentWordIndex+1 != words.length" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowRight___xJqg7" @click="nextWord()">
+        <div v-show="!showAddBtn" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowRight___xJqg7" @click="nextWord()">
             <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
                 <path d="M569.8 825.2l276.2-268c12-11.6 18-27.4 18-44.8v-0.8c0-17.4-6-33.2-18-44.8l-276.2-268c-24-25-62.6-25-86.4 0s-23.8 65.4 0 90.4l166 158.8h-428c-34-0-61.4 28.6-61.4 64 0 36 27.4 64 61.2 64h428l-166 158.8c-23.8 25-23.8 65.4 0 90.4 24 25 62.6 25 86.6 0z"></path>
             </svg>
         </div>
     </div>
+    <word-modal @created="setNewestWord()" @refresh="reload()"></word-modal>
 </modal>
 </template>
 
@@ -75,12 +79,14 @@ import rf from '../requests/RequestFactory';
 import SpeakButton from '../components/SpeakButton';
 import Recorder from '../components/Recorder';
 import StarButton from '../components/StarButton';
+import WordModal from '../modals/Word';
 
 export default {
     components: {
         SpeakButton,
         Recorder,
-        StarButton
+        StarButton,
+        WordModal
     },
     data() {
         return {
@@ -99,30 +105,47 @@ export default {
             tempImageUrl: '',
             tempImage: {},
             currentWordIndex: 0,
-            currentWord: {}
+            currentWord: {},
+            showAddBtn: false
         }
     },
     methods: {
-        beforeOpen(event) {
+        async beforeOpen(event) {
             this.categoryId = event.params.categoryId;
-            rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
+            await rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
+                this.currentWordIndex = 0;
                 this.words = res;
                 this.currentWord = res[0];
+                this.showAddBtn = false;
             });
         },
         beforeClose() {},
         cancel() {
             this.$modal.hide('category');
         },
+        showWordModal() {
+            this.$modal.show('word', { title: 'Thêm từ mới', categoryId: this.categoryId });
+        },
         nextWord() {
             this.editMode = false;
             if (this.currentWordIndex < this.words.length) {
+                if (this.currentWordIndex == (this.words.length - 1)) {
+                    this.showAddBtn = true;
+                    return;
+                }
                 this.currentWordIndex++
                 this.currentWord = this.words[this.currentWordIndex];
             }
+
         },
         previousWord() {
             this.editMode = false;
+            if (this.showAddBtn) {
+                this.currentWordIndex == this.words.length - 1;
+                this.currentWord = this.words[this.currentWordIndex];
+                this.showAddBtn = !this.showAddBtn;
+                return;
+            }
             this.currentWordIndex--;
             this.currentWord = this.words[this.currentWordIndex];
         },
@@ -141,6 +164,9 @@ export default {
                         if (this.currentWordIndex == (this.words.length - 1)) {
                             this.words = this.words.filter((_, index) => index != this.currentWordIndex);
                             this.currentWord = this.words[this.words.length - 1];
+                            this.currentWordIndex = this.words.length - 1;
+                            this.$emit('reload');
+
                             return;
                         }
                         this.words = this.words.filter((_, index) => index != this.currentWordIndex);
@@ -193,6 +219,18 @@ export default {
                 this.words = res;
                 this.currentWord = this.words[this.currentWordIndex];
             });
+        },
+        setNewestWord() {
+            console.log('created');
+            rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
+                this.words = res;
+                this.currentWordIndex = this.words.length - 1;
+                this.currentWord = this.words[this.currentWordIndex];
+                this.showAddBtn = false;
+            });
+        },
+        reload() {
+            this.$emit('reload');
         }
     }
 }
@@ -215,6 +253,33 @@ export default {
     width: 38rem;
     height: 31.9375rem;
     padding: 26px;
+}
+
+@keyframes gelatine {
+
+    from,
+    to {
+        transform: scale(1, 1);
+    }
+
+    25% {
+        transform: scale(0.97, 1.07);
+    }
+
+    50% {
+        transform: scale(1.0, 1.0);
+    }
+
+    75% {
+        transform: scale(0.97, 1.05);
+    }
+}
+
+.plus-btn {
+    text-align: center;
+    padding: 130px;
+    cursor: pointer;
+    animation: gelatine 0.5s;
 }
 
 .camera-icon {
@@ -269,6 +334,7 @@ export default {
     margin-left: 15px;
     height: 20rem;
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+    border: 0.5px solid;
 }
 
 .word-info {

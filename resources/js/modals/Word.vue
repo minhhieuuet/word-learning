@@ -114,8 +114,9 @@ export default {
         },
         createNewWord() {
             rf.getRequest('WordRequest').store(this.word).then((res) => {
-                this.$modal.hide('word');
                 this.$emit('refresh');
+                this.$emit('created');
+                this.$modal.hide('word');
             }).catch((err) => {
                 // this.$toasted.show('Đã có lỗi xảy ra, vui lòng kiểm tra lại!', {
                 //   theme: 'bubble',
