@@ -17,9 +17,14 @@ Route::get('/translate', 'TranslatorController@translate');
 
 Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
   
-  Route::get('/category/total-word', 'CategoryController@getTotalWordByCategories');
-  Route::resource('category', 'CategoryController');
   
+  Route::resource('category', 'CategoryController');
+  Route::group(['prefix' => 'category'], function () {
+    Route::get('/id-by-slug/{slug}', 'CategoryController@getIdBySlug');
+    Route::get('/total-word', 'CategoryController@getTotalWordByCategories');
+  });
+
+
   Route::resource('/word', 'WordController');
   Route::group(['prefix' => 'word'], function () {
     Route::get('/change-important/{wordId}', 'WordController@changeImportant');

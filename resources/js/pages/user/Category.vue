@@ -20,7 +20,7 @@
         </div>
 
         <div v-for="category in categories" :key="category.id" v-if="category.is_visible" class="styles__container___2c6eo inline-flex">
-            <div :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" class="styles__overLay___1WcJB" @click="goToCategory(category.id)">
+            <div :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" class="styles__overLay___1WcJB" @click="goToCategory(category.slug)">
                 <div class="styles__conName___2JHZN">
                     <div class="styles__viewName___2PQg6">{{category.title}}</div>
                 </div>
@@ -58,8 +58,8 @@ export default {
         goToPhrase() {
             this.$router.push({ name: 'Phrase' })
         },
-        goToCategory(id) {
-            this.$router.push(`/category/${id}`);
+        goToCategory(slug) {
+            this.$router.push(`/category/${slug}`);
         },
         refresh() {
             this.getCategories();
@@ -168,6 +168,12 @@ export default {
     cursor: pointer;
     margin: .5rem;
     background: linear-gradient(0deg, #fec551, #fec551);
+    transition: 0.3s ease-in-out;
+
+    &:hover {
+        box-shadow: 2px 5px 2px rgba(0, 0, 0, .5);
+    }
+
 }
 
 .styles__icon___25pzZ {
@@ -187,8 +193,29 @@ export default {
     color: #000;
 }
 
+@keyframes gelatine {
+
+    from,
+    to {
+        transform: scale(1, 1);
+    }
+
+    25% {
+        transform: scale(0.97, 1.07);
+    }
+
+    50% {
+        transform: scale(1.0, 1.0);
+    }
+
+    75% {
+        transform: scale(0.97, 1.05);
+    }
+}
+
 .effectScale:hover {
-    transform: scale(1.2);
+    // transform: scale(1.2);
+    animation: gelatine 0.5s;
     /* transform: scale(1); */
 }
 
@@ -207,6 +234,11 @@ export default {
     margin: .5rem;
     overflow: hidden;
     height: 8rem;
+    transition: 0.3s ease-in-out;
+
+    &:hover {
+        box-shadow: 2px 5px 2px rgba(0, 0, 0, .5);
+    }
 }
 
 .styles__overLay___1WcJB {

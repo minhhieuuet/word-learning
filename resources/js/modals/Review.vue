@@ -36,7 +36,10 @@
 
                             <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
                         </template>
-
+                        <div class="fluency-percent">
+                            Thông thạo:
+                            <a-progress style="width: 59%;" :stroke-color="{'0%': '#108ee9','100%': '#87d068',}" :percent="currentWord.priority | formatPriorityToPercent" status="active" />
+                        </div>
                         <input type="file" ref="image" @change="onImageChange" style="display: none" />
                     </a-col>
                     <a-col span="12">
@@ -63,7 +66,7 @@
             </div>
         </template>
         <!-- Left button -->
-        <div v-show="currentWordIndex != 0 || showAddBtn" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowLeft___OPxnB" @click="previousWord()">
+        <div v-show="(currentWordIndex != 0 || showAddBtn) && words.length" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowLeft___OPxnB" @click="previousWord()">
             <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
                 <path d="M802.8 448h-428l166-158.8c23.8-25 23.8-65.4 0-90.4s-62.4-25-86.4 0l-276.4 268c-12 11.6-18 27.4-18 44.8v0.8c0 17.4 6 33.2 18 44.8l276.2 268c24 25 62.6 25 86.4 0s23.8-65.4 0-90.4l-166-158.8h428c33.8 0 61.2-28.6 61.2-64 0.2-36-27.2-64-61-64z"></path>
             </svg>
@@ -120,6 +123,10 @@ export default {
             await rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
                 this.currentWordIndex = 0;
                 this.words = res;
+                if(!this.words.length) {
+                    this.showAddBtn = true;
+                    return;
+                }
                 this.currentWord = res[0];
                 this.showAddBtn = false;
             });
@@ -166,7 +173,10 @@ export default {
             }).then((value) => {
                 if (value) {
                     rf.getRequest('WordRequest').removeWord(this.currentWord.id).then(res => {
-                        if (this.currentWordIndex == (this.words.length - 1)) {
+                        if(this.words.length == 1) {
+                            this.words = [];
+                            this.showAddBtn = true;
+                        }else if (this.currentWordIndex == (this.words.length - 1)) {
                             this.words = this.words.filter((_, index) => index != this.currentWordIndex);
                             this.currentWord = this.words[this.words.length - 1];
                             this.currentWordIndex = this.words.length - 1;
@@ -226,7 +236,6 @@ export default {
             });
         },
         setNewestWord() {
-            console.log('created');
             rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
                 this.words = res;
                 this.currentWordIndex = this.words.length - 1;
@@ -258,6 +267,12 @@ export default {
     width: 38rem;
     height: 31.9375rem;
     padding: 26px;
+}
+
+.fluency-percent {
+    margin: 0px auto;
+    margin-left: 17px;
+    margin-top: 20px;
 }
 
 @keyframes gelatine {

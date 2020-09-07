@@ -78,7 +78,7 @@ export default {
                         requiresAuth: true
                     }
                 }, {
-                    path: 'category/:id',
+                    path: 'category/:slug',
                     name: 'CategoryDetail',
                     component: CategoryDetail,
                     props: true,

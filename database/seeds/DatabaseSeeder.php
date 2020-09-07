@@ -37,12 +37,14 @@ class DatabaseSeeder extends Seeder
           "title" => "Phrase",
           "cover" => "https://pbs.twimg.com/profile_images/972055567035883520/8uCAWl8v.jpg",
           "bucket_id" => 1,
-          "is_visible" => false
+          "is_visible" => false,
+          "slug" => "phrase"
          ], [
           "title" => "Fruit",
           "cover" => "https://i.pinimg.com/600x315/00/02/73/000273215edf92b43dce81039da97cf4.jpg",
           "bucket_id" => 1,
-          "is_visible" => true
+          "is_visible" => true,
+          "slug" => "fruit"
          ]
         ]);
         DB::table('words')->truncate();

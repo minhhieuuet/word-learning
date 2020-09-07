@@ -32,6 +32,11 @@ class CategoryController extends Controller
         return $this->categoryService->getTotalWordByCategories($ids);
 
     }
+
+    public function getIdBySlug(Request $request, $slug) {
+        $userId = $request->user()->id;
+        return $this->categoryService->getIdBySlug($userId, $slug);
+    }
     /**
      * Show the form for creating a new resource.
      *

@@ -8,52 +8,110 @@
                 <div class="frame">
                     <img class="phrase-img" :src="category.cover" alt="">
                 </div>
-                <div class="phrase-desc">
+                <div class="phrase-desc hit-the-floor">
                     <h2>{{category.title}}</h2>
                 </div>
-                <a-button type="primary" style="background-color: #921cb9;" icon="eye" @click="openReviewModal()">
-                    Trình chiếu
-                </a-button>
-                <a-button type="primary" style="background-color: #31b108;" icon="plus-circle" @click="createWord()">
-                    Thêm từ
-                </a-button>
+
+                <a-button-group style="text-align: center; width: 100%;">
+                    <a-button type="primary" size="large" style="background-color: #31b108;" icon="plus-circle" @click="createWord()">
+                        Thêm từ
+                    </a-button>
+                    <a-button type="primary" size="large" style="background-color: rgb(135 106 253);" icon="eye" @click="openReviewModal()">
+                        Trình chiếu
+                    </a-button>
+                    <a-button type="primary" size="large" style="rgb(243 162 41);" icon="play-circle">
+                        Trò chơi
+                    </a-button>
+                </a-button-group>
+<!-- 
                 <div class="styles__viewBtnPlay___3lqzv" style="padding-top: 20px">
                     <div id="btnGameCenter" class="styles__button___dn9S6 effectScale">
                         <div class="styles__text___GW6do" style="visibility: visible;">Chơi trò chơi</div>
                     </div>
-                </div>
+                </div> -->
 
             </a-col>
             <a-col class="word-side" :span="10">
-
-                <div class="styles__container___AS5GT" v-for="word in words">
-                    <div style="margin-right: 10px;">
-                        <a-tooltip>
-                            <template slot="title">
-                                Độ thông thạo {{word.priority | formatPriorityToPercent}} %
-                            </template>
-                            <a-progress type="circle" :percent="word.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
-                        </a-tooltip>
-                    </div>
-                    <div class="styles__center___1alr7">
-                        <div class="styles__viewTitle___trc68">
-
-                            <SpeakButton :word="word.word" />
-
-                            <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="word.hint">
-                                </span><span>{{word.word | capitalize}}</span>
-
-                            </div>
-                            <StarButton :word.sync="word" @refresh="refresh()" />
+                <a-tabs default-active-key="1">
+                    <a-tab-pane key="1">
+                        <span slot="tab">
+                            <a-icon type="ordered-list" />
+                            Tất cả
+                        </span>
+                        <div v-if="!words.length">
+                            <a-empty description="Danh sách trống" />
                         </div>
-                        <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
-                        <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
-                    </div>
-                    <div class="styles__right___4LtJ-">
-                        <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                        <img :src="word.image" alt="ambitious">
-                    </div>
-                </div>
+                        <div v-else class="styles__container___AS5GT" v-for="word in words">
+                            <div style="margin-right: 10px;">
+                                <a-tooltip>
+                                    <template slot="title">
+                                        Độ thông thạo {{word.priority | formatPriorityToPercent}} %
+                                    </template>
+                                    <a-progress type="circle" :percent="word.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                                </a-tooltip>
+                            </div>
+                            <div class="styles__center___1alr7">
+                                <div class="styles__viewTitle___trc68">
+
+                                    <SpeakButton :word="word.word" />
+
+                                    <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="word.hint">
+                                        </span><span>{{word.word | capitalize}}</span>
+
+                                    </div>
+                                    <StarButton :word.sync="word" @refresh="refresh()" />
+                                </div>
+                                <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
+                                <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
+                            </div>
+                            <div class="styles__right___4LtJ-">
+                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <img :src="word.image" alt="ambitious">
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </a-tab-pane>
+                    <a-tab-pane key="2">
+                        <span slot="tab">
+                            <a-icon type="star" />
+                            Yêu thích
+                        </span>
+                        <div v-if="!words.length">
+                            <a-empty description="Danh sách trống" />
+                        </div>
+                        <div v-else class="styles__container___AS5GT" v-for="word in words.filter(word => word.is_important)">
+                            <div style="margin-right: 10px;">
+                                <a-tooltip>
+                                    <template slot="title">
+                                        Độ thông thạo {{word.priority | formatPriorityToPercent}} %
+                                    </template>
+                                    <a-progress type="circle" :percent="word.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                                </a-tooltip>
+                            </div>
+                            <div class="styles__center___1alr7">
+                                <div class="styles__viewTitle___trc68">
+
+                                    <SpeakButton :word="word.word" />
+
+                                    <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="word.hint">
+                                        </span><span>{{word.word | capitalize}}</span>
+
+                                    </div>
+                                    <StarButton :word.sync="word" @refresh="refresh()" />
+                                </div>
+                                <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
+                                <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
+                            </div>
+                            <div class="styles__right___4LtJ-">
+                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <img :src="word.image" alt="ambitious">
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </a-tab-pane>
+                </a-tabs>
             </a-col>
         </a-row>
         <review-modal @reload="refresh()"></review-modal>
@@ -79,6 +137,7 @@ export default {
     data() {
         return {
             words: [],
+            favouriteWords: [],
             category: {},
             seachKey: '',
             newWord: {
@@ -120,10 +179,13 @@ export default {
         }
     },
     mounted() {
-        this.categoryId = this.$route.params.id;
-        // this.$modal.show('review', { categoryId: this.categoryId });
-        this.getWordsByCategory(this.categoryId);
-        this.getCategory(this.categoryId);
+        rf.getRequest('CategoryRequest').getCategoryIdBySlug(this.$route.params.slug).then(res => {
+            this.categoryId = res;
+            // this.$modal.show('review', { categoryId: this.categoryId });
+            this.getWordsByCategory(this.categoryId);
+            this.getCategory(this.categoryId);
+        })
+        
     }
 
 }
@@ -132,6 +194,25 @@ export default {
 <style lang="scss" scoped>
 .desc-side {
     padding-right: 20px;
+}
+.hit-the-floor {
+  color: #fff;
+  font-size: 12em;
+  font-weight: bold;
+  font-family: Helvetica;
+  text-shadow: 
+    0 1px 0 #ccc, 
+    0 2px 0 #c9c9c9, 
+    0 3px 0 #bbb, 
+    0 4px 0 #b9b9b9, 
+    0 5px 0 #aaa, 
+    0 6px 1px rgba(0,0,0,.1), 
+    0 0 5px rgba(0,0,0,.1), 
+    0 1px 3px rgba(0,0,0,.3), 
+    0 3px 5px rgba(0,0,0,.2), 
+    0 5px 10px rgba(0,0,0,.25), 
+    0 10px 10px rgba(0,0,0,.2), 
+    0 20px 20px rgba(0,0,0,.15);
 }
 
 .star-btn {
@@ -167,7 +248,7 @@ export default {
     line-height: normal;
     letter-spacing: normal;
     text-align: center;
-    color: #000;
+    color: whitesmoke ;
 }
 
 .styles__viewBtnPlay___3lqzv {

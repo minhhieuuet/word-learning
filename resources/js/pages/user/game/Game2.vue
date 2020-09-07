@@ -111,6 +111,7 @@ export default {
             isLoser: false,
             isCompletedWord: false,
             isVisibleWrong: false,
+            isIncreased: false,
             lifeScore: 5,
             fullScreen: false
         }
@@ -142,6 +143,7 @@ export default {
                         }
                         //Move to new word
                         this.decreasePriority([this.currentWord.id]);
+                        this.isIncreased = true;
                         this.playSound('correct');
                         this.isCompletedWord = true;
                         setTimeout(() => {
@@ -218,6 +220,10 @@ export default {
             } else {
                 this.playSound('fail');
                 this.shufferCharacters[index].shake = true;
+                if (this.isIncreased == false) {
+                    this.increasePriority([this.currentWord.id]);
+                    this.isIncreased = true;
+                }
                 setTimeout(() => {
                     this.shufferCharacters[index].shake = false;
                 }, 100)
@@ -251,7 +257,6 @@ export default {
             this.isWinner = true;
         },
         loseGame() {
-            this.increasePriority([...this.words.map(word => word.id)]);
             this.playSound('die');
             this.isLoser = true;
             this.stopSound('mario');
@@ -279,14 +284,14 @@ export default {
             this.lifeScore = 5;
         },
         getWords(ids) {
-            rf.getRequest('GameRequest').getGame2Resource({ ids: ids }).then((res) => {
+            rf.getRequest('GameRequest').getGame2Resource(ids).then((res) => {
                 this.words = res;
                 this.currentWord = this.words[this.currentCorrectCharacterIndex];
                 this.characters = this.setCharacters(this.currentWord.word);
             })
         },
         replay() {
-            rf.getRequest('GameRequest').getGame2Resource({ ids: this.$props.ids }).then((res) => {
+            rf.getRequest('GameRequest').getGame2Resource(this.$props.ids).then((res) => {
                 this.currentScreen = 'start';
                 this.words = res;
                 this.lifeScore = 5;

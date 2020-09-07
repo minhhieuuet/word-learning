@@ -5,6 +5,11 @@ export default class CategoryRequest extends BaseModelRequest {
         const url = '/category';
         return this.get(url, params);
     }
+
+    getCategoryIdBySlug(slug) {
+        const url = `/category/id-by-slug/${slug}`;
+        return this.get(url);
+    }
     getCategory(categoryId) {
         const url = `/category/${categoryId}`;
         return this.get(url);

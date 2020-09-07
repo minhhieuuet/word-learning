@@ -26,11 +26,20 @@ class CategoryService
         }, 0);
     }
 
+    public function getIdBySlug($userId, $slug) {
+        $bucketId = Bucket::where('user_id', $userId)->firstOrFail()->id;
+        return Category::where([
+            'bucket_id' => $bucketId,
+            'slug' => $slug
+        ])->first()->id;
+    }
+
     public function storeCategory($userId, $params)
     {
         $bucket = Bucket::where('user_id', $userId)->first();
         $category = Category::create([
             'title' => array_get($params, 'title'),
+            'slug' =>  str_slug(array_get($params, 'title')),
             'cover' => array_get($params, 'cover'),
             'is_visible' => array_get($params, 'is_visible'),
             'bucket_id' => $bucket->id
