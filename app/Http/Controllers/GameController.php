@@ -20,4 +20,9 @@ class GameController extends Controller
         $userId = $request->user()->id;
         return $this->gameService->getGame2Resource($request->get('ids'), $userId);
     }
+
+    public function getGame1Resource(Request $request) {
+        $userId = $request->user()->id;
+        return $this->gameService->getGame1Resource($request->get('ids'), $userId);
+    }
 }

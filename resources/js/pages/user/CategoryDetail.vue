@@ -19,7 +19,7 @@
                     <a-button type="primary" size="large" style="background-color: rgb(135 106 253);" icon="eye" @click="openReviewModal()">
                         Trình chiếu
                     </a-button>
-                    <a-button type="primary" size="large" style="rgb(243 162 41);" icon="play-circle">
+                    <a-button type="primary" size="large" style="rgb(243 162 41);" icon="trophy">
                         Trò chơi
                     </a-button>
                 </a-button-group>
@@ -41,13 +41,13 @@
                         <div v-if="!words.length">
                             <a-empty description="Danh sách trống" />
                         </div>
-                        <div v-else class="styles__container___AS5GT" v-for="word in words">
+                        <div v-else class="styles__container___AS5GT" v-for="word in words" :key="word.id">
                             <div style="margin-right: 10px;">
                                 <a-tooltip>
                                     <template slot="title">
                                         Độ thông thạo {{word.priority | formatPriorityToPercent}} %
                                     </template>
-                                    <a-progress type="circle" :percent="word.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                                    <a-progress type="circle"  :percent="word.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
                                 </a-tooltip>
                             </div>
                             <div class="styles__center___1alr7">
@@ -77,7 +77,7 @@
                             <a-icon type="star" />
                             Yêu thích
                         </span>
-                        <div v-if="!words.length">
+                        <div v-if="!words.filter(word => word.is_important).length">
                             <a-empty description="Danh sách trống" />
                         </div>
                         <div v-else class="styles__container___AS5GT" v-for="word in words.filter(word => word.is_important)">

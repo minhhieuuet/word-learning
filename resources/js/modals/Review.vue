@@ -54,11 +54,11 @@
 
                             <h4 v-if="!editMode">{{currentWord['meaning']}}</h4>
                             <md-field class="meaning-edit" v-else>
-                                <md-input v-model="editWord.meaning"></md-input>
+                                <md-input v-model="editWord.meaning" @keyup.enter="handleEdit()"></md-input>
                             </md-field>
-                            <p><b>Gợi ý:</b> {{editMode ? '' : currentWord['hint']}}</p>
+                            <p><b v-show="currentWord.hint || editMode">Gợi ý:</b> {{editMode ? '' : currentWord['hint']}}</p>
                             <md-field class="hint-edit" v-if="editMode">
-                                <md-input type="text" v-model="editWord.hint"></md-input>
+                                <md-input type="text" v-model="editWord.hint" @keyup.enter="handleEdit()"></md-input>
                             </md-field>
                         </div>
                     </a-col>

@@ -309,7 +309,7 @@ export default {
     },
     mounted() {
         this.currentScreen = 'start',
-            this.getWords(this.$props.ids);
+        this.getWords(this.$props.ids);
     }
 }
 </script>

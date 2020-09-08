@@ -5,7 +5,7 @@
             <h3>Trò chơi</h3>
             <div>
                 <label class="typo__label">Trước khi bắt đầu, vui lòng chọn một hoặc nhiều danh mục từ</label>
-                <multiselect v-model="selectedCategories" select-label=" Nhấn để chọn" deselect-label=" Nhấn để bỏ chọn" placeholder="Vui lòng chọn" style="width: 500px" label="title" track-by="id" :options="categories" :multiple="true" :taggable="true"></multiselect>
+                <multiselect v-model="selectedCategories" select-label=" Nhấn để chọn" deselect-label=" Nhấn để bỏ chọn" placeholder="Vui lòng chọn" :custom-label="titleWithCount" :close-on-select="false" style="width: 500px" label="title" track-by="id" :options="categories" :multiple="true" :taggable="true"></multiselect>
                 <span>Tổng số từ được chọn: {{totalSelectedWord}}</span>
             </div>
             <br>
@@ -54,9 +54,9 @@
     </transition>
     <transition name="custom-classes-transition" enter-active-class="animated bounceInUp" leave-active-class="animated backOutUp">
         <div class="game-zone" v-show="mode == 'gamezone'">
-            <Game1 v-if="currentGameId == 1" :ids="selectedIds"/>
-            <Game2 v-if="currentGameId == 2" :ids="selectedIds" @backToList="backToGameList()"/>
-            <Game3 v-if="currentGameId == 3" :ids="selectedIds" @backToList="backToGameList()"/>
+            <Game1 v-if="currentGameId == 1" :ids="selectedIds" />
+            <Game2 v-if="currentGameId == 2" :ids="selectedIds" @backToList="backToGameList()" />
+            <Game3 v-if="currentGameId == 3" :ids="selectedIds" @backToList="backToGameList()" />
         </div>
     </transition>
 </div>
@@ -94,7 +94,7 @@ export default {
 
             ],
             mode: 'list',
-            currentGameId: 1
+            currentGameId: 0
         }
     },
     methods: {
@@ -102,6 +102,9 @@ export default {
             rf.getRequest('CategoryRequest').getCategories().then(categories => {
                 this.categories = categories;
             })
+        },
+        titleWithCount({ title, total_word }) {
+            return `${title} [${total_word}]`
         },
         playGame(gameId) {
             this.mode = '';

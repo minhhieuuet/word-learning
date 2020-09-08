@@ -42,7 +42,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
   Route::group(['prefix' => 'game'], function () {
       Route::post('game3', 'GameController@getGame3Resource');
       Route::post('game2', 'GameController@getGame2Resource');
-
+      Route::post('game1', 'GameController@getGame1Resource');
   });
 
   Route::get('random-word', 'WordController@getRandomWord');
