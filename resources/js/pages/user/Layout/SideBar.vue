@@ -11,7 +11,11 @@
             <a-icon type="sketch" />
             <span class="nav-text">Trò chơi</span>
         </a-menu-item>
-        <a-menu-item key="3">
+         <a-menu-item key="3">
+            <a-icon type="schedule" />
+            <span class="nav-text">Nhắc từ</span>
+        </a-menu-item>
+        <a-menu-item key="4">
             <a-icon type="user" />
             <span class="nav-text">Tôi</span>
         </a-menu-item>
@@ -49,6 +53,10 @@ export default {
                 },
                 {
                     key: 3,
+                    routerName: 'Schedule'
+                },
+                {
+                    key: 4,
                     routerName: 'AboutMe'
                 }
             ]

@@ -14,6 +14,9 @@ import GameList from '@/pages/user/GameList.vue';
 import AboutMe from '@/pages/user/AboutMe.vue';
 import Game1 from '@/pages/user/game/Game1.vue';
 import Game3 from '@/pages/user/game/Game3.vue';
+import Schedule from '@/pages/user/Schedule.vue';
+
+
 export default {
     mode: 'history',
     routes: [{
@@ -86,8 +89,9 @@ export default {
                         requiresAuth: true
                     }
                 }, {
-                    path: 'game1',
-                    component: Game3
+                    path: 'schedule',
+                    name: 'Schedule',
+                    component: Schedule
                 }
             ]
         },

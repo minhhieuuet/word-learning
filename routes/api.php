@@ -11,12 +11,17 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('user', 'AuthController@user');
     });
 });
+Route::get('send', 'NotificationController@sendNotification');
 
 Route::post('/image/store', 'ImageController@store');
 Route::get('/translate', 'TranslatorController@translate');
 
 Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
   
+  Route::group(['prefix' => 'notification'], function () {
+      Route::post('save-token', 'NotificationController@saveToken');
+
+  });
   
   Route::group(['prefix' => 'category'], function () {
     Route::get('/id-by-slug/{slug}', 'CategoryController@getIdBySlug');

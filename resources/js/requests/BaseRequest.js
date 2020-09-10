@@ -58,10 +58,11 @@ export default class BaseRequest {
         console.log(el);
       	el.forEach(msg => {
           Vue.toasted.show(msg, {
-            theme: 'bubble',
-            position: 'top-right',
+            theme: 'toasted-primary',
+            position: 'top-center',
+            class: 'custom-toast',
+            icon : 'warning',
             duration : 1500,
-            type: 'danger'
           });
         });
       });
