@@ -1,7 +1,22 @@
 <template>
-<div class="about-me">
-        <button @click="handlePushNotification()">Enable push notification</button>
-        <br>
+<div class="schedule">
+    <button @click="handlePushNotification()">Enable push notification</button>
+    <button @click="handeTestNotification()">Kiểm tra thông báo</button>
+    <br>
+    <md-table style="width: 1000px;">
+      <md-table-row>
+        <md-table-head md-numeric>STT</md-table-head>
+        <md-table-head>Token</md-table-head>
+        <md-table-head>Ngày tạo</md-table-head>
+      </md-table-row>
+
+      <md-table-row v-for="(token, index) in tokens" :key="token.id">
+        <md-table-cell md-numeric>{{index + 1}}</md-table-cell>
+        <md-table-cell >{{token.token}}/</md-table-cell>
+        <md-table-cell>{{token.created_at}}</md-table-cell>
+      </md-table-row>
+    </md-table>
+    <br>
     <table class="dayparts table">
         <thead>
             <tr>
@@ -38,6 +53,7 @@ import rf from './../../requests/RequestFactory';
 export default {
     data() {
         return {
+            tokens: [],
             times: [{
                 hour: 4,
                 isActive: true
@@ -355,7 +371,7 @@ export default {
                     return messaging.getToken();
                 })
                 .then((token) => {
-                    rf.getRequest('NotificationRequest').saveToken({token: token}).then(res => {
+                    rf.getRequest('NotificationRequest').saveToken({ token: token }).then(res => {
                         console.log(res);
                     })
                     console.log("token is : " + token);
@@ -363,6 +379,11 @@ export default {
                 .catch(function (err) {
                     console.log("Unable to get permission to notify.", err);
                 });
+        },
+        handeTestNotification() {
+            rf.getRequest('NotificationRequest').sendTestNotification().then(res => {
+                console.log(res);
+            })
         },
         clearAll: () => {
             for (i = 0; i < this.days.length; i++) {
@@ -386,15 +407,18 @@ export default {
         };
         this.firebase = firebase.initializeApp(config);
 
+        rf.getRequest('NotificationRequest').getToken().then(res => {
+            this.tokens = res;
+        })
+
     },
 }
 </script>
 
 <style lang="scss" scoped>
-.about-me {
+.schedule {
     padding: 30px;
-    // background-image: url('https://i.pinimg.com/originals/78/81/2f/78812fd262025d24e53452a1307bbb6d.png');
-    height: 500px;
+    height: 800px;
 }
 
 .dayparts-cell {
