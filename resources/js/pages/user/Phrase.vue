@@ -2,7 +2,7 @@
 <div>
     <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Cụm từ" @back="() => $router.go(-1)" />
 
-    <div class="main-content">
+    <div class="main-conten phrase">
         <a-row style="padding-top: 20px">
             <a-col class="desc-side" :span="10">
                 <img class="phrase-img" src="/images/empty-phrase.svg" alt="">
@@ -22,25 +22,87 @@
                 </div>
 
             </a-col>
-            <a-col class="word-side" :span="10">
-
-                <div class="styles__container___AS5GT" v-for="phrase in phrases">
-                    <div class="styles__center___1alr7">
-                        <div class="styles__viewTitle___trc68">
-                            <SpeakButton :word="phrase['word']"/>
-                            <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="phrase.hint">
-                                </span><span>{{phrase.word | capitalize}}</span>
-                            </div>
-                            <StarButton :word="phrase"/>
+            <a-col class="word-side" :span="14">
+                <a-tabs default-active-key="1">
+                    <a-tab-pane key="1">
+                        <span slot="tab">
+                            <a-icon type="ordered-list" />
+                            Tất cả
+                        </span>
+                        <div v-if="!phrases.length">
+                            <a-empty description="Danh sách trống" />
                         </div>
-                        <div class="styles__desc___2IcIn"><span>{{phrase.meaning}}</span></div>
-                        <div class="styles__desc___2IcIn" v-if="phrase.hint">Gợi ý: <span>{{phrase.hint}}</span></div>
-                    </div>
-                    <div class="styles__right___4LtJ-">
-                        <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                        <img :src="phrase.image" alt="ambitious">
-                    </div>
-                </div>
+                        <div v-else class="styles__container___AS5GT" v-for="phrase in phrases" :key="phrase.id">
+                            <div style="margin-right: 10px;">
+                                <a-tooltip>
+                                    <template slot="title">
+                                        Độ thông thạo {{phrase.priority | formatPriorityToPercent}} %
+                                    </template>
+                                    <a-progress type="circle" :percent="phrase.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                                </a-tooltip>
+                            </div>
+                            <div class="styles__center___1alr7">
+                                <div class="styles__viewTitle___trc68">
+
+                                    <SpeakButton :word="phrase.word" />
+
+                                    <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="phrase.hint">
+                                        </span><span>{{phrase.word | capitalize}}</span>
+
+                                    </div>
+                                    <StarButton :word.sync="phrase" @refresh="refresh()" />
+                                </div>
+                                <div class="styles__desc___2IcIn"><span>{{phrase.meaning}}</span></div>
+                                <div class="styles__desc___2IcIn" v-if="phrase.hint">Gợi ý: <span>{{phrase.hint}}</span></div>
+                            </div>
+                            <div class="styles__right___4LtJ-">
+                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <img :src="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </a-tab-pane>
+                    <a-tab-pane key="2">
+                        <span slot="tab">
+                            <a-icon type="star" />
+                            Yêu thích
+                        </span>
+                        <div v-if="!phrases.filter(phrase => phrase.is_important).length">
+                            <a-empty description="Danh sách trống" />
+                        </div>
+                        <div v-else class="styles__container___AS5GT" v-for="phrase in phrases.filter(phrase => phrase.is_important)">
+                            <div style="margin-right: 10px;">
+                                <a-tooltip>
+                                    <template slot="title">
+                                        Độ thông thạo {{phrase.priority | formatPriorityToPercent}} %
+                                    </template>
+                                    <a-progress type="circle" :percent="phrase.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                                </a-tooltip>
+                            </div>
+                            <div class="styles__center___1alr7">
+                                <div class="styles__viewTitle___trc68">
+
+                                    <SpeakButton :word="phrase.word" />
+
+                                    <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="phrase.hint">
+                                        </span><span>{{phrase.word | capitalize}}</span>
+
+                                    </div>
+                                    <StarButton :word.sync="phrase" @refresh="refresh()" />
+                                </div>
+                                <div class="styles__desc___2IcIn"><span>{{phrase.meaning}}</span></div>
+                                <div class="styles__desc___2IcIn" v-if="phrase.hint">Gợi ý: <span>{{phrase.hint}}</span></div>
+                            </div>
+                            <div class="styles__right___4LtJ-">
+                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <img :src="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </a-tab-pane>
+                </a-tabs>
             </a-col>
         </a-row>
         <review-modal @reload="refresh()"></review-modal>
@@ -109,13 +171,27 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.phrase {
+    .ant-tabs-nav {
+        width: 100% !important;
+
+        .ant-tabs-tab {
+            width: 40% !important;
+        }
+    }
+
+}
+</style>
 <style lang="scss" scoped>
 .desc-side {
     padding-right: 20px;
 }
+
 .star-btn {
     margin-left: 5px;
 }
+
 .main-content {
     padding: 50px;
 }

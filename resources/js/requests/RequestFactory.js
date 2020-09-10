@@ -4,6 +4,7 @@ import TranslateRequest from './TranslateRequest';
 import WordRequest from './WordRequest';
 import CategoryRequest from './CategoryRequest';
 import GameRequest from './GameRequest';
+import NotificationRequest from './NotificationRequest';
 
 const requestMap = {
     UserRequest,
@@ -11,7 +12,8 @@ const requestMap = {
     TranslateRequest,
     WordRequest,
     CategoryRequest,
-    GameRequest
+    GameRequest,
+    NotificationRequest
 };
 
 const instances = {};

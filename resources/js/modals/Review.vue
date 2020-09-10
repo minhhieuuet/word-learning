@@ -27,12 +27,12 @@
                     <a-col span="12">
 
                         <template v-if="editImageMode">
-                            <img class="word-img" :src="tempImageUrl ? tempImageUrl : currentWord['image']" :title="currentWord['meaning']">
+                            <img class="word-img" :src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/default.jpg' )" :title="currentWord['meaning']">
                             <a-icon title="Huỷ bỏ" @click="discardImageChange" type="close-circle" theme="filled" class="discard-image-icon" />
                             <a-icon title="Lưu thay đổi" @click="saveImageChange" type="check-circle" theme="filled" class="submit-image-icon" />
                         </template>
                         <template v-else>
-                            <img class="word-img" :src="currentWord['image']" :title="currentWord['meaning']">
+                            <img class="word-img" :src="currentWord['image'] ? currentWord['image'] : '/images/default.jpg'" :title="currentWord['meaning']">
 
                             <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
                         </template>
