@@ -50,7 +50,7 @@ export default {
                 is_visible: true,
             },
             dropzoneOptions: {
-                url: 'http://localhost:8000/api/image/store',
+                url: `${process.env.MIX_APP_URL}/api/image/store`,
                 thumbnailWidth: null,
                 maxFiles: 1,
                 maxFilesize: 100000,
