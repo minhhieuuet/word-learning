@@ -74,7 +74,7 @@ export default {
                 category_id: 1
             },
             dropzoneOptions: {
-                url: `${process.env.MIX_APP_URL}/api/image/store`,
+                url: `${window.location.origin}/api/image/store`,
                 thumbnailWidth: null,
                 maxFiles: 1,
                 maxFilesize: 1000,
