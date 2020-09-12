@@ -73,6 +73,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 600px) {
+    .category {
+        height: 100vh !important;
+    }
+
+    .styles__container___16een,
+    .styles__container___2c6eo {
+        min-width: 49% !important;
+        display: inline;
+        height: 11rem !important;
+        margin: 0px auto !important;
+    }
+
+    .styles__viewName___3mvLd {
+        font-size: 1.3rem !important;
+    }
+
+    .styles__container___3mCLH {
+        // display: none !important;
+        min-width: 98% !important;
+        height: 6rem !important;
+        margin: 0px auto !important;
+    }
+}
+
 .category {
     height: 25rem;
     width: 100%;

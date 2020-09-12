@@ -1,8 +1,12 @@
 <template>
 <a-layout id="components-layout-demo-fixed-sider">
     <side-bar></side-bar>
+    <MobileSideBar :visible="menuVisible" />
     <a-layout :style="{ marginLeft: '200px' }">
         <a-layout-header :style="{ background: '#fff', padding: 0 }">
+            <div class="hamburger-icon" style="width: 100px;height: 66px; position: absolute;" @click="menuVisible = !menuVisible">
+                <a-icon type="menu" class="menu-btn" style="display: none;" />
+            </div>
             <a-tooltip>
                 <template slot="title">
                     Đăng xuất
@@ -11,7 +15,7 @@
             </a-tooltip>
         </a-layout-header>
         <a-layout-content :style="{ margin: '24px 16px 0', overflow: 'initial' }">
-            <div :style="{ padding: '24px', background: '#fff', textAlign: 'left' }">
+            <div class="dashboard-content" :style="{ padding: '24px', background: '#fff', textAlign: 'left' }">
 
                 <dashboard-content> </dashboard-content>
 
@@ -26,24 +30,80 @@
 
 <script>
 import SideBar from './SideBar';
+import MobileSideBar from './MobileSideBar';
+
 import DashboardContent from './Content.vue';
 import AuthenticationUtils from '../../../common/AuthenticationUtils';
 
 export default {
     components: {
         SideBar,
-        DashboardContent
+        DashboardContent,
+        MobileSideBar
+    },
+    data() {
+        return {
+            menuVisible: false,
+        }
     },
     methods: {
         logout() {
             AuthenticationUtils.logout();
             this.$router.push({ path: '/login' });
-        }
+        },
+        showDrawer() {
+            this.menuVisible = true;
+        },
     },
 }
 </script>
 
 <style>
+@media screen and (max-width: 600px) {
+    .v--modal-box {
+        height: 100vh !important;
+        top: 0px !important;
+        bottom: 0px !important;
+        padding: 20px !important;
+    }
+    .hamburger-icon {
+        display: block !important;
+    }
+    .ant-layout {
+        margin-left: 0px !important;
+    }
+
+    .login {
+        position: absolute !important;
+        bottom: 0px;
+        top: 0px;
+    }
+}
+.hamburger-icon {
+    display: none;
+}
+.dashboard-content {
+    padding: 0px !important;
+}
+
+.ant-layout-footer {
+    display: none;
+}
+
+
+.menu-btn {
+    display: block !important;
+    float: left;
+    margin-top: 20px;
+    margin-left: 39px;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.menu-btn {
+    display: none;
+}
+
 #components-layout-demo-fixed-sider .logo {
     height: 32px;
     background: rgba(255, 255, 255, 0.2);
