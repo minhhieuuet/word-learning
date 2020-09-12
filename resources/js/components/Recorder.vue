@@ -121,11 +121,12 @@ export default {
         }
     },
     mounted() {
-        var speechRecognizer = new webkitSpeechRecognition();
+        var speechRecognizer = new webkitSpeechRecognition() || new SpeechRecognition();
         speechRecognizer.continuous = true;
         speechRecognizer.interimResults = true;
         speechRecognizer.lang = 'en-US';
         this.speechRecognizer = speechRecognizer;
+        this.speechRecognizer.start();
         this.text = '';
         this.score = 0;
     }

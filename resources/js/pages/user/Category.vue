@@ -19,8 +19,8 @@
             </div>
         </div>
 
-        <div v-for="category in categories" :key="category.id" v-if="category.is_visible" class="styles__container___2c6eo inline-flex">
-            <div :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" class="styles__overLay___1WcJB" @click="goToCategory(category.slug)">
+        <div v-for="(category, index) in categories" :key="category.id" v-if="category.is_visible" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
+            <div :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" :class="{styles__overLay___1WcJB : true}" @click="goToCategory(category.slug)">
                 <div class="styles__conName___2JHZN">
                     <div class="styles__viewName___2PQg6">{{category.title}}</div>
                 </div>
@@ -84,8 +84,11 @@ export default {
         display: inline;
         height: 11rem !important;
         margin: 0px auto !important;
+        border-radius: 0% !important;
     }
-
+    .last-category {
+        min-width: 99% !important;
+    }
     .styles__viewName___3mvLd {
         font-size: 1.3rem !important;
     }
@@ -95,6 +98,7 @@ export default {
         min-width: 98% !important;
         height: 6rem !important;
         margin: 0px auto !important;
+        border-radius: 0% !important;
     }
 }
 
