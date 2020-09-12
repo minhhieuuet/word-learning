@@ -14,7 +14,7 @@
                 <a-icon type="logout" class="logout-btn" @click="logout()" />
             </a-tooltip>
         </a-layout-header>
-        <a-layout-content :style="{ margin: '24px 16px 0', overflow: 'initial' }">
+        <a-layout-content class="layout-content" :style="{ margin: '24px 16px 0', overflow: 'initial' }">
             <div class="dashboard-content" :style="{ padding: '24px', background: '#fff', textAlign: 'left' }">
 
                 <dashboard-content> </dashboard-content>
@@ -60,12 +60,17 @@ export default {
 
 <style>
 @media screen and (max-width: 600px) {
+    .layout-content {
+        margin: 0px 2px !important;
+    }
     .v--modal-box {
         height: 100vh !important;
         top: 0px !important;
         bottom: 0px !important;
         padding: 20px !important;
-        
+        width: auto !important;
+        right: 0px !important;
+        left: 0px !important;
     }
     .hamburger-icon {
         display: block !important;
@@ -80,6 +85,10 @@ export default {
         margin-left: 0px !important;
     }
 
+
+    .ant-layout-footer {
+        display: none;
+    }
     .login {
         position: absolute !important;
         bottom: 0px;
@@ -91,10 +100,6 @@ export default {
 }
 .dashboard-content {
     padding: 0px !important;
-}
-
-.ant-layout-footer {
-    display: none;
 }
 
 
