@@ -60,7 +60,7 @@ class SendNotification extends Command
         echo $currentMinute."\n";
         echo $currentHour."\n";
         
-        if($currentMinute == 30) {
+        if($currentMinute == 0) {
             $notifications = NotificationSchedule::where(['day_number' => $currentDayNumber, 'hour' => $currentHour])->get();
             foreach($notifications as $notification) {
                 echo $notification['user_id'];
