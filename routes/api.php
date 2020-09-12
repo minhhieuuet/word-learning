@@ -18,9 +18,11 @@ Route::get('/translate', 'TranslatorController@translate');
 Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
 
     Route::group(['prefix' => 'notification'], function () {
+        Route::get('/get-schedule', 'NotificationController@getSchedule');
         Route::post('test', 'NotificationController@sendTestNotification');
         Route::get('/get-token', 'NotificationController@getToken');
-        Route::post('save-token', 'NotificationController@saveToken');
+        Route::post('/save-token', 'NotificationController@saveToken');
+        Route::post('/save-schedule', 'NotificationController@saveSchedule');
 
     });
 

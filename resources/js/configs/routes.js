@@ -91,7 +91,10 @@ export default {
                 }, {
                     path: 'schedule',
                     name: 'Schedule',
-                    component: Schedule
+                    component: Schedule,
+                    meta: {
+                        requiresAuth: true
+                    }
                 }
             ]
         },

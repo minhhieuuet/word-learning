@@ -23,7 +23,7 @@
 
             </a-col>
             <a-col class="word-side" :span="14">
-                <a-tabs default-active-key="1">
+                <a-tabs default-active-key="1" style="border: 1px solid rgba(0, 0, 0, 0.1);">
                     <a-tab-pane key="1">
                         <span slot="tab">
                             <a-icon type="ordered-list" />

@@ -354,7 +354,7 @@ a {
     background-color: aliceblue;
     background-image: url(/images/mario-background.jpg);
     height: 700px;
-    background-size: cover;
+    background-size: contain;
 
     .banner {
         font-family: 'Pacifico', cursive;

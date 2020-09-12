@@ -104,7 +104,9 @@ export default {
             })
         },
         titleWithCount({ title, total_word }) {
-            return `${title} [${total_word}]`
+            if (total_word) {
+                return `${title} [${total_word}]`
+            }
         },
         playGame(gameId) {
             this.mode = '';

@@ -1,20 +1,21 @@
 <template>
 <div class="schedule">
-    <button @click="handlePushNotification()">Enable push notification</button>
+    <button @click="handlePushNotification()">Bật thông báo</button>
+
     <button @click="handeTestNotification()">Kiểm tra thông báo</button>
     <br>
     <md-table style="width: 1000px;">
-      <md-table-row>
-        <md-table-head md-numeric>STT</md-table-head>
-        <md-table-head>Token</md-table-head>
-        <md-table-head>Ngày tạo</md-table-head>
-      </md-table-row>
+        <md-table-row>
+            <md-table-head md-numeric>STT</md-table-head>
+            <md-table-head>Token</md-table-head>
+            <md-table-head>Ngày tạo</md-table-head>
+        </md-table-row>
 
-      <md-table-row v-for="(token, index) in tokens" :key="token.id">
-        <md-table-cell md-numeric>{{index + 1}}</md-table-cell>
-        <md-table-cell >{{token.token}}/</md-table-cell>
-        <md-table-cell>{{token.created_at}}</md-table-cell>
-      </md-table-row>
+        <md-table-row v-for="(token, index) in tokens" :key="token.id">
+            <md-table-cell md-numeric>{{index + 1}}</md-table-cell>
+            <md-table-cell>{{token.token}}</md-table-cell>
+            <md-table-cell>{{token.created_at}}</md-table-cell>
+        </md-table-row>
     </md-table>
     <br>
     <table class="dayparts table">
@@ -26,8 +27,8 @@
             </tr>
             <tr>
                 <td rowspan="2"></td>
-                <td class="cell-label am-label" colspan="6">AM</td>
-                <td class="cell-label pm-label" colspan="6">PM</td>
+                <!-- <td class="cell-label am-label" colspan="12">Sáng</td>
+                <td class="cell-label pm-label" colspan="12">Chiều</td> -->
             </tr>
             <tr class="hour-row">
                 <td class="hour" v-for="hour in times" :value="hour.hour">
@@ -44,302 +45,495 @@
             </tr>
         </tbody>
     </table>
+    <button @click="saveSchedule()">Lưu lịch</button>
 </div>
 </template>
 
 <script>
 import rf from './../../requests/RequestFactory';
+import moment from 'moment';
 
 export default {
+    watch: {
+        days: {
+            deep: true,
+            immediate: true,
+            handler: function (val, oldVal) {
+                console.log(JSON.parse(JSON.stringify(this.days)).map(day => {
+                    day.times = day.times.filter((time) => {
+                        return time.isActive;
+                    }).map(time => {
+                        return time.hour;
+                    })
+
+                    if (day.times.length) {
+                        let newDay = {};
+                        newDay.dayNumber = day.dayNumber;
+                        newDay.times = day.times;
+                        return newDay;
+                    }
+                    return null;
+                }).filter(Boolean));
+            }
+        },
+    },
     data() {
         return {
             tokens: [],
-            times: [{
-                hour: 4,
-                isActive: true
-            }, {
-                hour: 6,
+            times: [ {
+                hour: 7,
                 isActive: false
             }, {
                 hour: 8,
                 isActive: false
             }, {
+                hour: 9,
+                isActive: false
+            }, {
                 hour: 10,
+                isActive: false
+            }, {
+                hour: 11,
                 isActive: false
             }, {
                 hour: 12,
                 isActive: false
             }, {
+                hour: 13,
+                isActive: false
+            }, {
                 hour: 14,
+                isActive: false
+            }, {
+                hour: 15,
                 isActive: false
             }, {
                 hour: 16,
                 isActive: false
             }, {
+                hour: 17,
+                isActive: false
+            }, {
                 hour: 18,
+                isActive: false
+            }, {
+                hour: 19,
                 isActive: false
             }, {
                 hour: 20,
                 isActive: false
             }, {
+                hour: 21,
+                isActive: false
+            }, {
                 hour: 22,
                 isActive: false
-            }],
+            }, {
+                hour: 23,
+                isActive: false
+            }, ],
             days: [{
-                dayName: "Monday",
+                dayName: "Thứ hai",
                 isActive: false,
                 dayNumber: 0,
-                times: [{
-                    hour: 4,
-                    isActive: false
-                }, {
-                    hour: 6,
+                times: [ {
+                    hour: 7,
                     isActive: false
                 }, {
                     hour: 8,
                     isActive: false
                 }, {
+                    hour: 9,
+                    isActive: false
+                }, {
                     hour: 10,
+                    isActive: false
+                }, {
+                    hour: 11,
                     isActive: false
                 }, {
                     hour: 12,
                     isActive: false
                 }, {
+                    hour: 13,
+                    isActive: false
+                }, {
                     hour: 14,
+                    isActive: false
+                }, {
+                    hour: 15,
                     isActive: false
                 }, {
                     hour: 16,
                     isActive: false
                 }, {
+                    hour: 17,
+                    isActive: false
+                }, {
                     hour: 18,
+                    isActive: false
+                }, {
+                    hour: 19,
                     isActive: false
                 }, {
                     hour: 20,
                     isActive: false
                 }, {
+                    hour: 21,
+                    isActive: false
+                }, {
                     hour: 22,
                     isActive: false
-                }]
+                }, {
+                    hour: 23,
+                    isActive: false
+                }, ]
             }, {
-                dayName: "Tuesday",
+                dayName: "Thứ ba",
                 isActive: false,
                 dayNumber: 1,
-                times: [{
-                        hour: 4,
-                        isActive: false
-                    }, {
-                        hour: 6,
+                times: [ {
+                        hour: 7,
                         isActive: false
                     }, {
                         hour: 8,
                         isActive: false
                     }, {
+                        hour: 9,
+                        isActive: false
+                    }, {
                         hour: 10,
+                        isActive: false
+                    }, {
+                        hour: 11,
                         isActive: false
                     }, {
                         hour: 12,
                         isActive: false
                     }, {
+                        hour: 13,
+                        isActive: false
+                    }, {
                         hour: 14,
+                        isActive: false
+                    }, {
+                        hour: 15,
                         isActive: false
                     }, {
                         hour: 16,
                         isActive: false
                     }, {
+                        hour: 17,
+                        isActive: false
+                    }, {
                         hour: 18,
+                        isActive: false
+                    }, {
+                        hour: 19,
                         isActive: false
                     }, {
                         hour: 20,
                         isActive: false
                     }, {
+                        hour: 21,
+                        isActive: false
+                    }, {
                         hour: 22,
                         isActive: false
-                    }
+                    }, {
+                        hour: 23,
+                        isActive: false
+                    },
 
                 ]
             }, {
-                dayName: "Wednesday",
+                dayName: "Thứ tư",
                 isActive: false,
                 dayNumber: 2,
-                times: [{
-                        hour: 4,
-                        isActive: false
-                    }, {
-                        hour: 6,
+                times: [ {
+                        hour: 7,
                         isActive: false
                     }, {
                         hour: 8,
                         isActive: false
                     }, {
+                        hour: 9,
+                        isActive: false
+                    }, {
                         hour: 10,
+                        isActive: false
+                    }, {
+                        hour: 11,
                         isActive: false
                     }, {
                         hour: 12,
                         isActive: false
                     }, {
+                        hour: 13,
+                        isActive: false
+                    }, {
                         hour: 14,
+                        isActive: false
+                    }, {
+                        hour: 15,
                         isActive: false
                     }, {
                         hour: 16,
                         isActive: false
                     }, {
+                        hour: 17,
+                        isActive: false
+                    }, {
                         hour: 18,
+                        isActive: false
+                    }, {
+                        hour: 19,
                         isActive: false
                     }, {
                         hour: 20,
                         isActive: false
                     }, {
+                        hour: 21,
+                        isActive: false
+                    }, {
                         hour: 22,
                         isActive: false
-                    }
+                    }, {
+                        hour: 23,
+                        isActive: false
+                    },
 
                 ]
             }, {
-                dayName: "Thursday",
+                dayName: "Thứ năm",
                 isActive: false,
                 dayNumber: 3,
-                times: [{
-                        hour: 4,
-                        isActive: false
-                    }, {
-                        hour: 6,
+                times: [ {
+                        hour: 7,
                         isActive: false
                     }, {
                         hour: 8,
                         isActive: false
                     }, {
+                        hour: 9,
+                        isActive: false
+                    }, {
                         hour: 10,
+                        isActive: false
+                    }, {
+                        hour: 11,
                         isActive: false
                     }, {
                         hour: 12,
                         isActive: false
                     }, {
+                        hour: 13,
+                        isActive: false
+                    }, {
                         hour: 14,
+                        isActive: false
+                    }, {
+                        hour: 15,
                         isActive: false
                     }, {
                         hour: 16,
                         isActive: false
                     }, {
+                        hour: 17,
+                        isActive: false
+                    }, {
                         hour: 18,
+                        isActive: false
+                    }, {
+                        hour: 19,
                         isActive: false
                     }, {
                         hour: 20,
                         isActive: false
                     }, {
+                        hour: 21,
+                        isActive: false
+                    }, {
                         hour: 22,
                         isActive: false
-                    }
+                    }, {
+                        hour: 23,
+                        isActive: false
+                    },
 
                 ]
             }, {
-                dayName: "Friday",
+                dayName: "Thứ sáu",
                 isActive: false,
                 dayNumber: 4,
-                times: [{
-                        hour: 4,
-                        isActive: false
-                    }, {
-                        hour: 6,
+                times: [ {
+                        hour: 7,
                         isActive: false
                     }, {
                         hour: 8,
                         isActive: false
                     }, {
+                        hour: 9,
+                        isActive: false
+                    }, {
                         hour: 10,
+                        isActive: false
+                    }, {
+                        hour: 11,
                         isActive: false
                     }, {
                         hour: 12,
                         isActive: false
                     }, {
+                        hour: 13,
+                        isActive: false
+                    }, {
                         hour: 14,
+                        isActive: false
+                    }, {
+                        hour: 15,
                         isActive: false
                     }, {
                         hour: 16,
                         isActive: false
                     }, {
+                        hour: 17,
+                        isActive: false
+                    }, {
                         hour: 18,
+                        isActive: false
+                    }, {
+                        hour: 19,
                         isActive: false
                     }, {
                         hour: 20,
                         isActive: false
                     }, {
+                        hour: 21,
+                        isActive: false
+                    }, {
                         hour: 22,
                         isActive: false
-                    }
+                    }, {
+                        hour: 23,
+                        isActive: false
+                    },
 
                 ]
             }, {
-                dayName: "Saturday",
+                dayName: "Thứ bảy",
                 isActive: false,
                 dayNumber: 5,
-                times: [{
-                        hour: 4,
-                        isActive: false
-                    }, {
-                        hour: 6,
+                times: [ {
+                        hour: 7,
                         isActive: false
                     }, {
                         hour: 8,
                         isActive: false
                     }, {
+                        hour: 9,
+                        isActive: false
+                    }, {
                         hour: 10,
+                        isActive: false
+                    }, {
+                        hour: 11,
                         isActive: false
                     }, {
                         hour: 12,
                         isActive: false
                     }, {
+                        hour: 13,
+                        isActive: false
+                    }, {
                         hour: 14,
+                        isActive: false
+                    }, {
+                        hour: 15,
                         isActive: false
                     }, {
                         hour: 16,
                         isActive: false
                     }, {
+                        hour: 17,
+                        isActive: false
+                    }, {
                         hour: 18,
+                        isActive: false
+                    }, {
+                        hour: 19,
                         isActive: false
                     }, {
                         hour: 20,
                         isActive: false
                     }, {
+                        hour: 21,
+                        isActive: false
+                    }, {
                         hour: 22,
                         isActive: false
-                    }
+                    }, {
+                        hour: 23,
+                        isActive: false
+                    },
 
                 ]
             }, {
-                dayName: "Sunday",
+                dayName: "Chủ nhật",
                 isActive: false,
                 dayNumber: 6,
-                times: [{
-                        hour: 4,
-                        isActive: false
-                    }, {
-                        hour: 6,
+                times: [ {
+                        hour: 7,
                         isActive: false
                     }, {
                         hour: 8,
                         isActive: false
                     }, {
+                        hour: 9,
+                        isActive: false
+                    }, {
                         hour: 10,
+                        isActive: false
+                    }, {
+                        hour: 11,
                         isActive: false
                     }, {
                         hour: 12,
                         isActive: false
                     }, {
+                        hour: 13,
+                        isActive: false
+                    }, {
                         hour: 14,
+                        isActive: false
+                    }, {
+                        hour: 15,
                         isActive: false
                     }, {
                         hour: 16,
                         isActive: false
                     }, {
+                        hour: 17,
+                        isActive: false
+                    }, {
                         hour: 18,
+                        isActive: false
+                    }, {
+                        hour: 19,
                         isActive: false
                     }, {
                         hour: 20,
                         isActive: false
                     }, {
+                        hour: 21,
+                        isActive: false
+                    }, {
                         hour: 22,
                         isActive: false
-                    }
+                    }, {
+                        hour: 23,
+                        isActive: false
+                    },
 
                 ]
             }, ],
@@ -348,6 +542,27 @@ export default {
         }
     },
     methods: {
+        saveSchedule() {
+            let schedule = JSON.parse(JSON.stringify(this.days)).map(day => {
+                day.times = day.times.filter((time) => {
+                    return time.isActive;
+                }).map(time => {
+                    return moment().hour(time.hour).utc().format('H');
+                })
+
+                if (day.times.length) {
+                    let newDay = {};
+                    newDay.dayNumber = day.dayNumber;
+                    newDay.hours = day.times;
+                    return newDay;
+                }
+                return null;
+            }).filter(Boolean);
+            let params = { schedule: schedule };
+            rf.getRequest('NotificationRequest').saveSchedule(params).then(res => {
+                this.$message.success('Lưu thành công');
+            })
+        },
         activateDay(selectedDay, selectedHour) {
             this.days = [...this.days].map(day => {
                 if (day == selectedDay) {
@@ -360,7 +575,6 @@ export default {
                 }
                 return day;
             })
-            console.log(this.days);
         },
         handlePushNotification() {
             const messaging = firebase.messaging();
@@ -395,6 +609,23 @@ export default {
         }
     },
     mounted() {
+        rf.getRequest('NotificationRequest').getSchedule().then(res => {
+            let schedules = res;
+            schedules.forEach(schedule => {
+                this.days.forEach((day) => {
+                    if (day.dayNumber == schedule.day_number) {
+                        day.times.forEach(time => {
+                            if (time.hour == moment().utc().hour(schedule.hour).local().format('H')) {
+                                time.isActive = true;
+                            }
+                        })
+                    }
+                });
+            })
+        });
+        rf.getRequest('NotificationRequest').getToken().then(res => {
+            this.tokens = res;
+        })
         var config = {
             apiKey: "AIzaSyBF0BWf1dDJkowVXJaUO1vISw1nM8I4tIo",
             authDomain: "fir-94e10.firebaseapp.com",
@@ -406,10 +637,6 @@ export default {
             measurementId: "G-ZEWS3MD466"
         };
         this.firebase = firebase.initializeApp(config);
-
-        rf.getRequest('NotificationRequest').getToken().then(res => {
-            this.tokens = res;
-        })
 
     },
 }
