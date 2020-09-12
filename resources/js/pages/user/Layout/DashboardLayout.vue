@@ -30,7 +30,7 @@
 
 <script>
 import SideBar from './SideBar';
-import MobileSideBar from './MobileSideBar';
+import MobileSideBar from './MobileSidebar';
 
 import DashboardContent from './Content.vue';
 import AuthenticationUtils from '../../../common/AuthenticationUtils';
