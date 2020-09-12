@@ -4,7 +4,7 @@
     <MobileSideBar :visible="menuVisible" />
     <a-layout :style="{ marginLeft: '200px' }">
         <a-layout-header :style="{ background: '#fff', padding: 0 }">
-            <div style="width: 100px;height: 66px; position: absolute;" @click="menuVisible = !menuVisible">
+            <div class="hamburger-icon" style="width: 100px;height: 66px; position: absolute;" @click="menuVisible = !menuVisible">
                 <a-icon type="menu" class="menu-btn" style="display: none;" />
             </div>
             <a-tooltip>
@@ -66,7 +66,9 @@ export default {
         bottom: 0px !important;
         padding: 20px !important;
     }
-
+    .hamburger-icon {
+        display: block !important;
+    }
     .ant-layout {
         margin-left: 0px !important;
     }
@@ -77,7 +79,9 @@ export default {
         top: 0px;
     }
 }
-
+.hamburger-icon {
+    display: none;
+}
 .dashboard-content {
     padding: 0px !important;
 }
