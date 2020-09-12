@@ -126,7 +126,6 @@ export default {
         speechRecognizer.interimResults = true;
         speechRecognizer.lang = 'en-US';
         this.speechRecognizer = speechRecognizer;
-        this.speechRecognizer.start();
         this.text = '';
         this.score = 0;
     }
