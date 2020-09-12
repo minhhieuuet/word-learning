@@ -75,7 +75,7 @@ export default {
 <style lang="scss" scoped>
 @media screen and (max-width: 600px) {
     .category {
-        height: 100vh !important;
+        // height: 100vh !important;
     }
 
     .styles__container___16een,
