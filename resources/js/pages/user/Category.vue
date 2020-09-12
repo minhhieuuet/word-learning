@@ -75,19 +75,19 @@ export default {
 <style lang="scss" scoped>
 @media screen and (max-width: 600px) {
     .category {
-        // height: 100vh !important;
+        height: 30rem !important;
     }
 
     .styles__container___16een,
     .styles__container___2c6eo {
-        min-width: 49% !important;
+        min-width: 50% !important;
         display: inline;
         height: 11rem !important;
         margin: 0px auto !important;
         border-radius: 0% !important;
     }
     .last-category {
-        min-width: 99% !important;
+        min-width: 100% !important;
     }
     .styles__viewName___3mvLd {
         font-size: 1.3rem !important;
@@ -95,7 +95,7 @@ export default {
 
     .styles__container___3mCLH {
         // display: none !important;
-        min-width: 98% !important;
+        min-width: 100% !important;
         height: 6rem !important;
         margin: 0px auto !important;
         border-radius: 0% !important;
