@@ -7,6 +7,7 @@ use App\Models\Notification;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\Bucket;
+use App\Models\Word;
 
 class NotificationService
 {
@@ -14,6 +15,7 @@ class NotificationService
     {
         $curl = curl_init();
         $tokens = Notification::where('user_id', $userId)->pluck('token');
+        
         foreach($tokens as $token) {
             $content = "Coconut: Dừa - nhiều nước, rất ngọt";
             $title = "Từ mới hôm nay:";

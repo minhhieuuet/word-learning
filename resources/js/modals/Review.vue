@@ -1,5 +1,5 @@
 <template>
-<modal name="review" height="auto" width="620px" style="overflow: visible;" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
+<modal name="review" class="review-modal" height="auto" width="620px" style="overflow: visible;" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
 
     <div class="content">
         <div class="plus-btn" v-if="showAddBtn">
@@ -24,7 +24,7 @@
             </div>
             <div>
                 <a-row style="padding-top: 17px;">
-                    <a-col span="12">
+                    <a-col :xs="{ span: 24 }" :md="{ span: 12}">
 
                         <template v-if="editImageMode">
                             <img class="word-img" :src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/default.jpg' )" :title="currentWord['meaning']">
@@ -42,7 +42,7 @@
                         </div>
                         <input type="file" ref="image" @change="onImageChange" style="display: none" />
                     </a-col>
-                    <a-col span="12">
+                    <a-col :xs="{ span: 24 }" :md="{ span: 12}">
                         <h2 style="display: inline-flex">
                             <SpeakButton :word="currentWord['word']" />
                             {{currentWord['word'] | capitalize}}
@@ -78,6 +78,82 @@
             </svg>
         </div>
     </div>
+
+    <div class="content-mobile" style="display: none;">
+        <div class="plus-btn" v-if="showAddBtn">
+            <a-tooltip>
+                <template slot="title">
+                    Thêm từ
+                </template>
+                <img @click="showWordModal()" src="/images/plus.png" alt="">
+            </a-tooltip>
+        </div>
+        <template v-else>
+            <div class="tool-bar-mobile">
+                <Recorder :word="currentWord['word']" />
+
+                <StarButton :word="currentWord" @refresh="getWordsByCategory()" />
+
+                <a-button type="primary" shape="circle" icon="drag" size="large" />
+
+                <div class="remove-btn" title="Xoá từ này">
+                    <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
+                </div>
+            </div>
+            <div>
+                <a-row style="padding-top: 17px;">
+                    <a-col :xs="{ span: 24 }" :md="{ span: 12}">
+
+                        <template v-if="editImageMode">
+                            <img class="word-img" :src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/default.jpg' )" :title="currentWord['meaning']">
+                            <a-icon title="Huỷ bỏ" @click="discardImageChange" type="close-circle" theme="filled" class="discard-image-icon" />
+                            <a-icon title="Lưu thay đổi" @click="saveImageChange" type="check-circle" theme="filled" class="submit-image-icon" />
+                        </template>
+                        <template v-else>
+                            <img class="word-img" :src="currentWord['image'] ? currentWord['image'] : '/images/default.jpg'" :title="currentWord['meaning']">
+
+                            <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
+                        </template>
+                       
+                        <input type="file" ref="image" @change="onImageChange" style="display: none" />
+                    </a-col>
+                    <a-col :xs="{ span: 24 }" :md="{ span: 12}">
+                        <h2 style="display: inline-flex">
+                            <SpeakButton :word="currentWord['word']" />
+                            {{currentWord['word'] | capitalize}}
+                        </h2>
+                        <div class="word-info">
+
+                            <a-button v-if="editMode" type="default" shape="circle" icon="check" size="normal" style="float: right;" @click="handleEdit" />
+                            <a-button v-else type="default" shape="circle" icon="edit" size="normal" style="float: right;" @click="handleEdit" />
+
+                            <h4 v-if="!editMode">{{currentWord['meaning']}}</h4>
+                            <md-field class="meaning-edit" v-else>
+                                <md-input v-model="editWord.meaning" @keyup.enter="handleEdit()"></md-input>
+                            </md-field>
+                            <p><b v-show="currentWord.hint || editMode">Gợi ý:</b> {{editMode ? '' : currentWord['hint']}}</p>
+                            <md-field class="hint-edit" v-if="editMode">
+                                <md-input type="text" v-model="editWord.hint" @keyup.enter="handleEdit()"></md-input>
+                            </md-field>
+                        </div>
+                    </a-col>
+                </a-row>
+            </div>
+        </template>
+        <!-- Left button -->
+        <div v-show="(currentWordIndex != 0 || showAddBtn) && words.length" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowLeft___OPxnB" @click="previousWord()">
+            <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
+                <path d="M802.8 448h-428l166-158.8c23.8-25 23.8-65.4 0-90.4s-62.4-25-86.4 0l-276.4 268c-12 11.6-18 27.4-18 44.8v0.8c0 17.4 6 33.2 18 44.8l276.2 268c24 25 62.6 25 86.4 0s23.8-65.4 0-90.4l-166-158.8h428c33.8 0 61.2-28.6 61.2-64 0.2-36-27.2-64-61-64z"></path>
+            </svg>
+        </div>
+        <!-- Right button -->
+        <div v-show="!showAddBtn" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowRight___xJqg7" @click="nextWord()">
+            <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
+                <path d="M569.8 825.2l276.2-268c12-11.6 18-27.4 18-44.8v-0.8c0-17.4-6-33.2-18-44.8l-276.2-268c-24-25-62.6-25-86.4 0s-23.8 65.4 0 90.4l166 158.8h-428c-34-0-61.4 28.6-61.4 64 0 36 27.4 64 61.2 64h428l-166 158.8c-23.8 25-23.8 65.4 0 90.4 24 25 62.6 25 86.6 0z"></path>
+            </svg>
+        </div>
+    </div>
+
     <word-modal @created="setNewestWord()" @refresh="reload()"></word-modal>
 </modal>
 </template>
@@ -123,7 +199,7 @@ export default {
             await rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
                 this.currentWordIndex = 0;
                 this.words = res;
-                if(!this.words.length) {
+                if (!this.words.length) {
                     this.showAddBtn = true;
                     return;
                 }
@@ -173,10 +249,10 @@ export default {
             }).then((value) => {
                 if (value) {
                     rf.getRequest('WordRequest').removeWord(this.currentWord.id).then(res => {
-                        if(this.words.length == 1) {
+                        if (this.words.length == 1) {
                             this.words = [];
                             this.showAddBtn = true;
-                        }else if (this.currentWordIndex == (this.words.length - 1)) {
+                        } else if (this.currentWordIndex == (this.words.length - 1)) {
                             this.words = this.words.filter((_, index) => index != this.currentWordIndex);
                             this.currentWord = this.words[this.words.length - 1];
                             this.currentWordIndex = this.words.length - 1;
@@ -254,8 +330,37 @@ export default {
 .swal-delete-word {
     border: 1px solid rgb(115 59 59 / 50%) !important;
 }
+
+@media screen and (max-width: 600px) {
+    .review-modal {
+        .v--modal {
+            width: 100vh !important;
+            left: 0px !important;
+        }
+    }
+}
 </style>
 <style lang="scss" scoped>
+@media screen and (max-width: 600px) {
+    .content {
+        display: none;
+    }
+    .tool-bar-mobile {
+        
+    }
+    .content-mobile {
+        display: block !important;
+        width: 100vh !important;
+        left: 0px !important;
+    }
+
+    .review-modal {
+        width: 100vh !important;
+        left: 0px !important;
+    }
+
+}
+
 .content {
     align-items: center;
     justify-content: center;

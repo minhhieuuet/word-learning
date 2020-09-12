@@ -1,7 +1,6 @@
 <template>
-<a-layout-sider class="sidebar-pc" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }">
-    <div class="logo" />
-    <a-menu theme="dark"  :inline-collapsed="collapsed" @click="handleClick">
+<a-drawer class="mobile-menu" title="Vocabulary Learning" placement="left" :closable="false" :visible="visible" :after-visible-change="afterVisibleChange" @close="onClose">
+    <a-menu theme="light" :inline-collapsed="collapsed" @click="handleClick">
 
         <a-menu-item key="1">
             <a-icon type="book" />
@@ -20,11 +19,14 @@
             <span class="nav-text">Tôi</span>
         </a-menu-item>
     </a-menu>
-</a-layout-sider>
+</a-drawer>
 </template>
 
 <script>
 export default {
+    props: {
+        visible: Boolean
+    },
     data() {
         return {
             items: [{
@@ -51,11 +53,21 @@ export default {
             this.$router.push({
                 name: this.items[e.key - 1].routerName
             });
-        }
+        },
+        onClose() {
+            this.visible = false;
+        },
     },
 }
 </script>
 
+<style lang="scss">
+.mobile-menu {
+    .ant-drawer-body {
+        padding: 0px !important;
+    }
+}
+</style>
 <style lang="scss" scoped>
 @media screen and (max-width: 600px) {
     .sidebar-pc {

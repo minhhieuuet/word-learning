@@ -1,6 +1,6 @@
 <template>
 <div class="centered-container">
-    <md-content class="md-elevation-3">
+    <md-content class="md-elevation-3 login">
 
         <div class="title">
             <img src="/images/login-logo.png">
