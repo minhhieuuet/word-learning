@@ -1,6 +1,9 @@
 <template>
 <modal name="review" class="review-modal" height="auto" width="620px" style="overflow: visible;" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
-
+   <div class="close-button-mobile" @click="cancel">
+        <a-button type="danger" shape="circle" icon="close" />
+    </div>
+       
     <div class="content">
         <div class="plus-btn" v-if="showAddBtn">
             <a-tooltip>
@@ -94,15 +97,13 @@
 
                 <StarButton :word="currentWord" @refresh="getWordsByCategory()" />
 
-                <a-button type="primary" shape="circle" icon="drag" size="large" />
-
                 <div class="remove-btn" title="Xoá từ này">
                     <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
                 </div>
             </div>
             <div>
                 <a-row style="padding-top: 17px;">
-                    <a-col :xs="{ span: 24 }" :md="{ span: 12}">
+                    <a-col style="text-align: center; !important" :xs="{ span: 24 }" :md="{ span: 12}">
 
                         <template v-if="editImageMode">
                             <img class="word-img" :src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/default.jpg' )" :title="currentWord['meaning']">
@@ -117,7 +118,7 @@
                        
                         <input type="file" ref="image" @change="onImageChange" style="display: none" />
                     </a-col>
-                    <a-col :xs="{ span: 24 }" :md="{ span: 12}">
+                    <a-col class="mobile-info-side" :xs="{ span: 24 }" :md="{ span: 12}">
                         <h2 style="display: inline-flex">
                             <SpeakButton :word="currentWord['word']" />
                             {{currentWord['word'] | capitalize}}
@@ -140,6 +141,18 @@
                 </a-row>
             </div>
         </template>
+        
+        <div class="mobile-derection-btn-group" style="display: none;">
+            <a-button-group size="large" :block="true">
+            <a-button type="primary" @click="previousWord()" :disabled="(currentWordIndex == 0 && !showAddBtn) || !words.length">
+                <a-icon type="left" />Trở về
+            </a-button>
+            <a-button type="primary" @click="nextWord()" :disabled="showAddBtn">
+                Tiếp theo<a-icon type="right" />
+            </a-button>
+            </a-button-group>
+        </div>
+
         <!-- Left button -->
         <div v-show="(currentWordIndex != 0 || showAddBtn) && words.length" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowLeft___OPxnB" @click="previousWord()">
             <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
@@ -209,7 +222,7 @@ export default {
         },
         beforeClose() {},
         cancel() {
-            this.$modal.hide('category');
+            this.$modal.hide('review');
         },
         showWordModal() {
             this.$modal.show('word', { title: 'Thêm từ mới', categoryId: this.categoryId });
@@ -345,18 +358,51 @@ export default {
     .content {
         display: none;
     }
+    .mobile-info-side {
+        // h2 {
+            text-align: center !important;
+        // }
+    }
+    .arrow-btn {
+        display: none !important;
+    }
+    .word-img {
+        width: 15rem !important;
+        height: 13rem !important;
+    }
+    .word-info {
+        // width: 16.8rem !important;
+        width: 89% !important;
+        margin-left: 15px !important;
+        text-align: left !important;
+        display: block !important;
+    }
     .tool-bar-mobile {
         
     }
+    .remove-btn {
+        button {
+            background-color: white;
+            border: none;
+            color: red;
+        }
+    }
     .content-mobile {
         display: block !important;
-        width: 100vh !important;
+        width: 49vh !important;
         left: 0px !important;
     }
 
     .review-modal {
         width: 100vh !important;
         left: 0px !important;
+    }
+    .mobile-derection-btn-group {
+        display: block !important;
+        margin-top: 6px;
+        button {
+            width: 24vh;
+        }
     }
 
 }

@@ -58,50 +58,98 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 @media screen and (max-width: 600px) {
+    .html {
+        scroll-behavior: smooth;
+    }
+
     .layout-content {
         margin: 0px 2px !important;
     }
+
+    .v--modal-overlay {
+        background-color: white !important;
+    }
+
     .v--modal-box {
-        height: 100vh !important;
+        /* height: 100vh !important; */
         top: 0px !important;
         bottom: 0px !important;
         padding: 20px !important;
         width: auto !important;
         right: 0px !important;
         left: 0px !important;
-    }
-    .hamburger-icon {
-        display: block !important;
-        i {
-            padding: 2px;
-        background-color: white;
-        border-radius: 2%;
-        width: 100px;height: 66px; position: absolute;
+        overflow: scroll;
+        box-shadow: none !important;
+
+        .mobile-btn-group {
+            display: block !important;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .pc-btn-group {
+            display: none !important;
+        }
+
+        .close-button-mobile {
+            display: block !important;
+            right: 16px;
+            top: 5px;
+            position: fixed;
         }
     }
+
+    .hamburger-icon {
+        display: block !important;
+        margin-left: -55px;
+
+        i {
+            padding: 2px;
+            background-color: white;
+            border-radius: 2%;
+            width: 100px;
+            height: 66px;
+            position: absolute;
+        }
+    }
+
     .ant-layout {
         margin-left: 0px !important;
     }
 
-
     .ant-layout-footer {
-        display: none;
+        /* display: none; */
     }
+
     .login {
         position: absolute !important;
         bottom: 0px;
         top: 0px;
     }
 }
+
+.v--modal-box {
+    .mobile-btn-group {
+        display: none;
+    }
+
+    .close-button-mobile {
+        display: none;
+    }
+
+}
+
 .hamburger-icon {
     display: none;
 }
+
 .dashboard-content {
     padding: 0px !important;
 }
-
 
 .menu-btn {
     display: block !important;

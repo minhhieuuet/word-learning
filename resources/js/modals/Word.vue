@@ -1,6 +1,11 @@
 <template>
 <modal name="word" height="auto" width="400px" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
 
+     <div class="close-button-mobile" @click="cancel">
+        <a-button type="danger" shape="circle" icon="close" />
+    </div>
+
+
     <div class="content">
         <div slot="top-right">
         </div>
@@ -51,8 +56,15 @@
         </a-row>
 
     </div>
-
-    <div class="md-right">
+    <div class="mobile-btn-group">
+        <a-button type="primary" size="large" block @click="submit">
+            Lưu
+        </a-button>
+        <a-button type="dashed" size="large" block @click="cancel">
+            Thoát
+        </a-button>
+    </div>
+    <div class="md-right pc-btn-group">
         <a-button type="primary" @click="submit">Thêm</a-button>
         <a-button type="dashed" @click="cancel">Bỏ qua</a-button>
     </div>
