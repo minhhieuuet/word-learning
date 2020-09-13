@@ -27,7 +27,7 @@ class NotificationService
 
         foreach ($tokens as $token) {
             $content = "$word->meaning".($word->hint ? " - $word->hint": "");
-            $title = "$word->word";
+            $title = ucfirst($word->word);
             $image = $word['image'];
             curl_setopt_array($curl, array(
                 CURLOPT_URL => "https://fcm.googleapis.com/fcm/send",
@@ -37,7 +37,7 @@ class NotificationService
                 CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                 CURLOPT_CUSTOMREQUEST => "POST",
-                CURLOPT_POSTFIELDS => "{\n\"to\":\"$token\",\n \"notification\" : {\n  \"sound\" : \"default\",\n  \"image\" : \"$image\", \n  \"body\" :  \"$content\",\n  \"title\" : \"$title\",\n  \"content_available\" : true,\n  \"priority\" : \"high\",\n },\n \"data\" : {\n  \"sound\" : \"default\",\n  \"body\" :  \"test body\",\n  \"title\" : \"test title\",\n  \"content_available\" : true,\n  \"priority\" : \"high\",\n }\n}",
+                CURLOPT_POSTFIELDS => "{\n\"to\":\"$token\",\n \"notification\" : {\n  \"sound\" : \"default\",\n  \"image\" : \"$image\", \n  \"body\" :  \"$content\",\n  \"title\" : \"$title\",\n  \"icon\" : \"https://hoctumoi.tk/favicon.png\",\n  \"content_available\" : true,\n  \"priority\" : \"high\",\n },\n \"data\" : {\n  \"sound\" : \"default\",\n  \"body\" :  \"test body\",\n  \"title\" : \"test title\",\n  \"content_available\" : true,\n  \"priority\" : \"high\",\n }\n}",
                 CURLOPT_HTTPHEADER => array(
                     "authorization: key=" . env('FIREBASE_PUSH_KEY'),
                     "cache-control: no-cache",

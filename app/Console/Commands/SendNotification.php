@@ -59,6 +59,7 @@ class SendNotification extends Command
         echo $currentDayNumber."\n";
         echo $currentMinute."\n";
         echo $currentHour."\n";
+        // $this->notificationService->sendNotification(2);
         
         if($currentMinute == 0) {
             $notifications = NotificationSchedule::where(['day_number' => $currentDayNumber, 'hour' => $currentHour])->get();
