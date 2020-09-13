@@ -117,6 +117,7 @@ export default {
         height: 11rem !important;
         margin: 0px auto !important;
         border-radius: 0% !important;
+        border: 1px solid rgba(0, 0, 0, 0.2);
     }
 
     .last-category {
