@@ -390,7 +390,7 @@ export default {
     align-items: center;
     height: 3.0625rem;
     padding: 0 2.625rem;
-    border-radius: 1.5rem;
+    border-radius: 1.7rem;
     cursor: pointer;
     position: relative;
 }
@@ -447,7 +447,7 @@ export default {
 
 .styles__textTitle___3ne0o {
     font-weight: 600;
-    line-height: 1.5rem;
+    line-height: 1.7rem;
     font-size: 1.125rem;
     color: #232323;
     cursor: pointer;

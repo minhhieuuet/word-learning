@@ -1,6 +1,6 @@
 <template>
 <div>
-    <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Danh mục từ" sub-title="Bạn có thể thêm danh mục mới" @back="() => null" />
+    <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Danh mục từ" @back="() => null" />
     <div class="category inline-flex">
 
         <div class="styles__container___3mCLH effectScale inline-flex" @click="createCategory()">
@@ -20,7 +20,22 @@
         </div>
 
         <div v-for="(category, index) in categories" :key="category.id" v-if="category.is_visible" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
+            <div class="setting-btn">
+                <a-popover placement="topLeft" trigger="click">
+                    <template slot="content">
+                        <!-- <p><a-icon type="check-circle" style="color: green;" /> Đánh dấu</p> -->
+                        <div class="remove-category-btn" style="cursor: pointer;" @click="removeCategory(category.id)">
+                            <a-icon type="delete" style="color: red;" /> Xoá
+                        </div>
+                    </template>
+                    <!-- <template slot="title">
+                            <span>Title</span>
+                        </template> -->
+                    <a-button icon="setting"></a-button>
+                </a-popover>
+            </div>
             <div :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" :class="{styles__overLay___1WcJB : true}" @click="goToCategory(category.slug)">
+
                 <div class="styles__conName___2JHZN">
                     <div class="styles__viewName___2PQg6">{{category.title}}</div>
                 </div>
@@ -63,6 +78,23 @@ export default {
         },
         refresh() {
             this.getCategories();
+        },
+        removeCategory(categoryId) {
+            this.$swal({
+                icon: "error",
+                title: "Cảnh báo",
+                text: "Bạn có chắc chắn muốn xoá danh mục này ?",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["Huỷ", "Xoá"],
+                className: "swal-delete-word"
+            }).then((value) => {
+                if (value) {
+                    rf.getRequest('CategoryRequest').removeCategory(categoryId).then(res => {
+                        this.refresh();
+                    });
+                }
+            })
         }
     },
     mounted() {
@@ -104,10 +136,24 @@ export default {
     }
 }
 
+.setting-btn {
+    position: absolute;
+    right: 0px;
+
+    &:hover {
+        border: black;
+    }
+
+    .remove-category-btn {
+        color: black !important;
+        cursor: pointer !important;
+    }
+}
+
 .category {
-    height: 25rem;
     width: 100%;
     flex-flow: wrap;
+    padding: 20px;
 }
 
 .inline-flex {
@@ -251,6 +297,7 @@ export default {
 }
 
 .styles__container___2c6eo {
+    position: relative;
     min-width: 15rem;
     max-width: 19rem;
     width: 16vw;

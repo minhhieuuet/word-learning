@@ -28,4 +28,9 @@ export default class CategoryRequest extends BaseModelRequest {
         return this.get(url, params);
     }
 
+    removeCategory(categoryId) {
+        const url=`/category/${categoryId}`;
+        return this.del(url);
+    }
+
 }

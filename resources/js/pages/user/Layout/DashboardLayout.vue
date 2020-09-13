@@ -22,7 +22,7 @@
             </div>
         </a-layout-content>
         <a-layout-footer :style="{ textAlign: 'center' }">
-            Vocabulary Learining ©2020 Created with <a-icon type="heart"></a-icon>
+            Vocabulary Learning ©2020 Created with <a-icon type="heart"></a-icon>
         </a-layout-footer>
     </a-layout>
 </a-layout>
