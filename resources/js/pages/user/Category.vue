@@ -75,7 +75,7 @@ export default {
 <style lang="scss" scoped>
 @media screen and (max-width: 600px) {
     .category {
-        height: 30rem !important;
+        height: 100% !important;
     }
 
     .styles__container___16een,
@@ -86,9 +86,11 @@ export default {
         margin: 0px auto !important;
         border-radius: 0% !important;
     }
+
     .last-category {
         min-width: 100% !important;
     }
+
     .styles__viewName___3mvLd {
         font-size: 1.3rem !important;
     }
