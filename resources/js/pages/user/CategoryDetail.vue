@@ -129,7 +129,7 @@
         <a-row>
             <a-col class="word-side-mobile" :span="24">
                 <a-button-group style="text-align: center;width: 100%;">
-                    <a-button type="primary"  size="large" style="background-color: #31b108;width: 33%;" icon="plus-circle" @click="createWord()">
+                    <a-button type="primary" size="large" style="background-color: #31b108;width: 33%;" icon="plus-circle" @click="createWord()">
                     </a-button>
                     <a-button type="primary" size="large" style="background-color: rgb(135 106 253);width: 33%;" icon="eye" @click="openReviewModal()">
                     </a-button>
@@ -215,7 +215,7 @@
                         <div>
                         </div>
                     </a-tab-pane>
-                     <a-tab-pane key="3">
+                    <a-tab-pane key="3">
                         <span slot="tab">
                             <a-icon type="check-circle" />
                             Hoàn thành
