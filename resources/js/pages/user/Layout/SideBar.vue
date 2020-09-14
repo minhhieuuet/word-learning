@@ -1,7 +1,7 @@
 <template>
 <a-layout-sider class="sidebar-pc" :style="{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }">
     <div class="logo" />
-    <a-menu theme="dark"  :inline-collapsed="collapsed" @click="handleClick">
+    <a-menu theme="dark"  @click="handleClick">
 
         <a-menu-item key="1">
             <a-icon type="book" />

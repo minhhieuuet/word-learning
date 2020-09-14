@@ -10,7 +10,7 @@
             </div>
             <br>
             <a-row>
-                <a-col :span="8">
+                <a-col :xs="{ span: 24}" :md="{ span: 8}">
                     <a-card class="game-1" hoverable>
                         <img slot="cover" alt="example" class="game-background" src="/images/ai-la-trieu-phu-01.jpg" />
                         <template slot="actions" class="ant-card-actions">
@@ -23,7 +23,7 @@
                         <span>Yêu cầu tối thiểu: 15 từ</span>
                     </a-card>
                 </a-col>
-                <a-col class="game-2" :span="8">
+                <a-col class="game-2" :xs="{ span: 24}" :md="{ span: 8}">
                     <a-card hoverable>
                         <img slot="cover" alt="example" class="game-background" src="/images/mario-game.png" />
                         <template slot="actions" class="ant-card-actions">
@@ -36,7 +36,7 @@
                         <span>Yêu cầu tối thiểu: 5 từ</span>
                     </a-card>
                 </a-col>
-                <a-col class="game-3" :span="8">
+                <a-col class="game-3" :xs="{ span: 24}" :md="{ span: 8}">
                     <a-card hoverable>
                         <img slot="cover" alt="example" class="game-background" src="/images/card-list.jpg" />
                         <template slot="actions" class="ant-card-actions">
@@ -129,6 +129,15 @@ export default {
 </script>
 
 <style lang="scss">
+@media screen and (max-width: 600px) { 
+    .game-list {
+        padding: 10px;
+        padding-top: 30px;
+        .multiselect {
+            width: 350px !important;
+        }
+    }
+}
 .multiselect__tag {
     background: #3d9fe8 !important;
 }

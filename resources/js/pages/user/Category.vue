@@ -15,7 +15,7 @@
                 <div class="styles__conName___Jiq61">
                     <div class="styles__viewName___3mvLd">Cụm từ</div>
                 </div>
-                <div class="styles__txtNum___3JT46">{{categories[0].total_word}} cụm từ</div>
+                <div class="styles__txtNum___3JT46">{{categories[0] ? categories[0].total_word : '' }} cụm từ</div>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
                     <div class="styles__viewName___2PQg6">{{category.title}}</div>
                 </div>
                 <!-- <div class="styles__txtDate___1BKAV">{{category.created_at}}</div> -->
-                <div class="styles__txtNum___39eD4">{{category.total_word}} từ</div>
+                <div class="styles__txtNum___39eD4">{{category ? category.total_word : ''}} từ</div>
             </div>
         </div>
     </div>
@@ -314,6 +314,7 @@ export default {
     overflow: hidden;
     height: 8rem;
     transition: 0.3s ease-in-out;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 
     &:hover {
         box-shadow: 2px 5px 2px rgba(0, 0, 0, .5);

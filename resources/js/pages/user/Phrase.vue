@@ -108,6 +108,109 @@
         <review-modal @reload="refresh()"></review-modal>
         <word-modal @refresh="refresh()"></word-modal>
     </div>
+    <div class="main-conten phrase-mobile">
+        <a-row>
+            <a-col class="desc-side-mobile" :span="24">
+                <div class="phrase-desc hit-the-floor">
+                    <h2>Phrase</h2>
+                </div>
+            </a-col>
+        </a-row>
+        <a-row style="padding-top: 20px">
+            <a-col class="word-side" :span="24">
+                <a-button-group style="text-align: center;width: 100%;">
+                    <a-button type="primary" size="large" style="background-color: #31b108;width: 33%;" icon="plus-circle" @click="createWord()">
+                    </a-button>
+                    <a-button type="primary" size="large" style="background-color: rgb(135 106 253);width: 33%;" icon="eye" @click="openReviewModal()">
+                    </a-button>
+                    <a-button type="primary" size="large" style="rgb(243 162 41);width: 33%;" icon="trophy">
+                    </a-button>
+                </a-button-group>
+                <a-tabs default-active-key="1" style="border: 1px solid rgba(0, 0, 0, 0.1);">
+                    <a-tab-pane key="1">
+                        <span slot="tab">
+                            <a-icon type="ordered-list" />
+                            Tất cả
+                        </span>
+                        <div v-if="!phrases.length">
+                            <a-empty description="Danh sách trống" />
+                        </div>
+                        <div v-else class="styles__container___AS5GT" v-for="phrase in phrases" :key="phrase.id">
+                            <div style="margin-right: 10px;">
+                                <a-tooltip>
+                                    <template slot="title">
+                                        Độ thông thạo {{phrase.priority | formatPriorityToPercent}} %
+                                    </template>
+                                    <a-progress type="circle" :percent="phrase.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                                </a-tooltip>
+                            </div>
+                            <div class="styles__center___1alr7">
+                                <div class="styles__viewTitle___trc68">
+
+                                    <SpeakButton :word="phrase.word" />
+
+                                    <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="phrase.hint">
+                                        </span><span>{{phrase.word | capitalize}}</span>
+
+                                    </div>
+                                    <StarButton :word.sync="phrase" @refresh="refresh()" />
+                                </div>
+                                <div class="styles__desc___2IcIn"><span>{{phrase.meaning}}</span></div>
+                                <div class="styles__desc___2IcIn" v-if="phrase.hint">Gợi ý: <span>{{phrase.hint}}</span></div>
+                            </div>
+                            <div class="styles__right___4LtJ-">
+                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <img :src="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </a-tab-pane>
+                    <a-tab-pane key="2">
+                        <span slot="tab">
+                            <a-icon type="star" />
+                            Yêu thích
+                        </span>
+                        <div v-if="!phrases.filter(phrase => phrase.is_important).length">
+                            <a-empty description="Danh sách trống" />
+                        </div>
+                        <div v-else class="styles__container___AS5GT" v-for="phrase in phrases.filter(phrase => phrase.is_important)">
+                            <div style="margin-right: 10px;">
+                                <a-tooltip>
+                                    <template slot="title">
+                                        Độ thông thạo {{phrase.priority | formatPriorityToPercent}} %
+                                    </template>
+                                    <a-progress type="circle" :percent="phrase.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                                </a-tooltip>
+                            </div>
+                            <div class="styles__center___1alr7">
+                                <div class="styles__viewTitle___trc68">
+
+                                    <SpeakButton :word="phrase.word" />
+
+                                    <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="phrase.hint">
+                                        </span><span>{{phrase.word | capitalize}}</span>
+
+                                    </div>
+                                    <StarButton :word.sync="phrase" @refresh="refresh()" />
+                                </div>
+                                <div class="styles__desc___2IcIn"><span>{{phrase.meaning}}</span></div>
+                                <div class="styles__desc___2IcIn" v-if="phrase.hint">Gợi ý: <span>{{phrase.hint}}</span></div>
+                            </div>
+                            <div class="styles__right___4LtJ-">
+                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <img :src="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </a-tab-pane>
+                </a-tabs>
+            </a-col>
+        </a-row>
+        <review-modal @reload="refresh()"></review-modal>
+        <word-modal @refresh="refresh()"></word-modal>
+    </div>
 </div>
 </template>
 
@@ -172,6 +275,49 @@ export default {
 </script>
 
 <style lang="scss">
+@media screen and (max-width: 600px) {
+    .phrase {
+        display: none;
+    }
+
+    .phrase-mobile {
+        display: block !important;
+
+        .ant-tabs-nav {
+            width: 100% !important;
+            // text-align: center;
+        }
+
+        .ant-tabs-tab {
+            width: 40% !important;
+        }
+    }
+}
+
+.hit-the-floor {
+    color: #fff;
+    font-size: 12em;
+    font-weight: bold;
+    font-family: Helvetica;
+    text-shadow:
+        0 1px 0 #ccc,
+        0 2px 0 #c9c9c9,
+        0 3px 0 #bbb,
+        0 4px 0 #b9b9b9,
+        0 5px 0 #aaa,
+        0 6px 1px rgba(0, 0, 0, .1),
+        0 0 5px rgba(0, 0, 0, .1),
+        0 1px 3px rgba(0, 0, 0, .3),
+        0 3px 5px rgba(0, 0, 0, .2),
+        0 5px 10px rgba(0, 0, 0, .25),
+        0 10px 10px rgba(0, 0, 0, .2),
+        0 20px 20px rgba(0, 0, 0, .15);
+}
+
+.phrase-mobile {
+    display: none;
+}
+
 .phrase {
     .ant-tabs-nav {
         width: 100% !important;
@@ -270,7 +416,6 @@ export default {
     box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .1);
     margin: 0 1rem;
     padding: .0625rem 0;
-    height: 6rem;
 }
 
 .styles__left___22i0T {
