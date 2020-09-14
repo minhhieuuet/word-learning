@@ -98,7 +98,7 @@ export default {
         .close-button-mobile {
             display: block !important;
             right: 16px;
-            top: 5px;
+            top: 17px;
             position: fixed;
         }
     }

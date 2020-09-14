@@ -215,6 +215,45 @@
                         <div>
                         </div>
                     </a-tab-pane>
+                     <a-tab-pane key="3">
+                        <span slot="tab">
+                            <a-icon type="check-circle" />
+                            Hoàn thành
+                        </span>
+                        <div v-if="!words.filter(word => word.priority <= -5).length">
+                            <a-empty description="Danh sách trống" />
+                        </div>
+                        <div v-else class="styles__container___AS5GT" v-for="word in words.filter(word => word.priority <= -5)">
+                            <div style="margin-right: 10px;">
+                                <a-tooltip>
+                                    <template slot="title">
+                                        Độ thông thạo {{word.priority | formatPriorityToPercent}} %
+                                    </template>
+                                    <a-progress type="circle" :percent="word.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                                </a-tooltip>
+                            </div>
+                            <div class="styles__center___1alr7">
+                                <div class="styles__viewTitle___trc68">
+
+                                    <SpeakButton :word="word.word" />
+
+                                    <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="word.hint">
+                                        </span><span>{{word.word | capitalize}}</span>
+
+                                    </div>
+                                    <StarButton :word.sync="word" @refresh="refresh()" />
+                                </div>
+                                <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
+                                <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
+                            </div>
+                            <div class="styles__right___4LtJ-">
+                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <img :src="word.image" alt="ambitious">
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </a-tab-pane>
                 </a-tabs>
             </a-col>
         </a-row>
