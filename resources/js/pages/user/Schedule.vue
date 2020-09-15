@@ -49,7 +49,11 @@
             </tr>
         </tbody>
     </table>
-    <button @click="saveSchedule()">Lưu lịch</button>
+    <div style="margin-left: 30px;">
+        <a-button @click="saveSchedule()" size="large" type="primary" icon="save" style="margin-top: 10px;">
+        Lưu
+        </a-button>
+    </div>
 </div>
 </template>
 
