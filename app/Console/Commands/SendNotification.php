@@ -46,10 +46,10 @@ class SendNotification extends Command
         // echo Carbon::now();
         $daysNumber = [
             "Monday" => 0,
-            "Saturday" => 1,
-            "Tuesday" => 2,
-            "Wednesday" => 3,
-            "Thursday" => 4,
+            "Tuesday" => 1,
+            "Wednesday" => 2,
+            "Thursday" => 3,
+            "Friday" => 4,
             "Saturday" => 5,
             "Sunday" => 6,
         ];
