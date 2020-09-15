@@ -144,10 +144,10 @@
         
         <div class="mobile-derection-btn-group" style="display: none;">
             <a-button-group size="large" :block="true">
-            <a-button type="primary" @click="previousWord()" :disabled="(currentWordIndex == 0 && !showAddBtn) || !words.length">
+            <a-button  style="height: 80px;" type="primary" @click="previousWord()" :disabled="(currentWordIndex == 0 && !showAddBtn) || !words.length">
                 <a-icon type="left" />Trở về
             </a-button>
-            <a-button type="primary" @click="nextWord()" :disabled="showAddBtn">
+            <a-button style="height: 80px;" type="primary"  @click="nextWord()" :disabled="showAddBtn">
                 Tiếp theo<a-icon type="right" />
             </a-button>
             </a-button-group>
@@ -349,6 +349,7 @@ export default {
         .v--modal {
             width: 100vh !important;
             left: 0px !important;
+            height: 100vh;
         }
     }
 }
@@ -357,6 +358,9 @@ export default {
 @media screen and (max-width: 600px) {
     .content {
         display: none;
+    }
+    .word-info {
+        border-radius: 0px !important;
     }
     .mobile-info-side {
         // h2 {

@@ -1,22 +1,26 @@
 <template>
 <div class="schedule">
-    <button @click="handlePushNotification()">Bật thông báo</button>
+    <a-button type="primary" @click="handlePushNotification()">
+        Bật thông báo
+    </a-button>
+    <a-button type="primary" @click="handeTestNotification()">
+        Kiểm tra thông báo
+    </a-button>
 
-    <button @click="handeTestNotification()">Kiểm tra thông báo</button>
     <br>
-    <md-table style="width: 1000px;">
-        <md-table-row>
-            <md-table-head md-numeric>STT</md-table-head>
-            <md-table-head>Token</md-table-head>
-            <md-table-head>Ngày tạo</md-table-head>
-        </md-table-row>
+    <table>
+        <tr>
+            <th>STT</th>
+            <th>Token</th>
+            <th>Ngày tạo</th>
+        </tr>
 
-        <md-table-row v-for="(token, index) in tokens" :key="token.id">
-            <md-table-cell md-numeric>{{index + 1}}</md-table-cell>
-            <md-table-cell>{{token.token}}</md-table-cell>
-            <md-table-cell>{{token.created_at}}</md-table-cell>
-        </md-table-row>
-    </md-table>
+        <tr v-for="(token, index) in tokens" :key="token.id">
+            <td>{{index + 1}}</td>
+            <td>{{token.token}}</td>
+            <td>{{token.created_at}}</td>
+        </tr>
+    </table>
     <br>
     <table class="dayparts table">
         <thead>
@@ -32,7 +36,7 @@
             </tr>
             <tr class="hour-row">
                 <td class="hour" v-for="hour in times" :value="hour.hour">
-                    {{hour.hour}}
+                    {{hour.hour < 10 ? ('0'+ hour.hour) : hour.hour}}
                 </td>
             </tr>
         </thead>
@@ -45,7 +49,11 @@
             </tr>
         </tbody>
     </table>
-    <button @click="saveSchedule()">Lưu lịch</button>
+    <div style="margin-left: 30px;">
+        <a-button @click="saveSchedule()" size="large" type="primary" icon="save" style="margin-top: 10px;">
+        Lưu
+        </a-button>
+    </div>
 </div>
 </template>
 
@@ -80,7 +88,7 @@ export default {
     data() {
         return {
             tokens: [],
-            times: [ {
+            times: [{
                 hour: 7,
                 isActive: false
             }, {
@@ -133,10 +141,10 @@ export default {
                 isActive: false
             }, ],
             days: [{
-                dayName: "Thứ hai",
+                dayName: "2",
                 isActive: false,
                 dayNumber: 0,
-                times: [ {
+                times: [{
                     hour: 7,
                     isActive: false
                 }, {
@@ -189,10 +197,10 @@ export default {
                     isActive: false
                 }, ]
             }, {
-                dayName: "Thứ ba",
+                dayName: "3",
                 isActive: false,
                 dayNumber: 1,
-                times: [ {
+                times: [{
                         hour: 7,
                         isActive: false
                     }, {
@@ -247,10 +255,10 @@ export default {
 
                 ]
             }, {
-                dayName: "Thứ tư",
+                dayName: "4",
                 isActive: false,
                 dayNumber: 2,
-                times: [ {
+                times: [{
                         hour: 7,
                         isActive: false
                     }, {
@@ -305,10 +313,10 @@ export default {
 
                 ]
             }, {
-                dayName: "Thứ năm",
+                dayName: "5",
                 isActive: false,
                 dayNumber: 3,
-                times: [ {
+                times: [{
                         hour: 7,
                         isActive: false
                     }, {
@@ -363,10 +371,10 @@ export default {
 
                 ]
             }, {
-                dayName: "Thứ sáu",
+                dayName: "6",
                 isActive: false,
                 dayNumber: 4,
-                times: [ {
+                times: [{
                         hour: 7,
                         isActive: false
                     }, {
@@ -421,10 +429,10 @@ export default {
 
                 ]
             }, {
-                dayName: "Thứ bảy",
+                dayName: "7",
                 isActive: false,
                 dayNumber: 5,
-                times: [ {
+                times: [{
                         hour: 7,
                         isActive: false
                     }, {
@@ -479,10 +487,10 @@ export default {
 
                 ]
             }, {
-                dayName: "Chủ nhật",
+                dayName: "CN",
                 isActive: false,
                 dayNumber: 6,
-                times: [ {
+                times: [{
                         hour: 7,
                         isActive: false
                     }, {
@@ -643,6 +651,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@media screen and (max-width: 600px) {
+    .day-label {
+        // display: none;
+    }
+
+    .dayparts {
+        margin-left: -37px;
+    }
+}
+
 .schedule {
     padding: 30px;
     height: 800px;

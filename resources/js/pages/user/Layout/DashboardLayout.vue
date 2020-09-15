@@ -98,14 +98,17 @@ export default {
         .close-button-mobile {
             display: block !important;
             right: 16px;
-            top: 5px;
+            top: 17px;
             position: fixed;
         }
     }
 
     .hamburger-icon {
         display: block !important;
-        margin-left: -55px;
+        margin-left: -50px;
+        position: absolute;
+        width: 200px;
+        height: 65px;
 
         i {
             padding: 2px;
@@ -114,6 +117,8 @@ export default {
             width: 100px;
             height: 66px;
             position: absolute;
+            margin-top: 0px;
+            padding-top: 23px;
         }
     }
 
