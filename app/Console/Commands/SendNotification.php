@@ -54,7 +54,7 @@ class SendNotification extends Command
             "Sunday" => 6,
         ];
         $currentDayNumber = $daysNumber[Carbon::now()->format('l')];
-        $currentHour = Carbon::now()->format('h');
+        $currentHour = Carbon::now()->format('H');
         $currentMinute = Carbon::now()->format('i');
         echo $currentDayNumber."\n";
         echo $currentMinute."\n";
