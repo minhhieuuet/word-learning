@@ -5,7 +5,7 @@ namespace App\Http\Services;
 use App\Models\Bucket;
 use App\Models\Notification;
 use App\Models\Category;
-
+use Carbon\Carbon;
 use App\Models\Word;
 
 class NotificationService
@@ -22,7 +22,10 @@ class NotificationService
         $word = $categories->map(function ($category) {
             return Word::where('category_id', $category->id)->inRandomOrder()->get();
         })->flatten()->shuffle()->first();
-        echo $word;
+        
+        $now = Carbon::now()->setTimezone('Asia/Ho_Chi_Minh');
+
+        \Log::alert("$now :========= Send notification to user $userId ===".$word);
         // return $word;
 
         foreach ($tokens as $token) {
