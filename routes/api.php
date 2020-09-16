@@ -14,6 +14,8 @@ Route::get('send', 'NotificationController@sendNotification');
 
 Route::post('/image/store', 'ImageController@store');
 Route::get('/translate', 'TranslatorController@translate');
+Route::get('/translate-to-en', 'TranslatorController@translateToEn');
+
 
 Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
 

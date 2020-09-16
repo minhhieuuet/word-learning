@@ -27,8 +27,14 @@
         </div>
         <md-field>
             <label>Nghĩa</label>
-            <md-input type="text" :name="`${_uid}_meaning`" data-vv-validate-on="none" data-vv-as="nghĩa" v-validate="'required|max:300'" data-vv-scope="general" v-model="word.meaning" md-counter="300">
+            <md-input type="text" :name="`${_uid}_meaning`" @keyup.enter="translateToEn()" data-vv-validate-on="none" data-vv-as="nghĩa" v-validate="'required|max:300'" data-vv-scope="general" v-model="word.meaning" md-counter="300">
             </md-input>
+            <a-tooltip @click="translateToEn()">
+                <template slot="title">
+                    Nhấn để dịch
+                </template>
+                <md-icon style="cursor: pointer;">translate</md-icon>
+            </a-tooltip>
         </md-field>
         <div v-if="errors.has(`general.${_uid}_meaning`)">
             <md-icon class="md-accent">warning</md-icon>
@@ -165,12 +171,21 @@ export default {
                 // });
             });
         },
-        translate() {
+        getSuggestImages() {
             this.$imageClient.search(this.word.word).then(images => {
                 this.suggestImages = images;
             });
+        },
+        translate() {
+            this.getSuggestImages();
             rf.getRequest('TranslateRequest').translate({ text: this.word.word }).then(res => {
                 this.word.meaning = res;
+            })
+        },
+        translateToEn() {
+            rf.getRequest('TranslateRequest').translateToEn({ text: this.word.meaning }).then(res => {
+                    this.word.word = res;
+                    this.getSuggestImages();
             })
         },
         cancel() {
