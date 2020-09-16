@@ -1,6 +1,8 @@
 /node_modules
 /public/hot
 /public/storage
+/public/external_images
+/pulic/.DS_Store
 /storage/*.key
 /vendor
 /public/js/app.js

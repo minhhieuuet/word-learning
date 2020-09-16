@@ -17,7 +17,7 @@ class ImageService
     }
 
     public function saveImageFromUrl($url) {
-        $img = "external_images/".time() . 'jpg';
+        $img = "external_images/".time() . '.jpg';
         if(!strpos(substr($url, strrpos($url, '/') + 1), '.')){
             $img = $img.'.jpg';
         }  
