@@ -7,6 +7,7 @@ use App\Models\NotificationSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use App\Http\Services\NotificationService;
+use App\Http\Requests\NotificationRequest;
 
 class NotificationController extends Controller
 {
@@ -16,17 +17,18 @@ class NotificationController extends Controller
         $this->notificationService = $notificationService;
     }
 
-    public function saveToken(Request $request)
+    public function saveToken(NotificationRequest $request)
     {
         $userId = $request->user()->id;
         $token = array_get($request, 'token');
-
+        $deviceName = array_get($request, 'device_name');
         $notification = Notification::updateOrCreate([
             'user_id' => $userId,
             'token' => $token,
         ], [
             'user_id' => $userId,
             'token' => $token,
+            'device_name' => $deviceName
         ]);
         return $notification;
     }
@@ -61,6 +63,12 @@ class NotificationController extends Controller
     public function getToken(Request $request) {
         $userId = $request->user()->id;
         return Notification::where('user_id', $userId)->get();
+    }
+
+    public function removeNotification($notificationId) {
+        $notification = Notification::findOrFail($notificationId);
+        $notification->delete();
+        return 'ok';
     }
 
     public function sendNotification()

@@ -65,7 +65,7 @@
         </a-button>
     </div>
     <div class="md-right pc-btn-group">
-        <a-button type="primary" @click="submit">Thêm</a-button>
+        <a-button type="primary" :loading="isLoading" @click="submit">Thêm</a-button>
         <a-button type="dashed" @click="cancel">Bỏ qua</a-button>
     </div>
 </modal>
@@ -77,6 +77,7 @@ export default {
     data() {
         return {
             title: 'Word',
+            isLoading: false,
             word: {
                 word: '',
                 hint: '',
@@ -126,11 +127,14 @@ export default {
             this.createNewWord();
         },
         createNewWord() {
+            this.isLoading = true;
             rf.getRequest('WordRequest').store(this.word).then((res) => {
+                this.isLoading= false;
                 this.$emit('refresh');
                 this.$emit('created');
                 this.$modal.hide('word');
             }).catch((err) => {
+                this.isLoading= false;
                 // this.$toasted.show('Đã có lỗi xảy ra, vui lòng kiểm tra lại!', {
                 //   theme: 'bubble',
                 //   position: 'top-right',

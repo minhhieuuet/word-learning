@@ -10,8 +10,12 @@ require('./bootstrap');
 import Vue from 'vue';
 Vue.config.silent = true
 
-import './common/filters';
+const GoogleImages = require('google-images');
 
+Vue.prototype.$imageClient = new GoogleImages(process.env.MIX_GOOGLE_IMAGE_ID, process.env.MIX_GOOGLE_IMAGE_KEY);
+
+import './common/filters';
+import Clipboard from 'v-clipboard'
 import VeeValidate, { Validator } from 'vee-validate';
 import draggable from 'vuedraggable'
 import VueRouter from 'vue-router';
@@ -37,8 +41,9 @@ import Antd from 'ant-design-vue';
 import VueSwal from 'vue-swal'
 import Multiselect from 'vue-multiselect'
 import AnimatedVue from 'animated-vue'
-import 'animate.css/animate.css'
+import 'animate.css/animate.css';
 
+Vue.use(Clipboard)
 Vue.use(AnimatedVue)
 // register globally
 Vue.config.productionTip = true;

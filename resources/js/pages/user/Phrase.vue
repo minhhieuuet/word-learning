@@ -330,6 +330,9 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.phrase {
+    padding: 10px;
+}
 .desc-side {
     padding-right: 20px;
 }

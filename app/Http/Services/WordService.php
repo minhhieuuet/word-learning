@@ -7,9 +7,17 @@ use App\Models\Word;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\Bucket;
+use App\Http\Services\ImageService;
+use Storage;
 
 class WordService
 {
+    protected $imageService;
+
+    public function __construct(ImageService $imageService) {
+        $this->imageService = $imageService;
+    }
+    
     public function getWords($params)
     {
         $limit = array_get($params, 'limit', 10);
@@ -65,13 +73,19 @@ class WordService
     }
 
     public function storeWord($params)
-    {
+    {   
+        $externalImage = array_get($params, 'external_image');
+        if($externalImage) {
+            $imageUrl = $this->imageService->saveImageFromUrl($externalImage);
+        } else {
+            $imageUrl = array_get($params, 'image');
+        }
         $word = Word::create([
             'category_id' => array_get($params, 'category_id'),
             'word' => array_get($params, 'word'),
             'hint' => array_get($params, 'hint'),
             'meaning' => array_get($params, 'meaning'),
-            'image' => array_get($params, 'image'),
+            'image' => $imageUrl,
             'is_important' => array_get($params, 'is_important')
         ]);
 

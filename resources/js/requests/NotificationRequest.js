@@ -16,6 +16,11 @@ export default class NotificationRequest extends BaseModelRequest {
         return this.get(url);
     }
 
+     removeToken(notificationId) {
+        const url=`/notification/${notificationId}`;
+        return this.del(url);
+    }
+
     sendTestNotification() {
         const url = '/notification/test';
         return this.post(url);

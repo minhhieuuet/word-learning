@@ -148,6 +148,7 @@ export default {
 }
 
 .game-list {
+    padding: 20px;
     .anticon-play-circle {
         font-size: 31px !important;
         line-height: 22px;

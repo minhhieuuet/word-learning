@@ -50,15 +50,21 @@
 
         <a-row style="margin-top: 20px;">
             Ảnh
-            <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions" accepted-file-types=".jpg,.png,.jpeg" @vdropzone-success="uploadSuccess" @vdropzone-complete="afterComplete">
+            <vue-dropzone :style="{backgroundImage: `url(${chosedImage})`, backgroundSize: 'cover'}" ref="myVueDropzone" vdropzone-file-added="handleFileAdded" id="dropzone" :options="dropzoneOptions" accepted-file-types=".jpg,.png,.jpeg" @vdropzone-success="uploadSuccess" @vdropzone-complete="afterComplete">
 
             </vue-dropzone>
+        </a-row>
+        <a-row v-if="suggestImages.length">
+            <div class="image-list">
+                <img class="suggest-image" v-for="image in suggestImages" @click="chooseImage(image)" style="width: 100px;" :key="image" :src="image.url" alt="">
+
+            </div>
         </a-row>
 
     </div>
 
     <div class="mobile-btn-group">
-        <a-button type="primary" size="large" block @click="submit">
+        <a-button type="primary" size="large" :loading="isLoading" block @click="submit">
             Lưu
         </a-button>
         <a-button type="dashed" size="large" block @click="cancel">
@@ -66,7 +72,7 @@
         </a-button>
     </div>
     <div class="md-right pc-btn-group">
-        <a-button type="primary" @click="submit">Thêm</a-button>
+        <a-button type="primary" :loading="isLoading" @click="submit">Thêm</a-button>
         <a-button type="dashed" @click="cancel">Bỏ qua</a-button>
     </div>
 </modal>
@@ -78,13 +84,17 @@ export default {
     data() {
         return {
             title: 'Word',
+            suggestImages: [],
+            isLoading: false,
+            chosedImage: '',
             word: {
                 word: '',
                 hint: '',
                 image: '',
                 meaning: '',
                 is_important: false,
-                category_id: 1
+                category_id: 1,
+                suggestImage: []
             },
             dropzoneOptions: {
                 url: `${process.env.MIX_APP_URL}/api/image/store`,
@@ -103,6 +113,8 @@ export default {
         beforeOpen(event) {
             this.title = event.params.title;
             this.word.category_id = event.params.categoryId;
+            this.suggestImages = [];
+            this.chosedImage = '';
         },
         beforeClose() {
             this.word = {
@@ -114,10 +126,18 @@ export default {
                 category_id: 1
             }
         },
+        handleFileAdded() {
+            this.chosedImage = '';
+        },
+        chooseImage(image) {
+            this.$refs.myVueDropzone.removeAllFiles();
+            this.chosedImage = image.url;
+        },
         afterComplete(file, response) {
-            // console.log(response);
+            this.chosedImage = '';
         },
         uploadSuccess(file, response) {
+            this.chosedImage = '';
             this.word.image = response;
         },
         onIsImportantChange(isImportant) {
@@ -127,11 +147,16 @@ export default {
             this.createNewWord();
         },
         createNewWord() {
-            rf.getRequest('WordRequest').store(this.word).then((res) => {
+            let params = { ...this.word };
+            params.external_image = this.chosedImage;
+            this.isLoading = true;
+            rf.getRequest('WordRequest').store(params).then((res) => {
+                this.isLoading = false;
                 this.$emit('refresh');
                 this.$emit('created');
                 this.$modal.hide('word2');
             }).catch((err) => {
+                this.isLoading = false;
                 // this.$toasted.show('Đã có lỗi xảy ra, vui lòng kiểm tra lại!', {
                 //   theme: 'bubble',
                 //   position: 'top-right',
@@ -141,6 +166,9 @@ export default {
             });
         },
         translate() {
+            this.$imageClient.search(this.word.word).then(images => {
+                this.suggestImages = images;
+            });
             rf.getRequest('TranslateRequest').translate({ text: this.word.word }).then(res => {
                 this.word.meaning = res;
             })
@@ -155,6 +183,21 @@ export default {
 <style lang="scss" scoped>
 .content {
     padding: 30px 30px 10px 30px;
+}
+
+.image-list {
+    height: 100px;
+    overflow-x: scroll;
+    display: flex;
+
+    img {
+        cursor: pointer;
+        opacity: 0.7;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
 }
 
 .md-right {
