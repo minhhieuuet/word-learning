@@ -73,7 +73,7 @@ class GameService
         
           return [
               'content' => $word->meaning,
-              'options' => $randomWords
+              'options' => $randomWords->shuffle()
           ];
 
 
