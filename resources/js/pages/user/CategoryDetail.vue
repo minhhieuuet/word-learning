@@ -66,8 +66,17 @@
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
                             </div>
                             <div class="styles__right___4LtJ-">
-                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                                <img :src="word.image" alt="ambitious">
+                                <div class="styles__status___2gUWg">
+                                    <a-popover placement="top" trigger="click">
+                                        <template slot="content">
+                                            <div style="cursor: pointer;" @click="removeWord(word.id)">
+                                                <a-icon type="delete" style="color: red;" /> Xoá
+                                            </div>
+                                        </template>
+                                        <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
+                                    </a-popover>
+                                </div>
+                                <img :src="word.image" alt="Ảnh">
                             </div>
                         </div>
                         <div>
@@ -105,7 +114,16 @@
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
                             </div>
                             <div class="styles__right___4LtJ-">
-                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <div class="styles__status___2gUWg">
+                                    <a-popover placement="top" trigger="click">
+                                        <template slot="content">
+                                            <div style="cursor: pointer;" @click="removeWord(word.id)">
+                                                <a-icon type="delete" style="color: red;" /> Xoá
+                                            </div>
+                                        </template>
+                                        <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
+                                    </a-popover>
+                                </div>
                                 <img :src="word.image" alt="ambitious">
                             </div>
                         </div>
@@ -169,7 +187,16 @@
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
                             </div>
                             <div class="styles__right___4LtJ-">
-                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <div class="styles__status___2gUWg">
+                                    <a-popover placement="left" trigger="click">
+                                        <template slot="content">
+                                            <div style="cursor: pointer;" @click="removeWord(word.id)">
+                                                <a-icon type="delete" style="color: red;" /> Xoá
+                                            </div>
+                                        </template>
+                                        <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
+                                    </a-popover>
+                                </div>
                                 <img :src="word.image" alt="ambitious">
                             </div>
                         </div>
@@ -208,7 +235,16 @@
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
                             </div>
                             <div class="styles__right___4LtJ-">
-                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                               <div class="styles__status___2gUWg">
+                                    <a-popover placement="left" trigger="click">
+                                        <template slot="content">
+                                            <div style="cursor: pointer;" @click="removeWord(word.id)">
+                                                <a-icon type="delete" style="color: red;" /> Xoá
+                                            </div>
+                                        </template>
+                                        <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
+                                    </a-popover>
+                                </div>
                                 <img :src="word.image" alt="ambitious">
                             </div>
                         </div>
@@ -247,7 +283,16 @@
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
                             </div>
                             <div class="styles__right___4LtJ-">
-                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <div class="styles__status___2gUWg">
+                                    <a-popover placement="left" trigger="click">
+                                        <template slot="content">
+                                            <div style="cursor: pointer;" @click="removeWord(word.id)">
+                                                <a-icon type="delete" style="color: red;" /> Xoá
+                                            </div>
+                                        </template>
+                                        <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
+                                    </a-popover>
+                                </div>
                                 <img :src="word.image" alt="ambitious">
                             </div>
                         </div>
@@ -308,6 +353,23 @@ export default {
         onSeach(value) {
             alert(value);
         },
+        removeWord(wordId) {
+            this.$swal({
+                icon: "error",
+                title: "Cảnh báo",
+                text: "Bạn có chắc chắn muốn xoá từ này ?",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["Huỷ", "Xoá"],
+                className: "swal-delete-word"
+            }).then((value) => {
+                if (value) {
+                    rf.getRequest('WordRequest').removeWord(wordId).then(res => {
+                        this.refresh();
+                    })
+                }
+            })
+        },
         createWord() {
             this.$modal.show('word2', { categoryId: this.categoryId, title: 'Thêm từ mới' });
         },
@@ -354,6 +416,11 @@ export default {
         background-repeat: no-repeat;
         border: 1px solid rgba(99, 99, 99, 0.2);
     }
+}
+
+.remove-word-icon {
+    width: 1.2rem !important;
+    height: 1.5rem !important;
 }
 
 .desc-side {
@@ -516,9 +583,8 @@ export default {
 
 .styles__status___2gUWg {
     position: absolute;
-    top: .25rem;
-    right: .25rem;
-    border: 1px solid hsla(0, 0%, 100%, .8);
+    right: .1rem;
+    cursor: pointer;
     border-radius: 4px;
     width: 1rem;
     height: 1rem;
