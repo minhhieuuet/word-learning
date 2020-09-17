@@ -62,7 +62,7 @@
         </a-row>
         <a-row v-if="suggestImages.length">
             <div class="image-list">
-                <img class="suggest-image" v-for="image in suggestImages" @click="chooseImage(image)" style="width: 100px;" :key="image" :src="image.url" alt="">
+                <img class="suggest-image" v-for="image in suggestImages" @click="chooseImage(image)" style="width: 100px;" :key="image" v-lazy="image.url" alt="">
 
             </div>
         </a-row>
