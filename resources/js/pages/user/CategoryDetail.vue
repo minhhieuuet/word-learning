@@ -133,8 +133,6 @@
                 </a-tabs>
             </a-col>
         </a-row>
-        <review-modal @reload="refresh()"></review-modal>
-        <WordModal2 @refresh="refresh()"></WordModal2>
     </div>
     <div class="main-content-mobile" style="display:none;">
         <a-row>
@@ -235,7 +233,7 @@
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
                             </div>
                             <div class="styles__right___4LtJ-">
-                               <div class="styles__status___2gUWg">
+                                <div class="styles__status___2gUWg">
                                     <a-popover placement="left" trigger="click">
                                         <template slot="content">
                                             <div style="cursor: pointer;" @click="removeWord(word.id)">
@@ -302,9 +300,9 @@
                 </a-tabs>
             </a-col>
         </a-row>
-        <review-modal @reload="refresh()"></review-modal>
-        <WordModal2 @refresh="refresh()"></WordModal2>
     </div>
+    <review-modal @reload="refresh()"></review-modal>
+    <WordModal2 @refresh="refresh()"></WordModal2>
 </div>
 </template>
 

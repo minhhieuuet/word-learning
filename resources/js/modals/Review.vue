@@ -1,9 +1,9 @@
 <template>
 <modal name="review" class="review-modal" height="auto" width="620px" style="overflow: visible;" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
-   <div class="close-button-mobile" @click="cancel">
+    <div class="close-button-mobile" @click="cancel">
         <a-button type="danger" shape="circle" icon="close" />
     </div>
-       
+
     <div class="content">
         <div class="plus-btn" v-if="showAddBtn">
             <a-tooltip>
@@ -30,12 +30,12 @@
                     <a-col :xs="{ span: 24 }" :md="{ span: 12}">
 
                         <template v-if="editImageMode">
-                            <img class="word-img" :src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/default.jpg' )" :title="currentWord['meaning']">
+                            <img class="word-img" v-src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/default.jpg' )" :title="currentWord['meaning']">
                             <a-icon title="Huỷ bỏ" @click="discardImageChange" type="close-circle" theme="filled" class="discard-image-icon" />
                             <a-icon title="Lưu thay đổi" @click="saveImageChange" type="check-circle" theme="filled" class="submit-image-icon" />
                         </template>
                         <template v-else>
-                            <img class="word-img" :src="currentWord['image'] ? currentWord['image'] : '/images/default.jpg'" :title="currentWord['meaning']">
+                            <img class="word-img" v-lazy="currentWord['image'] ? currentWord['image'] : '/images/default.jpg'" :title="currentWord['meaning']">
 
                             <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
                         </template>
@@ -115,7 +115,7 @@
 
                             <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
                         </template>
-                       
+
                         <input type="file" ref="image" @change="onImageChange" style="display: none" />
                     </a-col>
                     <a-col class="mobile-info-side" :xs="{ span: 24 }" :md="{ span: 12}">
@@ -141,15 +141,16 @@
                 </a-row>
             </div>
         </template>
-        
+
         <div class="mobile-derection-btn-group" style="display: none;">
             <a-button-group size="large" :block="true">
-            <a-button  style="height: 80px;" type="primary" @click="previousWord()" :disabled="(currentWordIndex == 0 && !showAddBtn) || !words.length">
-                <a-icon type="left" />Trở về
-            </a-button>
-            <a-button style="height: 80px;" type="primary"  @click="nextWord()" :disabled="showAddBtn">
-                Tiếp theo<a-icon type="right" />
-            </a-button>
+                <a-button style="height: 80px;" type="primary" @click="previousWord()" :disabled="(currentWordIndex == 0 && !showAddBtn) || !words.length">
+                    <a-icon type="left" />Trở về
+                </a-button>
+                <a-button style="height: 80px;" type="primary" @click="nextWord()" :disabled="showAddBtn">
+                    Tiếp theo
+                    <a-icon type="right" />
+                </a-button>
             </a-button-group>
         </div>
 
@@ -209,6 +210,8 @@ export default {
     methods: {
         async beforeOpen(event) {
             this.categoryId = event.params.categoryId;
+
+            //Get words by category
             await rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
                 this.currentWordIndex = 0;
                 this.words = res;
@@ -219,8 +222,20 @@ export default {
                 this.currentWord = res[0];
                 this.showAddBtn = false;
             });
+            
+            //Add event press arrow left and right to back and next
+
+            window.addEventListener('keyup', (ev) => {
+                if (ev.key === 'ArrowRight') {
+                    this.nextWord();
+                } else if (ev.key === 'ArrowLeft') {
+                    this.previousWord();
+                }
+            });
         },
-        beforeClose() {},
+        beforeClose() {
+            window.removeEventListener('keyup', () => {});
+        },
         cancel() {
             this.$modal.hide('review');
         },
@@ -229,6 +244,7 @@ export default {
         },
         nextWord() {
             this.editMode = false;
+
             if (this.currentWordIndex < this.words.length) {
                 if (this.currentWordIndex == (this.words.length - 1)) {
                     this.showAddBtn = true;
@@ -241,6 +257,10 @@ export default {
         },
         previousWord() {
             this.editMode = false;
+            if (this.currentWordIndex == 0) {
+                return;
+            }
+
             if (this.showAddBtn) {
                 this.currentWordIndex == this.words.length - 1;
                 this.currentWord = this.words[this.currentWordIndex];
@@ -359,21 +379,26 @@ export default {
     .content {
         display: none;
     }
+
     .word-info {
         border-radius: 0px !important;
     }
+
     .mobile-info-side {
         // h2 {
-            text-align: center !important;
+        text-align: center !important;
         // }
     }
+
     .arrow-btn {
         display: none !important;
     }
+
     .word-img {
         width: 15rem !important;
         height: 13rem !important;
     }
+
     .word-info {
         // width: 16.8rem !important;
         width: 89% !important;
@@ -381,9 +406,9 @@ export default {
         text-align: left !important;
         display: block !important;
     }
-    .tool-bar-mobile {
-        
-    }
+
+    .tool-bar-mobile {}
+
     .remove-btn {
         button {
             background-color: white;
@@ -391,6 +416,7 @@ export default {
             color: red;
         }
     }
+
     .content-mobile {
         display: block !important;
         width: 49vh !important;
@@ -401,9 +427,11 @@ export default {
         width: 100vh !important;
         left: 0px !important;
     }
+
     .mobile-derection-btn-group {
         display: block !important;
         margin-top: 6px;
+
         button {
             width: 24vh;
         }
