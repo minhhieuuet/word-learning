@@ -57,7 +57,7 @@
                             </div>
                             <div class="styles__right___4LtJ-">
                                 <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                                <img :src="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
+                                <img v-lazy="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
                             </div>
                         </div>
                         <div>
@@ -96,7 +96,7 @@
                             </div>
                             <div class="styles__right___4LtJ-">
                                 <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                                <img :src="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
+                                <img v-lazy="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
                             </div>
                         </div>
                         <div>
@@ -160,7 +160,7 @@
                             </div>
                             <div class="styles__right___4LtJ-">
                                 <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                                <img :src="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
+                                <img v-lazy="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
                             </div>
                         </div>
                         <div>
@@ -199,7 +199,7 @@
                             </div>
                             <div class="styles__right___4LtJ-">
                                 <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                                <img :src="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
+                                <img v-lazy="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
                             </div>
                         </div>
                         <div>

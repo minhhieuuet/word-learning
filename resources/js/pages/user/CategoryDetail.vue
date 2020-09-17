@@ -76,7 +76,7 @@
                                         <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
                                     </a-popover>
                                 </div>
-                                <img :src="word.image" alt="Ảnh">
+                                <img v-lazy="word.image" :alt="word.word">
                             </div>
                         </div>
                         <div>
@@ -124,7 +124,7 @@
                                         <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
                                     </a-popover>
                                 </div>
-                                <img :src="word.image" alt="ambitious">
+                                <img v-lazy="word.image" :alt="word.word">
                             </div>
                         </div>
                         <div>
@@ -197,7 +197,7 @@
                                         <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
                                     </a-popover>
                                 </div>
-                                <img :src="word.image" alt="ambitious">
+                                <img v-lazy="word.image" :alt="word.word">
                             </div>
                         </div>
                         <div>
@@ -245,7 +245,7 @@
                                         <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
                                     </a-popover>
                                 </div>
-                                <img :src="word.image" alt="ambitious">
+                                <img v-lazy="word.image" :alt="word.word">
                             </div>
                         </div>
                         <div>
@@ -293,7 +293,7 @@
                                         <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
                                     </a-popover>
                                 </div>
-                                <img :src="word.image" alt="ambitious">
+                                <img v-lazy="word.image" :alt="word.word">
                             </div>
                         </div>
                         <div>

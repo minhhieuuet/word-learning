@@ -24,6 +24,7 @@ import VueMaterial from 'vue-material';
 import VModal from 'vue-js-modal';
 import Toasted from 'vue-toasted';
 import vue2Dropzone from 'vue2-dropzone';
+import VueLazyload from 'vue-lazyload';
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import 'vue-material/dist/vue-material.min.css';
 
@@ -51,6 +52,9 @@ Vue.config.productionTip = true;
 
 Vue.component('multiselect', Multiselect)
 Vue.use(VueSwal)
+Vue.use(VueLazyload, {
+    loading: '/loading.gif'
+})
 Vue.use(VueMaterial);
 Vue.use(VeeValidate);
 Vue.use(VModal, { dialog: true });
