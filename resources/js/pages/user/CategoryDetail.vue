@@ -325,6 +325,7 @@ export default {
     data() {
         return {
             words: [],
+            isLoading: false,
             favouriteWords: [],
             category: {},
             seachKey: '',
@@ -343,8 +344,10 @@ export default {
             })
         },
         getWordsByCategory(categoryId) {
+            const loading = this.$message.loading('Đang tải ...', 0);
             rf.getRequest('CategoryRequest').getWordsByCategory(categoryId).then(res => {
                 this.words = res;
+                loading();
             })
         },
         openReviewModal() {
