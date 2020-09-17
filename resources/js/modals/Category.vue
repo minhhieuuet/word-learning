@@ -116,7 +116,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
 
     .styles__container___16een {
         min-width: 10rem !important;

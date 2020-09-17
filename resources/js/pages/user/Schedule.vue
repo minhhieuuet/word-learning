@@ -711,7 +711,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .day-label {
         // display: none;
     }

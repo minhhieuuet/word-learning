@@ -344,7 +344,7 @@ export default {
     border: 1px solid rgb(115 59 59 / 50%) !important;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .review-modal {
         .v--modal {
             width: 100vh !important;
@@ -355,7 +355,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .content {
         display: none;
     }

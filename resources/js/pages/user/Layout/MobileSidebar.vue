@@ -68,7 +68,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .sidebar-pc {
         display: none;
     }

@@ -41,11 +41,9 @@ import 'ant-design-vue/dist/antd.css';
 import Antd from 'ant-design-vue';
 import VueSwal from 'vue-swal'
 import Multiselect from 'vue-multiselect'
-import AnimatedVue from 'animated-vue'
 import 'animate.css/animate.css';
 
 Vue.use(Clipboard)
-Vue.use(AnimatedVue)
 // register globally
 Vue.config.productionTip = true;
 
@@ -65,10 +63,6 @@ Vue.component('data-table', DataTable);
 Vue.component('vue-dropzone', vue2Dropzone)
 Vue.use(VueRouter)
 Vue.use(MaterialDashboard)
-// Vue.use(GlobalComponents)
-// Vue.use(GlobalDirectives)
-// Vue.use(Notifications)
-
 // global library setup
 Object.defineProperty(Vue.prototype, '$Chartist', {
     get() {

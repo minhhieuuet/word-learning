@@ -129,7 +129,7 @@ export default {
 </script>
 
 <style lang="scss">
-@media screen and (max-width: 600px) { 
+@media screen and (max-width: 900px) { 
     .game-list {
         padding: 10px;
         padding-top: 30px;

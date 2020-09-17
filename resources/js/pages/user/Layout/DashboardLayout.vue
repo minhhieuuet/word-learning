@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style lang="scss">
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .html {
         scroll-behavior: smooth;
     }
