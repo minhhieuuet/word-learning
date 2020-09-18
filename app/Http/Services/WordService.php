@@ -45,6 +45,9 @@ class WordService
         }
     }
 
+    public function getYoutubeVideos($word) {
+        return file_get_contents("https://api.tracau.vn/WBBcwnwQpV89/trans/$word");
+    }
 
     public function getRandomWord() {
         return Word::inRandomOrder()->limit(8)->get();;

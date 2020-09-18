@@ -27,6 +27,10 @@ class WordController extends Controller
         //
     }
 
+    public function getYotubeVideos(Request $request) {
+        return $this->wordService->getYoutubeVideos($request->input('word'));
+    }
+
     public function increasePriority(Request $request) {
         return $this->wordService->increasePriority($request->ids);
     }

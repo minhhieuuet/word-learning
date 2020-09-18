@@ -44,4 +44,9 @@ export default class TranslateRequest extends BaseModelRequest {
         return this.get(url);
     }
 
+    getYoutubeVideos(params) {
+        const url = '/word/youtube-videos';
+        return this.get(url, params);
+    } 
+
 }

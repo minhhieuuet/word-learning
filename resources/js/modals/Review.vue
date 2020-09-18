@@ -19,7 +19,7 @@
 
                 <StarButton :word="currentWord" @refresh="getWordsByCategory()" />
 
-                <a-button type="primary" shape="circle" icon="drag" size="large" />
+                <a-button type="dashed"  icon="youtube" size="medium" @click="openYoutubeReview"/>
 
                 <div class="remove-btn" title="Xoá từ này">
                     <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
@@ -169,6 +169,7 @@
     </div>
 
     <word-modal @created="setNewestWord()" @refresh="reload()"></word-modal>
+    <YoutubeReviewModal />
 </modal>
 </template>
 
@@ -178,13 +179,15 @@ import SpeakButton from '../components/SpeakButton';
 import Recorder from '../components/Recorder';
 import StarButton from '../components/StarButton';
 import WordModal from '../modals/Word';
+import YoutubeReviewModal from '../modals/YoutubeReview';
 
 export default {
     components: {
         SpeakButton,
         Recorder,
         StarButton,
-        WordModal
+        WordModal,
+        YoutubeReviewModal
     },
     data() {
         return {
@@ -354,6 +357,9 @@ export default {
         },
         reload() {
             this.$emit('reload');
+        },
+        openYoutubeReview() {
+            this.$modal.show('youtube-review', {word: this.currentWord});
         }
     }
 }
