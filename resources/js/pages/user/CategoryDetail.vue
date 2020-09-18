@@ -1,6 +1,6 @@
 <template>
 <div>
-    <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Danh mục từ" :subTitle="category.title" @back="() => $router.go(-1)" />
+    <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Danh mục từ" :subTitle="category.title" @back="() => $router.push({path : '/'})" />
 
     <div class="main-content">
         <a-row style="padding-top: 20px">
