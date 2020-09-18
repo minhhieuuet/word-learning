@@ -7,7 +7,7 @@
             </iframe>
         </div>
         <div style="text-align:center;">
-            <div id="content"></div>
+            <div id="subcontent"></div>
             <a-button icon="step-backward" @click="prev()">Prev</a-button>
             <a-button icon="step-forward" @click="next()">Next</a-button>
             <a-button icon="retweet" @click="replay()">Replay</a-button>
@@ -27,13 +27,12 @@ export default {
         return {
             title: 'Video Review',
             currentIndex: 0,
-            videos: [
-            ]
+            videos: []
         }
     },
     methods: {
         beforeOpen(event) {
-            let params = {word: event.params.word.word};
+            let params = { word: event.params.word.word };
             rf.getRequest('WordRequest').getYoutubeVideos(params).then(res => {
                 this.videos = res.transcripts;
                 this.next();
@@ -46,11 +45,11 @@ export default {
             document.getElementById('youtube-video').setAttribute('src', `https://www.youtube.com/embed/${this.videos[this.currentIndex].fields.youtube_id}?cc_load_policy=1&showinfo=0&controls=0&start=${start}&end=${parseInt(this.videos[this.currentIndex].fields.start) + duration}`);
             document.getElementById('youtube-video').src += '&autoplay=1';
 
-            document.getElementById('content').innerHTML = this.videos[this.currentIndex].fields.en;
+            document.getElementById('subcontent').innerHTML = this.videos[this.currentIndex].fields.en;
             this.currentIndex++;
         },
         prev() {
-            if(this.currentIndex == 0) {
+            if (this.currentIndex == 0) {
                 return;
             }
             this.currentIndex--;
@@ -58,7 +57,7 @@ export default {
             let start = parseInt(this.videos[this.currentIndex].fields.start) - 1;
             document.getElementById('youtube-video').setAttribute('src', `https://www.youtube.com/embed/${this.videos[this.currentIndex].fields.youtube_id}?cc_load_policy=1&showinfo=0&controls=0&start=${start}&end=${parseInt(this.videos[this.currentIndex].fields.start) + duration}`);
             document.getElementById('youtube-video').src += '&autoplay=1';
-            document.getElementById('content').innerHTML = this.videos[this.currentIndex].fields.en;
+            document.getElementById('subcontent').innerHTML = this.videos[this.currentIndex].fields.en;
         },
         replay() {
             document.getElementById('youtube-video').src += '&autoplay=1';
@@ -70,10 +69,22 @@ export default {
 }
 </script>
 
+<style lang="scss">
+#subcontent {
+    margin-bottom: 10px;
+    font-size: 20px;
+
+    em {
+        color: red !important;
+        font-weight: bold;
+    }
+}
+</style>
 <style lang="scss" scoped>
 .content {
     padding: 30px 30px 10px 30px;
     height: 600px;
+
     .video {
         // height: 500px !important;
     }
@@ -82,6 +93,11 @@ export default {
 #content {
     margin-bottom: 10px;
     font-size: 20px;
+
+    em {
+        color: red !important;
+        font-weight: bold;
+    }
 }
 
 .md-right {
