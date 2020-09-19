@@ -47,7 +47,9 @@ export default {
                 this.next();
             })
         },
-        beforeClose() {},
+        beforeClose() {
+            this.isNotFound = false;
+        },
         next() {
             let duration = parseInt(this.videos[this.currentIndex].fields.duration) + 5;
             let start = parseInt(this.videos[this.currentIndex].fields.start) - 1;
