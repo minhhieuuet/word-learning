@@ -6,7 +6,7 @@
         <a-input-search style="width: 300px" placeholder="Tìm kiếm" size="large" @search="onSearch" />
     </div>
     <div class="category inline-flex">
-        <div v-for="(category, index) in categories" :key="category.id" v-if="category.is_visible" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 0 && index == categories.length - 1)}">
+        <div v-for="(category, index) in categories" :key="category.id" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
             <div class="setting-btn">
                 <a-popover placement="top" trigger="click">
                     <template slot="content">
@@ -26,7 +26,7 @@
                 <!-- <div class="styles__txtDate___1BKAV">{{category.created_at}}</div> -->
                 <div class="styles__txtNum___39eD4">{{category ? category.total_word : ''}} từ</div>
                 <div class="author">
-                     Người tạo: {{category.author}}
+                     Người tạo: <b class="bold">{{category.author}}</b>
                 </div>
             </div>
         </div>
@@ -104,10 +104,12 @@ export default {
     .author {
         color: white;
         background-color:#3f85ef;
-        font-weight: bold;
         position: absolute;
         padding: 5px;
         bottom: 0;
+        .bold {
+            font-weight: bold;
+        }
     }
 
     .styles__container___16een,
@@ -140,10 +142,12 @@ export default {
 .author {
     color: white;
     background-color:#3f85ef;
-    font-weight: bold;
     position: absolute;
     padding: 5px;
     bottom: 0;
+    .bold {
+        font-weight: bold;
+    }
 }
 
 .setting-btn {

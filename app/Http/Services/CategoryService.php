@@ -25,8 +25,8 @@ class CategoryService
     }
 
     private static function getUserByCategoryId($categoryId) {
-        $bucketId = Category::find($categoryId)->value('bucket_id');
-        $userId = Bucket::find($bucketId)->value('user_id');
+        $bucketId = Category::find($categoryId)->bucket_id;
+        $userId = Bucket::find($bucketId)->user_id;
         return User::find($userId);
     }
 
@@ -36,7 +36,7 @@ class CategoryService
                 })->map(function ($category) {
                     $category->author = self::getUserByCategoryId($category->id)->name;
                     return $category;
-                });
+                })->toArray();
     }
 
     public function getAllWordsByCategory($categoryId) {
