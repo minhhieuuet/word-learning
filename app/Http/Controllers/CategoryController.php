@@ -22,6 +22,15 @@ class CategoryController extends Controller
         $userId = $request->user()->id;
         return $this->categoryService->getCategories($userId);
     }
+    public function shareCategory(Request $request, $categoryId) {
+        $userId = $request->user()->id;
+        return $this->categoryService->shareCategory($userId, $categoryId);
+    }
+
+    public function getPublicCategories(Request $request) {
+        $userId = $request->user()->id;
+        return $this->categoryService->getPublicCategories($userId);
+    }
 
     public function getAllWordsByCategory($id) {
         return $this->categoryService->getAllWordsByCategory($id);

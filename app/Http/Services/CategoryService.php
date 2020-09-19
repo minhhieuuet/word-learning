@@ -15,6 +15,25 @@ class CategoryService
     {
         return Bucket::where('user_id', $userId)->first()->categories()->get();
     }
+    
+    public function shareCategory($userId, $categoryId) {
+        $bucketId = Bucket::where('user_id', $userId)->first()->id;
+        $category = Category::where(['id' => $categoryId, 'bucket_id' => $bucketId])->first();
+        $category->is_public = !$category->is_public;
+        $category->save();
+        return $category;
+    }
+
+    public function getPublicCategories($userId) {
+        $user = User::findOrFail($userId);
+        return Bucket::where('user_id', $userId)->first()
+                ->categories()->get()->filter(function ($category) {
+                    return ($category->title != 'Phrase' && $category->is_public);
+                })->map(function ($category) use ($user) {
+                    $category->author = $user->name;
+                    return $category;
+                });
+    }
 
     public function getAllWordsByCategory($categoryId) {
         return Word::where('category_id', $categoryId)->get();

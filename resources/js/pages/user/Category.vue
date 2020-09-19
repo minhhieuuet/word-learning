@@ -26,7 +26,7 @@
         </div>
 
         <div v-for="(category, index) in categories" :key="category.id" v-if="category.is_visible" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
-            <div class="shop-icon">
+            <div v-show="category.is_public" class="shop-icon">
                 <a-tooltip placement="top" title="Đang được chia sẻ">
                     <a-icon type="share-alt"></a-icon>
                 </a-tooltip>
@@ -34,9 +34,13 @@
             <div class="setting-btn">
                 <a-popover placement="topLeft" trigger="click">
                     <template slot="content">
-                        <!-- <p><a-icon type="check-circle" style="color: green;" /> Đánh dấu</p> -->
-                        <div class="category-btn share-btn" style="cursor: pointer;">
-                            <a-icon type="share-alt" style="color: #63afff;" /> Chia sẻ
+                        <div class="category-btn share-btn" style="cursor: pointer;" @click="shareCategory(category.id)">
+                            <template v-if="!category.is_public">
+                                <a-icon type="share-alt" style="color: #63afff;"/> Chia sẻ
+                            </template>
+                             <template v-else>
+                                <a-icon type="share-alt" style="color: #63afff;"/> Bỏ chia sẻ
+                            </template>
                         </div>
                         <div class="category-btn" style="cursor: pointer;" @click="removeCategory(category.id)">
                             <a-icon type="delete" style="color: red;" /> Xoá
@@ -81,6 +85,16 @@ export default {
         getCategories(params) {
             rf.getRequest('CategoryRequest').getCategories().then(res => {
                 this.categories = res;
+            })
+        },
+        shareCategory(categoryId) {
+            rf.getRequest('CategoryRequest').shareCategory(categoryId).then(category => {
+                this.refresh();
+                if(category.is_public) {
+                    this.$message.success('Chia sẻ danh mục thành công');
+                } else {
+                    this.$message.success('Danh mục đã được gỡ bỏ trên của hàng');
+                }
             })
         },
         createCategory() {
