@@ -1,7 +1,7 @@
 <template>
 <a-drawer class="mobile-menu" title="Vocabulary Learning" placement="left" :closable="false" :visible="visible" :after-visible-change="afterVisibleChange" @close="onClose">
     <a-menu theme="light" :inline-collapsed="collapsed" @click="handleClick">
-         <a-menu-item key="1" :class="{'ant-menu-item-selected': currentRouteName == 'Dashboard' }">
+          <a-menu-item key="1" :class="{'ant-menu-item-selected': currentRouteName == 'Dashboard' }">
             <a-icon type="book" />
             <span class="nav-text">Quản lý từ</span>
         </a-menu-item>
@@ -13,7 +13,11 @@
             <a-icon type="schedule" />
             <span class="nav-text">Nhắc từ</span>
         </a-menu-item>
-        <a-menu-item key="4" :class="{'ant-menu-item-selected': currentRouteName == 'AboutMe' }">
+        <a-menu-item key="4" :class="{'ant-menu-item-selected': currentRouteName == 'Store' }">
+            <a-icon type="shop" />
+            <span class="nav-text">Cửa hàng</span>
+        </a-menu-item>
+        <a-menu-item key="5" :class="{'ant-menu-item-selected': currentRouteName == 'AboutMe' }">
             <a-icon type="user" />
             <span class="nav-text">Tôi</span>
         </a-menu-item>
@@ -42,6 +46,10 @@ export default {
                 },
                 {
                     key: 4,
+                    routerName: 'Store'
+                },
+                {
+                    key: 5,
                     routerName: 'AboutMe'
                 }
             ]

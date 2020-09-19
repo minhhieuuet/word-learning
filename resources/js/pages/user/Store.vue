@@ -6,7 +6,7 @@
         <a-input-search style="width: 300px" v-model="searchKey" placeholder="Tìm kiếm" size="large" @change="onSearch" />
     </div>
     <div class="category inline-flex">
-        <div v-for="(category, index) in categories" :key="category.id" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
+        <div v-for="(category, index) in categories" @click="showReviewCategory(category)" :key="category.id" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
             <div class="setting-btn">
                 <a-popover placement="top" trigger="click">
                     <template slot="content">
@@ -32,6 +32,30 @@
         </div>
     </div>
     <category-model @refresh="refresh()"></category-model>
+    <a-modal v-model="isShowReviewCategory" :title="`Danh mục: ${reviewCategory.title}`" width="400px" closable="true" footer=''>
+        <div>
+            <p>Người tạo:<b style="color: blue;font-weight: bold;"> {{reviewCategory.author}}</b></p>
+            <p>
+                <a-icon type="info-circle"></a-icon>
+                <i>Vui lòng tải về để xem bản đầy đủ</i>
+            </p>
+        </div>
+        <md-table v-if="reviewCategory.words ? reviewCategory.words.length : '0'">
+            <md-table-row>
+                <md-table-head>Từ</md-table-head>
+                <md-table-head>Nghĩa</md-table-head>
+                <md-table-head>Gợi ý</md-table-head>
+            </md-table-row>
+            <md-table-row v-for="word in reviewCategory.words" :key="word.id">
+                <md-table-cell>{{word.word}}</md-table-cell>
+                <md-table-cell>{{word.meaning}}</md-table-cell>
+                <md-table-cell class="hint">{{word.hint}}</md-table-cell>
+            </md-table-row>
+        </md-table>
+        <div v-else>
+            <a-empty description="Danh mục rỗng"/>
+        </div>
+    </a-modal>
     <QuickWordModel />
 </div>
 </template>
@@ -50,21 +74,31 @@ export default {
         return {
             categories: [],
             params: {},
-            searchKey: ''
+            searchKey: '',
+            isShowReviewCategory: false,
+            reviewCategory: {}
         }
     },
     methods: {
         getPublicCategories(params) {
             rf.getRequest('CategoryRequest').getPublicCategories(params).then(res => {
-                this.categories = res;
+                this.categories = Object.values(res);
             })
         },
-        onSearch() {
-            this.getPublicCategories({search: this.searchKey});
+        showReviewCategory(category) {
+            this.reviewCategory = category;
+            rf.getRequest('CategoryRequest').getWordsByCategory(category.id).then(words => {
+                this.isShowReviewCategory = true;
+                this.reviewCategory.words = words.slice(0, 5);
+            });
         },
+        onSearch() {
+            this.getPublicCategories({ search: this.searchKey });
+        },
+
         cloneCategory(categoryId) {
             const loading = this.$message.loading('Đang tải về, vui lòng đợi ...', 0);
-            rf.getRequest('CategoryRequest').cloneCategory({id: categoryId}).then(res => {
+            rf.getRequest('CategoryRequest').cloneCategory({ id: categoryId }).then(res => {
                 loading();
                 this.$message.success('Tải về thành công, danh mục đã được thêm vào tài khoản của bạn');
             }).catch(() => {
@@ -109,6 +143,13 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.hint {
+    .md-table-cell-container {
+        text-align: inherit !important;
+    }
+}
+</style>
 <style lang="scss" scoped>
 @media screen and (max-width: 900px) {
     .category {
@@ -117,10 +158,11 @@ export default {
 
     .author {
         color: white;
-        background-color:#3f85ef;
+        background-color: #3f85ef;
         position: absolute;
         padding: 5px;
         bottom: 0;
+
         .bold {
             font-weight: bold;
         }
@@ -155,10 +197,11 @@ export default {
 
 .author {
     color: white;
-    background-color:#3f85ef;
+    background-color: #3f85ef;
     position: absolute;
     padding: 5px;
     bottom: 0;
+
     .bold {
         font-weight: bold;
     }

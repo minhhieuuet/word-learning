@@ -96,6 +96,7 @@
                 <Recorder :word="currentWord['word']" />
 
                 <StarButton :word="currentWord" @refresh="getWordsByCategory()" />
+                <a-button type="dashed"  icon="youtube" size="medium" @click="openYoutubeReview"/>
 
                 <div class="remove-btn" title="Xoá từ này">
                     <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
