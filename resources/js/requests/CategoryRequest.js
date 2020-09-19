@@ -32,6 +32,10 @@ export default class CategoryRequest extends BaseModelRequest {
         const url = `/category/share/${categoryId}`;
         return this.get(url);
     }
+    cloneCategory(params) {
+        const url = '/category/clone';
+        return this.post(url, params);
+    }
     getTotalWordByCategories(params) {
         const url = '/category/total-word';
         return this.get(url, params);

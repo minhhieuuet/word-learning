@@ -26,7 +26,11 @@ class CategoryController extends Controller
         $userId = $request->user()->id;
         return $this->categoryService->shareCategory($userId, $categoryId);
     }
-
+    public function cloneCategory(Request $request) {
+        $userId = $request->user()->id;
+        $categoryId = array_get($request, 'id');
+        return $this->categoryService->cloneCategory($userId, $categoryId);
+    }
     public function getPublicCategories(Request $request) {
         $userId = $request->user()->id;
         return $this->categoryService->getPublicCategories($userId);

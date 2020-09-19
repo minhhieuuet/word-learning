@@ -10,7 +10,7 @@
             <div class="setting-btn">
                 <a-popover placement="top" trigger="click">
                     <template slot="content">
-                        <div class="category-btn share-btn" style="cursor: pointer;">
+                        <div class="category-btn share-btn" style="cursor: pointer;" @click="cloneCategory(category.id)">
                             <a-icon type="download" style="color: #63afff;" /> Tải về
                         </div>
 
@@ -57,6 +57,16 @@ export default {
             rf.getRequest('CategoryRequest').getPublicCategories(params).then(res => {
                 this.categories = res;
             })
+        },
+        cloneCategory(categoryId) {
+            const loading = this.$message.loading('Đang tải về, vui lòng đợi ...', 0);
+            rf.getRequest('CategoryRequest').cloneCategory({id: categoryId}).then(res => {
+                loading();
+                this.$message.success('Tải về thành công, danh mục đã được thêm vào tài khoản của bạn');
+            }).catch(() => {
+                loading();
+                this.$message.error('Đã có lỗi xảy ra, vui lòng thử lại');
+            });
         },
         goToPhrase() {
             this.$router.push({ name: 'Phrase' })

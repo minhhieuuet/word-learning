@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
 
     Route::group(['prefix' => 'category'], function () {
         Route::get('/public', 'CategoryController@getPublicCategories');
+        Route::post('/clone', 'CategoryController@cloneCategory');
         Route::get('/share/{categoryId}', 'CategoryController@shareCategory');
         Route::get('/id-by-slug/{slug}', 'CategoryController@getIdBySlug');
         Route::get('/total-word', 'CategoryController@getTotalWordByCategories');

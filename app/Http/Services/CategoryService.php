@@ -39,6 +39,32 @@ class CategoryService
                 })->toArray();
     }
 
+    public function cloneCategory($userId, $categoryId) {
+        $bucketId = Bucket::where('user_id', $userId)->first()->id;
+        $category = Category::find($categoryId);
+        //Clone category
+        $cloneCategory = Category::create([
+            'bucket_id' => $bucketId,
+            'title' => $category->title,
+            'cover' => $category->cover,
+            'slug' => $category->slug.'-'.time(),
+            'is_visible' => 1
+        ]);
+        //Clone words
+        $words = $category->words()->get();
+        foreach($words as $word) {
+            Word::create([
+                'category_id' => $cloneCategory->id,
+                'word' => $word->word,
+                'meaning' => $word->meaning,
+                'hint' => $word->hint,
+                'image' => $word->image,
+                'is_important' => $word->is_important
+            ]);
+        }
+        return $words;
+    }
+
     public function getAllWordsByCategory($categoryId) {
         return Word::where('category_id', $categoryId)->get();
     }
