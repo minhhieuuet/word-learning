@@ -1,6 +1,12 @@
 <template>
 <div>
-    <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Danh mục từ" @back="() => null" />
+    <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Danh mục từ" @back="() => null">
+        <template slot="extra">
+            <a-button icon="plus-circle" size="large" type="primary" @click="showQuickWordModal">
+                Thêm từ nhanh
+            </a-button>
+        </template>
+    </a-page-header>
     <div class="category inline-flex">
 
         <div class="styles__container___3mCLH effectScale inline-flex" @click="createCategory()">
@@ -20,17 +26,23 @@
         </div>
 
         <div v-for="(category, index) in categories" :key="category.id" v-if="category.is_visible" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
+            <div class="shop-icon">
+                <a-tooltip placement="top" title="Đang được chia sẻ">
+                    <a-icon type="share-alt"></a-icon>
+                </a-tooltip>
+            </div>
             <div class="setting-btn">
                 <a-popover placement="topLeft" trigger="click">
                     <template slot="content">
                         <!-- <p><a-icon type="check-circle" style="color: green;" /> Đánh dấu</p> -->
-                        <div class="remove-category-btn" style="cursor: pointer;" @click="removeCategory(category.id)">
+                        <div class="category-btn share-btn" style="cursor: pointer;">
+                            <a-icon type="share-alt" style="color: #63afff;" /> Chia sẻ
+                        </div>
+                        <div class="category-btn" style="cursor: pointer;" @click="removeCategory(category.id)">
                             <a-icon type="delete" style="color: red;" /> Xoá
                         </div>
+
                     </template>
-                    <!-- <template slot="title">
-                            <span>Title</span>
-                        </template> -->
                     <a-button icon="setting"></a-button>
                 </a-popover>
             </div>
@@ -45,15 +57,19 @@
         </div>
     </div>
     <category-model @refresh="refresh()"></category-model>
+    <QuickWordModel />
 </div>
 </template>
 
 <script>
 import rf from './../../requests/RequestFactory';
 import CategoryModel from '../../modals/Category';
+import QuickWordModel from '../../modals/QuickWord';
+
 export default {
     components: {
-        CategoryModel
+        CategoryModel,
+        QuickWordModel
     },
     data() {
         return {
@@ -78,6 +94,9 @@ export default {
         },
         refresh() {
             this.getCategories();
+        },
+        showQuickWordModal() {
+            this.$modal.show('quickword', { title: 'Thêm từ nhanh' });
         },
         removeCategory(categoryId) {
             this.$swal({
@@ -151,10 +170,36 @@ export default {
     }
 }
 
+.shop-icon {
+    position: absolute;
+    left: 0px;
+    color: white;
+    background-color: #398dec;
+    padding: 0px 1px 0px 0px;
+    border-radius: 0% 10% 10% 0%;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
 .category {
     width: 100%;
     flex-flow: wrap;
     padding: 20px;
+}
+
+.category-btn {
+    padding: 4px;
+
+    i {
+        margin-right: 2px;
+    }
+
+    &:hover {
+        color: rgb(36, 166, 226);
+    }
+}
+
+.share-btn {
+    // border-bottom: 0.1px solid rgba(0, 0, 0, 0.2);
 }
 
 .inline-flex {
@@ -354,7 +399,7 @@ export default {
 }
 
 .styles__txtNum___39eD4 {
-    padding: 0 1rem;
+    padding: 0 1.2rem;
     font-size: 12px;
     font-weight: bold;
     font-style: normal;
@@ -366,7 +411,7 @@ export default {
 }
 
 .styles__viewName___2PQg6 {
-    padding: 0 .5rem 0 1rem;
+    padding: 0 .5rem 0 1.2rem;
     font-size: 1.5rem;
     font-weight: 600;
     font-style: normal;

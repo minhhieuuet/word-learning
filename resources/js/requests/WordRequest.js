@@ -1,11 +1,15 @@
 import BaseModelRequest from './BaseModelRequest';
 
-export default class TranslateRequest extends BaseModelRequest {
+export default class WordRequest extends BaseModelRequest {
     store(params) {
         const url = '/word';
         return this.post(url, params);
     }
-
+    
+    quickStore(params) {
+        const url = '/word/quick-store';
+        return this.post(url, params);
+    }
     removeWord(wordId) {
         const url=`/word/${wordId}`;
         return this.del(url);

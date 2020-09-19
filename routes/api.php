@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
 
     Route::group(['prefix' => 'word'], function () {
         Route::get('/youtube-videos', 'WordController@getYotubeVideos');
+        Route::post('/quick-store', 'WordController@quickStore');
         Route::get('/change-important/{wordId}', 'WordController@changeImportant');
         Route::post('/update-image/{wordId}', 'WordController@updateImage');
         Route::group(['prefix' => 'priority'], function () {

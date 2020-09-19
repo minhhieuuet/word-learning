@@ -359,7 +359,7 @@ export default {
             this.$emit('reload');
         },
         openYoutubeReview() {
-            this.$modal.show('youtube-review', {word: this.currentWord});
+            this.$modal.show('youtubereview', {word: this.currentWord});
         }
     }
 }

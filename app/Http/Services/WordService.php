@@ -29,6 +29,26 @@ class WordService
         })->orderBy('created_at', 'desc')->paginate($limit);
     }
 
+    public function quickStore($userId, $params) {
+        $categories = array_get($params, 'categories');
+        $externalImage = array_get($params, 'external_image');
+        if($externalImage) {
+            $imageUrl = $this->imageService->saveImageFromUrl($externalImage);
+        } else {
+            $imageUrl = array_get($params, 'image');
+        }
+        
+        foreach($categories as $category) {
+            Word::create([
+                'category_id' => array_get($category, 'id'),
+                'word' => array_get($params, 'word'),
+                'hint' => array_get($params, 'hint'),
+                'meaning' => array_get($params, 'meaning'),
+                'image' => $imageUrl,
+                'is_important' => array_get($params, 'is_important')
+            ]);
+        }
+    }
     public function increasePriority($ids) {
         foreach($ids as $id) {
             $word = Word::find($id);

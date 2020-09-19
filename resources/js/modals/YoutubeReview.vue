@@ -1,18 +1,23 @@
 <template>
-<modal name="youtube-review" height="700px" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
+<modal name="youtubereview" height="700px" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
 
-    <div class="content">
+    <div class="content" v-if="!isNotFound">
         <div class='video' v-show="videos.length">
             <iframe width="760" height="615" style="height: 500px" ref="youtube-video" id="youtube-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
             </iframe>
         </div>
         <div style="text-align:center;">
             <div id="subcontent"></div>
-            <a-button icon="step-backward" @click="prev()">Prev</a-button>
-            <a-button icon="step-forward" @click="next()">Next</a-button>
-            <a-button icon="retweet" @click="replay()">Replay</a-button>
+            <a-button icon="step-backward" @click="prev()">Trở về</a-button>
+            <a-button icon="step-forward" @click="next()">Tiếp theo</a-button>
+            <a-button icon="retweet" @click="replay()">Phát lại</a-button>
 
         </div>
+    </div>
+    <div class="content notfound" v-else>
+        <img src="/images/video-notfound.gif" alt="">
+        <h2>Không tìm thấy dữ liệu liên quan</h2>
+        <a-button size="large" @click="cancel()">Thoát</a-button>
     </div>
 </modal>
 </template>
@@ -27,7 +32,8 @@ export default {
         return {
             title: 'Video Review',
             currentIndex: 0,
-            videos: []
+            videos: [],
+            isNotFound: false
         }
     },
     methods: {
@@ -35,6 +41,9 @@ export default {
             let params = { word: event.params.word.word };
             rf.getRequest('WordRequest').getYoutubeVideos(params).then(res => {
                 this.videos = res.transcripts;
+                if(!this.videos.length) {
+                    this.isNotFound = true;
+                }
                 this.next();
             })
         },
@@ -63,7 +72,8 @@ export default {
             document.getElementById('youtube-video').src += '&autoplay=1';
         },
         cancel() {
-            this.$modal.hide('yotube-review');
+            console.log("hihhi");
+            this.$modal.hide('youtubereview');
         }
     }
 }
@@ -88,6 +98,9 @@ export default {
     .video {
         // height: 500px !important;
     }
+}
+.notfound {
+    text-align: center;
 }
 
 #content {

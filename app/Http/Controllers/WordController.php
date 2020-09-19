@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\WordRequest;
+use App\Http\Requests\QuickWordRequest;
 use App\Http\Services\WordService;
 use App\Http\Services\ImageService;
 use App\Models\Word;
@@ -27,6 +28,10 @@ class WordController extends Controller
         //
     }
 
+    public function quickStore(QuickWordRequest $request) {
+        $userId = $request->user()->id;
+        return $this->wordService->quickStore($userId, $request->all());
+    }
     public function getYotubeVideos(Request $request) {
         return $this->wordService->getYoutubeVideos($request->input('word'));
     }
