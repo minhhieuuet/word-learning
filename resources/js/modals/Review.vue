@@ -213,7 +213,7 @@ export default {
     methods: {
         async beforeOpen(event) {
             this.categoryId = event.params.categoryId;
-
+            let startWordId = event.params.startWordId;
             //Get words by category
             await rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
                 this.currentWordIndex = 0;
@@ -222,22 +222,31 @@ export default {
                     this.showAddBtn = true;
                     return;
                 }
-                this.currentWord = res[0];
+
                 this.showAddBtn = false;
+                if(startWordId) {
+                    const findWordFunction = (word) => {
+                        return word.id == startWordId;
+                    }
+                    this.currentWord = this.words.find(findWordFunction);
+                    this.currentWordIndex = this.words.findIndex(findWordFunction);
+                    return;
+                }
+                this.currentWord = res[0];
             });
             
             //Add event press arrow left and right to back and next
 
-            window.addEventListener('keyup', (ev) => {
-                if (ev.key === 'ArrowRight') {
-                    this.nextWord();
-                } else if (ev.key === 'ArrowLeft') {
-                    this.previousWord();
-                }
-            });
+            // window.addEventListener('keyup', (ev) => {
+            //     if (ev.key === 'ArrowRight') {
+            //         this.nextWord();
+            //     } else if (ev.key === 'ArrowLeft') {
+            //         this.previousWord();
+            //     }
+            // });
         },
         beforeClose() {
-            window.removeEventListener('keyup', () => {});
+            // window.removeEventListener('keyup', () => {});
         },
         cancel() {
             this.$modal.hide('review');

@@ -60,7 +60,9 @@
                                         </span><span>{{word.word | capitalize}}</span>
 
                                     </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(word.id)"></a-icon>
                                     <StarButton :word.sync="word" @refresh="refresh()" />
+                                    
                                 </div>
                                 <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
@@ -350,6 +352,9 @@ export default {
         },
         openReviewModal() {
             this.$modal.show('review', { categoryId: this.categoryId });
+        },
+        showReviewModalFromWord(wordId) {
+            this.$modal.show('review', { categoryId: this.categoryId , startWordId: wordId});
         },
         onSeach(value) {
             alert(value);
