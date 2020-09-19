@@ -33,7 +33,8 @@ class CategoryController extends Controller
     }
     public function getPublicCategories(Request $request) {
         $userId = $request->user()->id;
-        return $this->categoryService->getPublicCategories($userId);
+        $searchKey = $request->input('search') ? $request->input('search') : '';
+        return $this->categoryService->getPublicCategories($userId, $searchKey);
     }
 
     public function getAllWordsByCategory($id) {

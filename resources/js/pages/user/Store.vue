@@ -3,7 +3,7 @@
     <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Cửa hàng" @back="() => null">
     </a-page-header>
     <div style="width: 500px;display: block;margin-left: 30px; margin-top: 20px;">
-        <a-input-search style="width: 300px" placeholder="Tìm kiếm" size="large" @search="onSearch" />
+        <a-input-search style="width: 300px" v-model="searchKey" placeholder="Tìm kiếm" size="large" @change="onSearch" />
     </div>
     <div class="category inline-flex">
         <div v-for="(category, index) in categories" :key="category.id" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
@@ -49,7 +49,8 @@ export default {
     data() {
         return {
             categories: [],
-            params: {}
+            params: {},
+            searchKey: ''
         }
     },
     methods: {
@@ -57,6 +58,9 @@ export default {
             rf.getRequest('CategoryRequest').getPublicCategories(params).then(res => {
                 this.categories = res;
             })
+        },
+        onSearch() {
+            this.getPublicCategories({search: this.searchKey});
         },
         cloneCategory(categoryId) {
             const loading = this.$message.loading('Đang tải về, vui lòng đợi ...', 0);
