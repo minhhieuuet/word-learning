@@ -24,13 +24,17 @@ class CategoryService
         return $category;
     }
 
+    private static function getUserByCategoryId($categoryId) {
+        $bucketId = Category::find($categoryId)->value('bucket_id');
+        $userId = Bucket::find($bucketId)->value('user_id');
+        return User::find($userId);
+    }
+
     public function getPublicCategories($userId) {
-        $user = User::findOrFail($userId);
-        return Bucket::where('user_id', $userId)->first()
-                ->categories()->get()->filter(function ($category) {
+        return Category::all()->filter(function ($category) {
                     return ($category->title != 'Phrase' && $category->is_public);
-                })->map(function ($category) use ($user) {
-                    $category->author = $user->name;
+                })->map(function ($category) {
+                    $category->author = self::getUserByCategoryId($category->id)->name;
                     return $category;
                 });
     }
