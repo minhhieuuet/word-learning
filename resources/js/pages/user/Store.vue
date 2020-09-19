@@ -6,7 +6,7 @@
         <a-input-search style="width: 300px" v-model="searchKey" placeholder="Tìm kiếm" size="large" @change="onSearch" />
     </div>
     <div class="category inline-flex">
-        <div v-for="(category, index) in categories" @click="showReviewCategory(category)" :key="category.id" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
+        <div v-for="(category, index) in categories" :key="category.id" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
             <div class="setting-btn">
                 <a-popover placement="top" trigger="click">
                     <template slot="content">
@@ -18,8 +18,7 @@
                     <a-button icon="setting"></a-button>
                 </a-popover>
             </div>
-            <div :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" :class="{styles__overLay___1WcJB : true}">
-
+            <div  @click="showReviewCategory(category)" :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" :class="{styles__overLay___1WcJB : true}">
                 <div class="styles__conName___2JHZN">
                     <div class="styles__viewName___2PQg6">{{category.title}}</div>
                 </div>
