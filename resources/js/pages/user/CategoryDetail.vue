@@ -6,7 +6,7 @@
         <a-row style="padding-top: 20px">
             <a-col class="desc-side" :span="10">
                 <div class="frame">
-                    <img class="phrase-img" :src="category.cover" alt="">
+                    <img class="phrase-img" :src="category.cover ? category.cover : '/images/default-cover.jpg'" alt="">
                 </div>
                 <div class="phrase-desc hit-the-floor">
                     <h2>{{category.title}}</h2>
@@ -140,7 +140,7 @@
     </div>
     <div class="main-content-mobile" style="display:none;">
         <a-row>
-            <a-col class="desc-side-mobile" :style="{backgroundImage: `url(${category.cover})`}" :span="24">
+            <a-col class="desc-side-mobile" :style="{backgroundImage: `url(${category.cover ? category.cover : '/images/default-cover.jpg'})`}" :span="24">
                 <div class="phrase-desc hit-the-floor">
                     <h2>{{category.title}}</h2>
                 </div>

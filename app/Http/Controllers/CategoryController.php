@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
+
 use App\Http\Services\CategoryService;
 use App\Models\Category;
+
 class CategoryController extends Controller
 {
     protected $categoryService;
@@ -67,7 +70,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         $userId = $request->user()->id;
         return $this->categoryService->storeCategory($userId, $request->all());
@@ -104,7 +107,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->categoryService->updateCategory($id, $request->all());
     }
 
     /**

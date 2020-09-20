@@ -28,6 +28,10 @@ export default class CategoryRequest extends BaseModelRequest {
         const url = '/category';
         return this.post(url, params);
     }
+    update(categoryId, params) {
+        const url = `/category/${categoryId}`;
+        return this.put(url, params);
+    }
     shareCategory(categoryId) {
         const url = `/category/share/${categoryId}`;
         return this.get(url);

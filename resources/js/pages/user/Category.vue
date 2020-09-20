@@ -42,6 +42,9 @@
                                 <a-icon type="share-alt" style="color: red;"/> Tắt chia sẻ
                             </template>
                         </div>
+                        <div class="category-btn" style="cursor: pointer;" @click="editCategory(category.id)">
+                            <a-icon type="edit" style="color: blue;" /> Sửa
+                        </div>
                         <div class="category-btn" style="cursor: pointer;" @click="removeCategory(category.id)">
                             <a-icon type="delete" style="color: red;" /> Xoá
                         </div>
@@ -99,6 +102,9 @@ export default {
         },
         createCategory() {
             this.$modal.show('category', { title: 'Thêm danh mục mới' });
+        },
+        editCategory(categoryId) {
+            this.$modal.show('category', { title: 'Sửa danh mục', categoryId: categoryId });
         },
         goToPhrase() {
             this.$router.push({ name: 'Phrase' })

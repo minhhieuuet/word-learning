@@ -47,7 +47,7 @@ class CategoryService
         $bucketId = Bucket::where('user_id', $userId)->first()->id;
         $category = Category::find($categoryId);
         //Increase downloaded time
-        $category->download_time ++;
+        $category->download_time++;
         $category->save();
         //Clone category
         $cloneCategory = Category::create([
@@ -100,24 +100,22 @@ class CategoryService
             'title' => array_get($params, 'title'),
             'slug' => str_slug(array_get($params, 'title')),
             'cover' => array_get($params, 'cover'),
-            'is_visible' => array_get($params, 'is_visible'),
+            'is_public' => array_get($params, 'is_public'),
             'bucket_id' => $bucket->id,
         ]);
 
         return $this->getOneCategory($category);
     }
 
-    public function updateCategory(User $category, $params)
+    public function updateCategory($categoryId, $params)
     {
-        $category->update([
-            'full_name' => array_get($params, 'full_name'),
-            'name' => array_get($params, 'name'),
-            'email' => array_get($params, 'email'),
+        $category = Category::find($categoryId)->update([
+            'title' => array_get($params, 'title'),
+            'slug' => str_slug(array_get($params, 'title')),
+            'cover' => array_get($params, 'cover'),
+            'is_public' => array_get($params, 'is_public'),
         ]);
-        if (array_get($params, 'passcategory')) {
-            $category->update(['passcategory' => bcrypt(array_get($params, 'passcategory'))]);
-        }
-        return $category;
+        return 'ok';
     }
 
     public function getOneCategory(Category $category)

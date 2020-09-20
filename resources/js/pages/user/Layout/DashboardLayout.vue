@@ -137,6 +137,10 @@ export default {
     }
 }
 
+.ant-popover {
+    z-index: 100 !important;
+}
+
 .v--modal-box {
     .mobile-btn-group {
         display: none;
