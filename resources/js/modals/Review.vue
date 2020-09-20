@@ -30,12 +30,12 @@
                     <a-col :xs="{ span: 24 }" :md="{ span: 12}">
 
                         <template v-if="editImageMode">
-                            <img class="word-img" v-src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/default.jpg' )" :title="currentWord['meaning']">
+                            <img class="word-img" v-lazy="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/placeholder-images.png' )" :title="currentWord['meaning']">
                             <a-icon title="Huỷ bỏ" @click="discardImageChange" type="close-circle" theme="filled" class="discard-image-icon" />
                             <a-icon title="Lưu thay đổi" @click="saveImageChange" type="check-circle" theme="filled" class="submit-image-icon" />
                         </template>
                         <template v-else>
-                            <img class="word-img" v-lazy="currentWord['image'] ? currentWord['image'] : '/images/default.jpg'" :title="currentWord['meaning']">
+                            <img class="word-img" v-lazy="currentWord['image'] ? currentWord['image'] : '/images/placeholder-images.png'" :title="currentWord['meaning']">
 
                             <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
                         </template>
@@ -107,12 +107,12 @@
                     <a-col style="text-align: center; !important" :xs="{ span: 24 }" :md="{ span: 12}">
 
                         <template v-if="editImageMode">
-                            <img class="word-img" :src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/default.jpg' )" :title="currentWord['meaning']">
+                            <img class="word-img" :src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/placeholder-images.png' )" :title="currentWord['meaning']">
                             <a-icon title="Huỷ bỏ" @click="discardImageChange" type="close-circle" theme="filled" class="discard-image-icon" />
                             <a-icon title="Lưu thay đổi" @click="saveImageChange" type="check-circle" theme="filled" class="submit-image-icon" />
                         </template>
                         <template v-else>
-                            <img class="word-img" :src="currentWord['image'] ? currentWord['image'] : '/images/default.jpg'" :title="currentWord['meaning']">
+                            <img class="word-img" :src="currentWord['image'] ? currentWord['image'] : '/images/placeholder-images.png'" :title="currentWord['meaning']">
 
                             <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
                         </template>
