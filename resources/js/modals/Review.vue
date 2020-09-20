@@ -421,7 +421,7 @@ export default {
 
     .word-info {
         // width: 16.8rem !important;
-        width: 89% !important;
+        width: 91% !important;
         margin-left: 15px !important;
         text-align: left !important;
         display: block !important;
