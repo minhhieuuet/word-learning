@@ -1,6 +1,8 @@
 <template>
 <modal name="youtubereview" height="700px" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
-
+    <div class="close-button-mobile" @click="cancel">
+        <a-button type="danger" shape="circle" icon="close" />
+    </div>
     <div class="content" v-if="!isNotFound">
         <div class='video' v-show="videos.length">
             <iframe width="760" height="615" style="height: 500px" ref="youtube-video" id="youtube-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
@@ -74,7 +76,6 @@ export default {
             document.getElementById('youtube-video').src += '&autoplay=1';
         },
         cancel() {
-            console.log("hihhi");
             this.$modal.hide('youtubereview');
         }
     }

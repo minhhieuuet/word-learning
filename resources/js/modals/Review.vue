@@ -19,7 +19,7 @@
 
                 <StarButton :word="currentWord" @refresh="getWordsByCategory()" />
 
-                <a-button type="dashed"  icon="youtube" size="medium" @click="openYoutubeReview"/>
+                <a-button type="dashed" icon="youtube" size="medium" @click="openYoutubeReview" />
 
                 <div class="remove-btn" title="Xoá từ này">
                     <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
@@ -96,7 +96,7 @@
                 <Recorder :word="currentWord['word']" />
 
                 <StarButton :word="currentWord" @refresh="getWordsByCategory()" />
-                <a-button type="dashed"  icon="youtube" size="medium" @click="openYoutubeReview"/>
+                <a-button type="dashed" icon="youtube" size="medium" @click="openYoutubeReview" />
 
                 <div class="remove-btn" title="Xoá từ này">
                     <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
@@ -143,16 +143,14 @@
             </div>
         </template>
 
-        <div class="mobile-derection-btn-group" style="display: none;">
-            <a-button-group size="large" :block="true">
-                <a-button style="height: 80px;" type="primary" @click="previousWord()" :disabled="(currentWordIndex == 0 && !showAddBtn) || !words.length">
-                    <a-icon type="left" />Trở về
-                </a-button>
-                <a-button style="height: 80px;" type="primary" @click="nextWord()" :disabled="showAddBtn">
-                    Tiếp theo
-                    <a-icon type="right" />
-                </a-button>
-            </a-button-group>
+        <div class="mobile-direction-btn-group" style="display: none;">
+            <div class="direction-btn">
+                <img src="/images/arrow-left.png" @click="previousWord()" :disabled="(currentWordIndex == 0 && !showAddBtn) || !words.length">
+            </div>
+
+            <div class="direction-btn">
+                <img src="/images/arrow-right.png" @click="nextWord()" :disabled="showAddBtn">
+            </div>
         </div>
 
         <!-- Left button -->
@@ -225,7 +223,7 @@ export default {
                 }
 
                 this.showAddBtn = false;
-                if(startWordId) {
+                if (startWordId) {
                     const findWordFunction = (word) => {
                         return word.id == startWordId;
                     }
@@ -235,7 +233,7 @@ export default {
                 }
                 this.currentWord = res[0];
             });
-            
+
             //Add event press arrow left and right to back and next
 
             // window.addEventListener('keyup', (ev) => {
@@ -369,7 +367,7 @@ export default {
             this.$emit('reload');
         },
         openYoutubeReview() {
-            this.$modal.show('youtubereview', {word: this.currentWord});
+            this.$modal.show('youtubereview', { word: this.currentWord });
         }
     }
 }
@@ -382,8 +380,9 @@ export default {
 
 @media screen and (max-width: 900px) {
     .review-modal {
+        overflow: scroll !important;
         .v--modal {
-            width: 100vh !important;
+            // width: 100vh !important;
             left: 0px !important;
             height: 100vh;
         }
@@ -394,6 +393,11 @@ export default {
 @media screen and (max-width: 900px) {
     .content {
         display: none;
+    }
+
+    .camera-icon {
+        right: inherit !important;
+        margin-left: -20px;
     }
 
     .word-info {
@@ -435,21 +439,36 @@ export default {
 
     .content-mobile {
         display: block !important;
-        width: 49vh !important;
         left: 0px !important;
     }
 
     .review-modal {
-        width: 100vh !important;
+        // width: 100vh !important;
         left: 0px !important;
     }
 
-    .mobile-derection-btn-group {
+    .mobile-direction-btn-group {
         display: block !important;
         margin-top: 6px;
+        text-align: center;
+
+        .direction-btn {
+            display: inline;
+            margin: 10px 20px;
+            animation: gelatine 0.5s;
+
+            img {
+                width: 80px;
+
+                &:active {
+                    animation: gelatine2 0.25s;
+                }
+            }
+
+        }
 
         button {
-            width: 24vh;
+            // width: 31vh;
         }
     }
 
@@ -475,6 +494,26 @@ export default {
 }
 
 @keyframes gelatine {
+
+    from,
+    to {
+        transform: scale(1, 1);
+    }
+
+    25% {
+        transform: scale(0.97, 1.07);
+    }
+
+    50% {
+        transform: scale(1.0, 1.0);
+    }
+
+    75% {
+        transform: scale(0.97, 1.05);
+    }
+}
+
+@keyframes gelatine2 {
 
     from,
     to {
