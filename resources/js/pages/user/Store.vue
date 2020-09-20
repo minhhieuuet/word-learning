@@ -7,8 +7,11 @@
     </div>
     <div class="category inline-flex">
         <div v-for="(category, index) in categories" :key="category.id" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
+            <div class="download-icon">
+                <a-icon type="download"></a-icon> {{category.download_time}}
+            </div>
             <div class="setting-btn">
-                <a-popover placement="top" trigger="click">
+                <a-popover placement="topLeft" trigger="hover">
                     <template slot="content">
                         <div class="category-btn share-btn" style="cursor: pointer;" @click="cloneCategory(category.id)">
                             <a-icon type="download" style="color: #63afff;" /> Tải về
@@ -18,14 +21,14 @@
                     <a-button icon="setting"></a-button>
                 </a-popover>
             </div>
-            <div  @click="showReviewCategory(category)" :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" :class="{styles__overLay___1WcJB : true}">
+            <div @click="showReviewCategory(category)" :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" :class="{styles__overLay___1WcJB : true}">
                 <div class="styles__conName___2JHZN">
                     <div class="styles__viewName___2PQg6">{{category.title}}</div>
                 </div>
                 <!-- <div class="styles__txtDate___1BKAV">{{category.created_at}}</div> -->
                 <div class="styles__txtNum___39eD4">{{category ? category.total_word : ''}} từ</div>
                 <div class="author">
-                     Người tạo: <b class="bold">{{category.author}}</b>
+                     Tạo bởi: <b class="bold">{{category.author}}</b>
                 </div>
             </div>
         </div>
@@ -52,7 +55,7 @@
             </md-table-row>
         </md-table>
         <div v-else>
-            <a-empty description="Danh mục rỗng"/>
+            <a-empty description="Danh mục rỗng" />
         </div>
     </a-modal>
     <QuickWordModel />
@@ -100,6 +103,7 @@ export default {
             rf.getRequest('CategoryRequest').cloneCategory({ id: categoryId }).then(res => {
                 loading();
                 this.$message.success('Tải về thành công, danh mục đã được thêm vào tài khoản của bạn');
+                this.getPublicCategories();
             }).catch(() => {
                 loading();
                 this.$message.error('Đã có lỗi xảy ra, vui lòng thử lại');
@@ -192,6 +196,15 @@ export default {
         margin: 0px auto !important;
         border-radius: 0% !important;
     }
+}
+
+.download-icon {
+    position: absolute;
+    background-color: #067fe8;
+    color: white;
+    font-weight: bold;
+    padding-right: 2px;
+    border-radius: 0% 0% 20% 0%;
 }
 
 .author {
@@ -461,7 +474,7 @@ export default {
 }
 
 .styles__viewName___2PQg6 {
-    padding: 0 .5rem 0 1.2rem;
+    padding: 0.5rem .5rem 0 1.2rem;
     font-size: 1.5rem;
     font-weight: 600;
     font-style: normal;

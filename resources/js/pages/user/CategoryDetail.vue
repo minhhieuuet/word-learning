@@ -19,7 +19,7 @@
                     <a-button type="primary" size="large" style="background-color: rgb(135 106 253);" icon="eye" @click="openReviewModal()">
                         Trình chiếu
                     </a-button>
-                    <a-button type="primary" size="large" style="rgb(243 162 41);" icon="trophy">
+                    <a-button type="primary" size="large" style="rgb(243 162 41);" icon="trophy" @click="playGame()">
                         Trò chơi
                     </a-button>
                 </a-button-group>
@@ -153,7 +153,7 @@
                     </a-button>
                     <a-button type="primary" size="large" style="background-color: rgb(135 106 253);width: 33%;" icon="eye" @click="openReviewModal()">
                     </a-button>
-                    <a-button type="primary" size="large" style="rgb(243 162 41);width: 33%;" icon="trophy">
+                    <a-button type="primary" size="large" style="rgb(243 162 41);width: 33%;" icon="trophy" @click="playGame()">
                     </a-button>
                 </a-button-group>
                 <a-tabs default-active-key="1">
@@ -334,6 +334,7 @@ export default {
         return {
             words: [],
             isLoading: false,
+            categoryId: '',
             favouriteWords: [],
             category: {},
             seachKey: '',
@@ -350,6 +351,10 @@ export default {
             rf.getRequest('CategoryRequest').getCategory(categoryId).then(res => {
                 this.category = res;
             })
+        },
+        playGame() {
+            localStorage.setItem('selectedCategoryId', this.categoryId);
+            this.$router.push({ name: 'Game' })
         },
         getWordsByCategory(categoryId) {
             const loading = this.$message.loading('Đang tải ...', 0);

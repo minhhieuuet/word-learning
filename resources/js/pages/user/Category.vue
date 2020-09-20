@@ -39,7 +39,7 @@
                                 <a-icon type="share-alt" style="color: #63afff;"/> Chia sẻ
                             </template>
                              <template v-else>
-                                <a-icon type="share-alt" style="color: #63afff;"/> Bỏ chia sẻ
+                                <a-icon type="share-alt" style="color: red;"/> Tắt chia sẻ
                             </template>
                         </div>
                         <div class="category-btn" style="cursor: pointer;" @click="removeCategory(category.id)">
@@ -125,6 +125,7 @@ export default {
                 if (value) {
                     rf.getRequest('CategoryRequest').removeCategory(categoryId).then(res => {
                         this.refresh();
+                        this.$message.success('Xoá danh mục thành công');
                     });
                 }
             })

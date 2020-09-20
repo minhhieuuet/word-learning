@@ -15,11 +15,9 @@
                 <a-button type="primary" style="background-color: #31b108;" icon="plus-circle" @click="createWord()">
                     Thêm từ
                 </a-button>
-                <div class="styles__viewBtnPlay___3lqzv" style="padding-top: 20px">
-                    <div id="btnGameCenter" class="styles__button___dn9S6 effectScale">
-                        <div class="styles__text___GW6do" style="visibility: visible;">Chơi trò chơi</div>
-                    </div>
-                </div>
+                <a-button type="primary" icon="trophy" @click="playGame()">
+                    Trò chơi
+                </a-button>
 
             </a-col>
             <a-col class="word-side" :span="14">
@@ -123,7 +121,7 @@
                     </a-button>
                     <a-button type="primary" size="large" style="background-color: rgb(135 106 253);width: 33%;" icon="eye" @click="openReviewModal()">
                     </a-button>
-                    <a-button type="primary" size="large" style="rgb(243 162 41);width: 33%;" icon="trophy">
+                    <a-button type="primary" size="large" style="rgb(243 162 41);width: 33%;" icon="trophy" @click="playGame()">
                     </a-button>
                 </a-button-group>
                 <a-tabs default-active-key="1" style="border: 1px solid rgba(0, 0, 0, 0.1);">
@@ -256,6 +254,10 @@ export default {
         },
         createWord() {
             this.$modal.show('word', { categoryId: this.phraseId, title: 'Thêm cụm từ mới' });
+        },
+        playGame() {
+            localStorage.setItem('selectedCategoryId', this.phraseId);
+            this.$router.push({name: 'Game'})
         },
         refresh() {
             this.newWord = {

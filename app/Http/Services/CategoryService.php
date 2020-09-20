@@ -46,6 +46,9 @@ class CategoryService
     {
         $bucketId = Bucket::where('user_id', $userId)->first()->id;
         $category = Category::find($categoryId);
+        //Increase downloaded time
+        $category->download_time ++;
+        $category->save();
         //Clone category
         $cloneCategory = Category::create([
             'bucket_id' => $bucketId,
