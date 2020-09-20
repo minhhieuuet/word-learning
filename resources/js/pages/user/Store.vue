@@ -43,11 +43,11 @@
             </p>
         </div>
         <md-table v-if="reviewCategory.words ? reviewCategory.words.length : '0'">
-            <md-table-row>
+            <!-- <md-table-row>
                 <md-table-head>Từ</md-table-head>
                 <md-table-head>Nghĩa</md-table-head>
                 <md-table-head>Gợi ý</md-table-head>
-            </md-table-row>
+            </md-table-row> -->
             <md-table-row v-for="word in reviewCategory.words" :key="word.id">
                 <md-table-cell>{{word.word}}</md-table-cell>
                 <md-table-cell>{{word.meaning}}</md-table-cell>
