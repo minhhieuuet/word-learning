@@ -425,6 +425,7 @@ export default {
         margin-left: 15px !important;
         text-align: left !important;
         display: block !important;
+        height: 90% !important;
     }
 
     .tool-bar-mobile {}
