@@ -112,7 +112,7 @@
                             <a-icon title="Lưu thay đổi" @click="saveImageChange" type="check-circle" theme="filled" class="submit-image-icon" />
                         </template>
                         <template v-else>
-                            <img class="word-img" :src="currentWord['image'] ? currentWord['image'] : '/images/placeholder-images.png'" :title="currentWord['meaning']">
+                            <img class="word-img" v-lazy="currentWord['image'] ? currentWord['image'] : '/images/placeholder-images.png'" :title="currentWord['meaning']">
 
                             <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
                         </template>
