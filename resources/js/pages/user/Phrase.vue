@@ -9,15 +9,17 @@
                 <div class="phrase-desc">
                     <h2>Đây là nơi bạn có thể lưu những cụm từ mà bạn muốn học</h2>
                 </div>
-                <a-button type="primary" style="background-color: #921cb9;" icon="eye" @click="openReviewModal()">
-                    Trình chiếu
-                </a-button>
-                <a-button type="primary" style="background-color: #31b108;" icon="plus-circle" @click="createWord()">
-                    Thêm từ
-                </a-button>
-                <a-button type="primary" icon="trophy" @click="playGame()">
-                    Trò chơi
-                </a-button>
+                <div style="text-align: center;">
+                    <a-button type="primary" style="background-color: #921cb9;" icon="eye" @click="openReviewModal()">
+                        Trình chiếu
+                    </a-button>
+                    <a-button type="primary" style="background-color: #31b108;" icon="plus-circle" @click="createWord()">
+                        Thêm từ
+                    </a-button>
+                    <a-button type="primary" icon="trophy" @click="playGame()">
+                        Trò chơi
+                    </a-button>
+                </div>
 
             </a-col>
             <a-col class="word-side" :span="14">

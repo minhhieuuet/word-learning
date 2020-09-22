@@ -144,26 +144,13 @@
         </template>
 
         <div class="mobile-direction-btn-group" style="display: none;">
-            <div class="direction-btn">
-                <img src="/images/arrow-left.png" @click="previousWord()" :disabled="(currentWordIndex == 0 && !showAddBtn) || !words.length">
+            <div class="direction-btn" >
+                <img v-show="(currentWordIndex != 0 || showAddBtn) && words.length" src="/images/arrow-left.png" @click="previousWord()" :disabled="(currentWordIndex == 0 && !showAddBtn) || !words.length">
             </div>
 
             <div class="direction-btn">
-                <img src="/images/arrow-right.png" @click="nextWord()" :disabled="showAddBtn">
+                <img v-show="!showAddBtn" src="/images/arrow-right.png" @click="nextWord()" :disabled="showAddBtn">
             </div>
-        </div>
-
-        <!-- Left button -->
-        <div v-show="(currentWordIndex != 0 || showAddBtn) && words.length" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowLeft___OPxnB" @click="previousWord()">
-            <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
-                <path d="M802.8 448h-428l166-158.8c23.8-25 23.8-65.4 0-90.4s-62.4-25-86.4 0l-276.4 268c-12 11.6-18 27.4-18 44.8v0.8c0 17.4 6 33.2 18 44.8l276.2 268c24 25 62.6 25 86.4 0s23.8-65.4 0-90.4l-166-158.8h428c33.8 0 61.2-28.6 61.2-64 0.2-36-27.2-64-61-64z"></path>
-            </svg>
-        </div>
-        <!-- Right button -->
-        <div v-show="!showAddBtn" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowRight___xJqg7" @click="nextWord()">
-            <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
-                <path d="M569.8 825.2l276.2-268c12-11.6 18-27.4 18-44.8v-0.8c0-17.4-6-33.2-18-44.8l-276.2-268c-24-25-62.6-25-86.4 0s-23.8 65.4 0 90.4l166 158.8h-428c-34-0-61.4 28.6-61.4 64 0 36 27.4 64 61.2 64h428l-166 158.8c-23.8 25-23.8 65.4 0 90.4 24 25 62.6 25 86.6 0z"></path>
-            </svg>
         </div>
     </div>
 
@@ -233,16 +220,6 @@ export default {
                 }
                 this.currentWord = res[0];
             });
-
-            //Add event press arrow left and right to back and next
-
-            // window.addEventListener('keyup', (ev) => {
-            //     if (ev.key === 'ArrowRight') {
-            //         this.nextWord();
-            //     } else if (ev.key === 'ArrowLeft') {
-            //         this.previousWord();
-            //     }
-            // });
         },
         beforeClose() {
             // window.removeEventListener('keyup', () => {});
@@ -394,7 +371,10 @@ export default {
     .content {
         display: none;
     }
-
+    .plus-btn{
+        padding: 0px !important;
+        margin-bottom: 70px;
+    }
     .camera-icon {
         right: inherit !important;
         margin-left: -20px;

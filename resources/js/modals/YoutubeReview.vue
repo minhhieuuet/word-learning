@@ -5,13 +5,13 @@
     </div>
     <div class="content" v-if="!isNotFound">
         <div class='video' v-show="videos.length">
-            <iframe width="760" height="615" style="height: 500px" ref="youtube-video" id="youtube-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            <iframe width="560" height="615" ref="youtube-video" id="youtube-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
             </iframe>
         </div>
         <div style="text-align:center;">
             <div id="subcontent"></div>
-            <a-button icon="step-backward" @click="prev()">Trở về</a-button>
-            <a-button icon="step-forward" @click="next()">Tiếp theo</a-button>
+            <a-button icon="step-backward" :disabled="currentIndex == 1" @click="prev()">Trở về</a-button>
+            <a-button icon="step-forward" @click="next()"  :disabled="currentIndex == videos.length">Tiếp theo</a-button>
             <a-button icon="retweet" @click="replay()">Phát lại</a-button>
 
         </div>
@@ -40,6 +40,9 @@ export default {
     },
     methods: {
         beforeOpen(event) {
+            this.currentIndex = 0;
+            this.videos = [];
+            this.isNotFound = false;
             let params = { word: event.params.word.word };
             rf.getRequest('WordRequest').getYoutubeVideos(params).then(res => {
                 this.videos = res.transcripts;
@@ -94,6 +97,14 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+@media screen and (max-width: 900px) {
+    #youtube-video {
+        height: auto !important;
+    }   
+}
+#youtube-video {
+    height: 500px;
+}
 .content {
     padding: 30px 30px 10px 30px;
     height: 600px;
