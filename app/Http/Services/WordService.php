@@ -98,14 +98,26 @@ class WordService
     public function storeWord($params)
     {   
         $externalImage = array_get($params, 'external_image');
+        $categoryId = array_get($params, 'category_id');
+        $word = array_get($params, 'word');
+
+        if(Word::where(['category_id' => $categoryId, 'word' => $word])->count()) {
+            return response([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "word" => ["$word đã tồn tại trong danh mục, vui lòng chọn từ khác"]
+                ]
+            ], 422);
+        }
+
         if($externalImage) {
             $imageUrl = $this->imageService->saveImageFromUrl($externalImage);
         } else {
             $imageUrl = array_get($params, 'image');
         }
         $word = Word::create([
-            'category_id' => array_get($params, 'category_id'),
-            'word' => array_get($params, 'word'),
+            'category_id' => $categoryId,
+            'word' => $word,
             'hint' => array_get($params, 'hint'),
             'meaning' => array_get($params, 'meaning'),
             'image' => $imageUrl,

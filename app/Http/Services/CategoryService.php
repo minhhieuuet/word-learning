@@ -103,18 +103,23 @@ class CategoryService
             'is_public' => array_get($params, 'is_public'),
             'bucket_id' => $bucket->id,
         ]);
-
+        $category->slug = $category->slug.'-'.$category->id;
+        $category->save();
         return $this->getOneCategory($category);
     }
 
     public function updateCategory($categoryId, $params)
     {
-        $category = Category::find($categoryId)->update([
+        Category::find($categoryId)->update([
             'title' => array_get($params, 'title'),
             'slug' => str_slug(array_get($params, 'title')),
             'cover' => array_get($params, 'cover'),
             'is_public' => array_get($params, 'is_public'),
         ]);
+        
+        $category = Category::find($categoryId);
+        $category->slug = $category->slug.'-'.$category->id;
+        $category->save();
         return 'ok';
     }
 

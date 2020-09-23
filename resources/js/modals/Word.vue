@@ -161,14 +161,11 @@ export default {
                 this.$emit('refresh');
                 this.$emit('created');
                 this.$modal.hide('word');
+                this.$message.success('Thêm từ mới thành công');
+
             }).catch((err) => {
                 this.isLoading = false;
-                // this.$toasted.show('Đã có lỗi xảy ra, vui lòng kiểm tra lại!', {
-                //   theme: 'bubble',
-                //   position: 'top-right',
-                //   duration : 1500,
-                //   type: 'danger'
-                // });
+                // this.$message.success('Đã có lỗi xảy ra, vui lòng thử lại');
             });
         },
         getSuggestImages() {

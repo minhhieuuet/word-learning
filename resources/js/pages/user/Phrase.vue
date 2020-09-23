@@ -50,6 +50,8 @@
                                         </span><span>{{phrase.word | capitalize}}</span>
 
                                     </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(phrase.id)"></a-icon>
+
                                     <StarButton :word.sync="phrase" @refresh="refresh()" />
                                 </div>
                                 <div class="styles__desc___2IcIn"><span>{{phrase.meaning}}</span></div>
@@ -89,6 +91,49 @@
                                         </span><span>{{phrase.word | capitalize}}</span>
 
                                     </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(phrase.id)"></a-icon>
+
+                                    <StarButton :word.sync="phrase" @refresh="refresh()" />
+                                </div>
+                                <div class="styles__desc___2IcIn"><span>{{phrase.meaning}}</span></div>
+                                <div class="styles__desc___2IcIn" v-if="phrase.hint">Gợi ý: <span>{{phrase.hint}}</span></div>
+                            </div>
+                            <div class="styles__right___4LtJ-">
+                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <img v-lazy="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </a-tab-pane>
+                    <a-tab-pane key="3">
+                        <span slot="tab">
+                            <a-icon type="check-circle" />
+                            Hoàn thành
+                        </span>
+                        <div v-if="!phrases.filter(word => word.priority <= -5).length">
+                            <a-empty description="Danh sách trống" />
+                        </div>
+                        <div v-else class="styles__container___AS5GT" v-for="phrase in phrases.filter(phrase => phrase.priority <= -5)">
+                            <div style="margin-right: 10px;">
+                                <a-tooltip>
+                                    <template slot="title">
+                                        Độ thông thạo {{phrase.priority | formatPriorityToPercent}} %
+                                    </template>
+                                    <a-progress type="circle" :percent="phrase.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                                </a-tooltip>
+                            </div>
+                            <div class="styles__center___1alr7">
+                                <div class="styles__viewTitle___trc68">
+
+                                    <SpeakButton :word="phrase.word" />
+
+                                    <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="phrase.hint">
+                                        </span><span>{{phrase.word | capitalize}}</span>
+
+                                    </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(phrase.id)"></a-icon>
+
                                     <StarButton :word.sync="phrase" @refresh="refresh()" />
                                 </div>
                                 <div class="styles__desc___2IcIn"><span>{{phrase.meaning}}</span></div>
@@ -153,6 +198,7 @@
                                         </span><span>{{phrase.word | capitalize}}</span>
 
                                     </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(phrase.id)"></a-icon>
                                     <StarButton :word.sync="phrase" @refresh="refresh()" />
                                 </div>
                                 <div class="styles__desc___2IcIn"><span>{{phrase.meaning}}</span></div>
@@ -192,6 +238,47 @@
                                         </span><span>{{phrase.word | capitalize}}</span>
 
                                     </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(phrase.id)"></a-icon>
+                                    <StarButton :word.sync="phrase" @refresh="refresh()" />
+                                </div>
+                                <div class="styles__desc___2IcIn"><span>{{phrase.meaning}}</span></div>
+                                <div class="styles__desc___2IcIn" v-if="phrase.hint">Gợi ý: <span>{{phrase.hint}}</span></div>
+                            </div>
+                            <div class="styles__right___4LtJ-">
+                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
+                                <img v-lazy="phrase.image ? phrase.image : '/images/default.jpg'" :alt="phrase.word">
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </a-tab-pane>
+                    <a-tab-pane key="3">
+                        <span slot="tab">
+                            <a-icon type="check-circle" />
+                            Hoàn thành
+                        </span>
+                        <div v-if="!phrases.filter(phrase => phrase.priority <= -5).length">
+                            <a-empty description="Danh sách trống" />
+                        </div>
+                        <div v-else class="styles__container___AS5GT" v-for="phrase in phrases.filter(phrase => phrase.priority <= -5)">
+                            <div style="margin-right: 10px;">
+                                <a-tooltip>
+                                    <template slot="title">
+                                        Độ thông thạo {{phrase.priority | formatPriorityToPercent}} %
+                                    </template>
+                                    <a-progress type="circle" :percent="phrase.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                                </a-tooltip>
+                            </div>
+                            <div class="styles__center___1alr7">
+                                <div class="styles__viewTitle___trc68">
+
+                                    <SpeakButton :word="phrase.word" />
+
+                                    <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="phrase.hint">
+                                        </span><span>{{phrase.word | capitalize}}</span>
+
+                                    </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(phrase.id)"></a-icon>
                                     <StarButton :word.sync="phrase" @refresh="refresh()" />
                                 </div>
                                 <div class="styles__desc___2IcIn"><span>{{phrase.meaning}}</span></div>
@@ -260,6 +347,9 @@ export default {
         playGame() {
             localStorage.setItem('selectedCategoryId', this.phraseId);
             this.$router.push({name: 'Game'})
+        },
+        showReviewModalFromWord(wordId) {
+            this.$modal.show('review', { categoryId: this.phraseId, startWordId: wordId });
         },
         refresh() {
             this.newWord = {
