@@ -1,43 +1,126 @@
 <template>
 <div class="about-me">
-    <div class="portfoliocard">
-        <div class="coverphoto"></div>
-        <div class="profile_picture"></div>
-        <div class="left_col">
-            <div class="followers">
-                Tổng số từ
-                <div class="follow_count">18,541</div>
+    <a-row>
+        <a-col span="12">
+            <div class="portfoliocard">
+                <div class="coverphoto"></div>
+                <div class="profile_picture"></div>
+                <div class="left_col">
+                    <div class="followers">
+                        Tổng số từ
+                        <div class="follow_count">18,541</div>
+                    </div>
+                    <div class="followers">
+                        Level
+                        <div class="follow_count">18</div>
+                    </div>
+                </div>
+                <div class="right_col">
+                    <h2 class="name">John Doe</h2>
+                    <h3 class="location">San Francisco, CA</h3>
+                    <ul class="contact_information">
+                        <li class="work">CEO</li>
+                        <li class="website"><a class="nostyle" href="#">www.apple.com</a></li>
+                        <li class="mail">john.doe@apple.com</li>
+                        <li class="phone">1-(732)-757-2923</li>
+                        <li class="resume"><a href="#" class="nostyle">download resume</a></li>
+                    </ul>
+                </div>
             </div>
-             <div class="followers">
-                 Level
-                <div class="follow_count">18</div>
+        </a-col>
+        <a-col span="12">
+            <div class="statistics">
+                <a-row>
+                    <a-col span="10" class="left-statistics">
+                        <h3>Thông số</h3>
+                        <div>
+                            <p>Tổng số từ: <b>200</b></p>
+                            <p>Số danh mục: <b>30</b> danh mục</p>
+                            <p>Đang chia sẻ: <b>10</b> danh mục</p>
+                            <p>Lượt tải: <b>10</b></p>
+                        </div>
+                    </a-col>
+                    <a-col span="14">
+                        <pie-chart :data="chartData" :options="chartOptions"></pie-chart>
+                    </a-col>
+                </a-row>
             </div>
-        </div>
-        <div class="right_col">
-            <h2 class="name">John Doe</h2>
-            <h3 class="location">San Francisco, CA</h3>
-            <ul class="contact_information">
-                <li class="work">CEO</li>
-                <li class="website"><a class="nostyle" href="#">www.apple.com</a></li>
-                <li class="mail">john.doe@apple.com</li>
-                <li class="phone">1-(732)-757-2923</li>
-                <li class="resume"><a href="#" class="nostyle">download resume</a></li>
-            </ul>
-        </div>
-    </div>
+
+            <div class="chart">
+                <line-chart />
+            </div>
+        </a-col>
+    </a-row>
 </div>
 </template>
 
 <script>
+import PieChart from './Chart/PieChart';
+import LineChart from './Chart/LineChart';
 export default {
+    components: {
+        PieChart,
+        LineChart
+    },
+    data() {
+        return {
+            chartOptions: {
+                hoverBorderWidth: 20,
+                weight: 2,
 
+            },
+            chartData: {
+                hoverBackgroundColor: "red",
+                hoverBorderWidth: 10,
+
+                labels: ["Thành thạo", "Chưa học", "Đang học"],
+                datasets: [{
+                    label: "Data One",
+                    backgroundColor: ["#7ac70c", "#e53938", "#ffcc00"],
+                    data: [1, 10, 5]
+                }]
+            }
+        }
+    }
 }
 </script>
 
+<style lang="scss">
+#doughnut-chart {
+    height: 300px !important;
+    width: 300px !important;
+    color: white !important;
+}
+
+#line-chart {
+    height: 300px !important;
+}
+</style>
 <style lang="scss" scoped>
+.statistics {
+    width: 100%;
+    height: 300px;
+    background-color: #f2f2ffe3;
+    margin-top: 50px;
+    border-radius: 15px;
+}
+
+.left-statistics {
+    padding: 20px;
+}
+
+.chart {
+    width: 100%;
+    height: 300px;
+    background-color: #f2f2ffe3;
+    margin-top: 10px;
+    border-radius: 15px;
+}
+
 .about-me {
     padding: 30px;
-    background-image: url('https://i.pinimg.com/originals/78/81/2f/78812fd262025d24e53452a1307bbb6d.png');
+    background-image: url('/images/about-me.jpg');
+    background-size: cover;
 }
 
 a.nostyle {
@@ -49,7 +132,7 @@ a.nostyle {
 
 div.portfoliocard {
     position: relative;
-    height: 450px;
+    height: 600px;
     width: 400px;
     background: rgba(255, 255, 255, 1);
     border: 1px solid rgba(0, 0, 0, 0.7);
