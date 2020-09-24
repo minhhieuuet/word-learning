@@ -38,6 +38,7 @@
                             Thay đổi thông tin
                         </a-button>
                     </div>
+                    <img src="/images/about-footer.gif"/>
                 </div>
             </div>
         </a-col>
@@ -225,7 +226,7 @@ export default {
 .chart {
     width: 100%;
     height: 300px;
-    background-color: #f2f2ffe3;
+    background-color: #ffffffeb;
     margin-top: 10px;
     border-radius: 15px;
     box-shadow: inset 0px 3px 20px rgba(255, 255, 255, 0.3), 1px 0px 2px rgba(255, 255, 255, 0.7);
