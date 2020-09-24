@@ -247,7 +247,7 @@ a.nostyle {
 div.portfoliocard {
     position: relative;
     height: 600px;
-    width: 400px;
+    width: 500px;
     background: rgba(255, 255, 255, 1);
     border: 1px solid rgba(0, 0, 0, 0.7);
     box-shadow: 0px -1px 3px rgba(0, 0, 0, 0.1),
@@ -261,7 +261,7 @@ div.portfoliocard {
 div.portfoliocard div.coverphoto {
     width: 100%;
     height: 120px;
-    background: url('https://img.wallpapersafari.com/tablet/2560/1700/19/51/a415uP.jpeg');
+    background: url('/images/profile-cover.jpeg');
     background-size: cover;
     background-position: center center;
     border-top-right-radius: 5px;
@@ -331,7 +331,7 @@ div.portfoliocard ul.contact_information {
 
 div.portfoliocard ul.contact_information li {
     height: 35px;
-    width: 180px;
+    width: 280px;
     line-height: 25px;
     font-weight: 300;
     font-size: 15px;
