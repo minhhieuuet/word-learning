@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    protected $fillable = ['title', 'cover', 'is_visible', 'bucket_id', 'slug', 'is_public'];
+    protected $fillable = ['title', 'cover', 'is_visible', 'bucket_id', 'slug', 'is_public', 'download_time'];
     protected $appends = array('total_word');
 
     public function getTotalWordAttribute()

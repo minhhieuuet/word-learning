@@ -1,12 +1,11 @@
 import { Line, mixins } from "vue-chartjs";
+import rf from './../../../requests/RequestFactory';
+
 export default {
   extends: Line,
   props: ["data", "options"],
-  mounted() {
-    // this.chartData is created in the mixin.
-    // If you want to pass options please create a local options object
-    this.renderChart({
-      labels: ['Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ 6', 'Thứ 7', 'Chủ nhật'],
+  data() {
+    return {
       datasets: [
         {
           label: 'Từ mới đã thêm',
@@ -14,6 +13,15 @@ export default {
           data: [10, 19, 20, 40, 19, 25, 10]
         }
       ]
-    }, {responsive: true, maintainAspectRatio: false, scaleFontColor: "#FFFFFF"});
+    }
+  },
+  mounted() {
+    rf.getRequest('UserRequest').getNewWordStatistics().then(res => {
+      this.datasets[0].data = res;
+      this.renderChart({
+        labels: ['Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ 6', 'Thứ 7', 'Chủ nhật'],
+        datasets: this.datasets
+      }, {responsive: true, maintainAspectRatio: false, scaleFontColor: "#FFFFFF"});
+    })
   }
 };

@@ -4,6 +4,13 @@ export default class UserRequest extends BaseModelRequest {
   getModelName () {
     return 'users';
   }
+  getStatistics() {
+    return this.get('/statistics');
+  }
+
+  getNewWordStatistics() {
+    return this.get('/statistics/new-word');
+  }
 
   login (params) {
     return this.post('/auth/login', params);

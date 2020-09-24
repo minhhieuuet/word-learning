@@ -7,24 +7,37 @@
                 <div class="profile_picture"></div>
                 <div class="left_col">
                     <div class="followers">
-                        Tổng số từ
-                        <div class="follow_count">18,541</div>
+                        Điểm <a-icon type="trophy"></a-icon>
+                        <div class="follow_count">{{user.score}}</div>
                     </div>
                     <div class="followers">
-                        Level
-                        <div class="follow_count">18</div>
+                        Cấp độ <a-icon type="sketch" />
+                        <div class="follow_count">
+                            <a-tooltip placement="top">
+                                <template slot="title">
+                                    <span>{{currentRank.title}}</span>
+                                </template>
+                                <img @click="showMedalModal()" class="rank-icon" :src="currentRank.image" />
+                            </a-tooltip>
+                            
+                        </div>
                     </div>
                 </div>
                 <div class="right_col">
-                    <h2 class="name">John Doe</h2>
-                    <h3 class="location">San Francisco, CA</h3>
+                    <h2 class="name">{{user.full_name}}</h2>
                     <ul class="contact_information">
-                        <li class="work">CEO</li>
-                        <li class="website"><a class="nostyle" href="#">www.apple.com</a></li>
-                        <li class="mail">john.doe@apple.com</li>
-                        <li class="phone">1-(732)-757-2923</li>
-                        <li class="resume"><a href="#" class="nostyle">download resume</a></li>
+                        <li>
+                            <a-icon type="user"></a-icon> {{user.name}}
+                        </li>
+                        <li>
+                            <a-icon type="mail"></a-icon> {{user.email}}
+                        </li>
                     </ul>
+                    <div style="text-align: center;">
+                        <a-button type="dashed" icon="form" size="large">
+                            Thay đổi thông tin
+                        </a-button>
+                    </div>
                 </div>
             </div>
         </a-col>
@@ -34,10 +47,10 @@
                     <a-col span="10" class="left-statistics">
                         <h3>Thông số</h3>
                         <div>
-                            <p>Tổng số từ: <b>200</b></p>
-                            <p>Số danh mục: <b>30</b> danh mục</p>
-                            <p>Đang chia sẻ: <b>10</b> danh mục</p>
-                            <p>Lượt tải: <b>10</b></p>
+                            <p>Tổng số từ: <b>{{statistics.total_word}}</b></p>
+                            <p>Số danh mục: <b>{{statistics.total_category}}</b> danh mục</p>
+                            <p>Đang chia sẻ: <b>{{statistics.total_sharing_category}}</b> danh mục</p>
+                            <p>Lượt tải: <b>{{statistics.download_time}}</b></p>
                         </div>
                     </a-col>
                     <a-col span="14">
@@ -51,10 +64,25 @@
             </div>
         </a-col>
     </a-row>
+    <a-modal v-model="medalModalVisible" title="Huy hiệu" width="650px" footer="">
+        <a-row>
+            <a-col :span="12" v-for="rank in ranks" :key="rank">
+                <div class="rank">
+                    <img :src="rank.image" width="70px" />
+                    <div class="rank-desc">
+                        <b>{{rank.title}}</b>
+                        -
+                        Điểm {{rank.start_score}} ~ {{rank.end_score}}
+                    </div>
+                </div>
+            </a-col>
+        </a-row>
+    </a-modal>
 </div>
 </template>
 
 <script>
+import rf from './../../requests/RequestFactory';
 import PieChart from './Chart/PieChart';
 import LineChart from './Chart/LineChart';
 export default {
@@ -64,24 +92,85 @@ export default {
     },
     data() {
         return {
-            chartOptions: {
-                hoverBorderWidth: 20,
-                weight: 2,
-
+            medalModalVisible: false,
+            currentRank: {},
+            statistics: {
+                total_word: 0,
+                total_category: 0,
+                total_sharing_category: 0,
+                download_time: 0
             },
-            chartData: {
-                hoverBackgroundColor: "red",
-                hoverBorderWidth: 10,
-
-                labels: ["Thành thạo", "Chưa học", "Đang học"],
-                datasets: [{
-                    label: "Data One",
-                    backgroundColor: ["#7ac70c", "#e53938", "#ffcc00"],
-                    data: [1, 10, 5]
-                }]
+            ranks: [{
+                title: 'Trái Đất',
+                start_score: 0,
+                end_score: 100,
+                image: '/images/rank/earth.png'
+            }, {
+                title: 'Mặt Trăng',
+                start_score: 101,
+                end_score: 200,
+                image: '/images/rank/moon.png'
+            },{
+                title: 'Sao Thuỷ',
+                start_score: 201,
+                end_score: 300,
+                image: '/images/rank/mercury.png',
+            }, {
+                title: 'Sao Hoả',
+                start_score: 301,
+                end_score: 400,
+                image: '/images/rank/mars.png'
+            }, {
+                title: 'Sao Thổ',
+                start_score: 401,
+                end_score: 500,
+                image: '/images/rank/saturn.png'
+            }, {
+                title: 'Sao Mộc',
+                start_score: 501,
+                end_score: 600,
+                image: '/images/rank/jupiter.png'
+            },{
+                title: 'Lỗ Đen',
+                start_score: 601,
+                end_score: 700,
+                image: '/images/rank/blackHole.png'
+            },{
+                title: 'Mặt trời',
+                start_score: 701,
+                end_score: '',
+                image: '/images/rank/sun.png'
+            }],
+            user: {
+                email: '',
+                full_name: '',
+                score: 100
             }
         }
-    }
+    },
+    methods: {
+        showMedalModal() {
+            this.medalModalVisible = true;
+        }
+    },
+    mounted() {
+        rf.getRequest('UserRequest').getStatistics().then(res => {
+            console.log(res);
+            this.statistics = res;
+        });
+        rf.getRequest('UserRequest').getCurrentUser().then(res => {
+            this.user = res;
+            this.user.score = 602;
+            for(let rank of this.ranks) {
+                if(this.user.score >= rank.start_score && this.user.score <= rank.end_score) {
+                    this.currentRank = rank;
+                    break;
+                } else {
+                    this.currentRank = this.ranks.slice(-1).pop();
+                }
+            }
+        });
+    },
 }
 </script>
 
@@ -97,12 +186,37 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+@-webkit-keyframes rotation {
+		from {
+				-webkit-transform: rotate(0deg);
+		}
+		to {
+				-webkit-transform: rotate(359deg);
+		}
+}
+.rank-icon {
+    cursor: pointer;
+    width: 50px;
+    -webkit-animation: rotation 12s infinite linear;
+}
+.rank {
+    margin: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+
+    .rank-desc {
+        display: inline;
+    }
+}
+
 .statistics {
     width: 100%;
     height: 300px;
-    background-color: #f2f2ffe3;
+    background-color: #ffffffed;
     margin-top: 50px;
     border-radius: 15px;
+    box-shadow: inset 0px 3px 20px rgba(255, 255, 255, 0.3), 1px 0px 2px rgba(255, 255, 255, 0.7);
 }
 
 .left-statistics {
@@ -115,6 +229,7 @@ export default {
     background-color: #f2f2ffe3;
     margin-top: 10px;
     border-radius: 15px;
+    box-shadow: inset 0px 3px 20px rgba(255, 255, 255, 0.3), 1px 0px 2px rgba(255, 255, 255, 0.7);
 }
 
 .about-me {
@@ -147,7 +262,8 @@ div.portfoliocard {
 div.portfoliocard div.coverphoto {
     width: 100%;
     height: 120px;
-    background: url('http://farm8.staticflickr.com/7149/6484148411_baf8d2e934_z.jpg');
+    background: url('https://img.wallpapersafari.com/tablet/2560/1700/19/51/a415uP.jpeg');
+    background-size: cover;
     background-position: center center;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
@@ -160,7 +276,7 @@ div.portfoliocard div.coverphoto {
 div.portfoliocard div.left_col,
 div.portfoliocard div.right_col {
     float: left;
-    height: 340px;
+    height: 540px;
 }
 
 div.portfoliocard div.left_col {
@@ -186,7 +302,7 @@ div.portfoliocard div.profile_picture {
     top: 65px;
     left: 40px;
     border-radius: 100%;
-    background-image: url('http://cache.spreadshirt.net/Public/Common/images/profile-pic-placeholder_130x130.png');
+    background-image: url('https://www.iconfinder.com/data/icons/professions-2-2/151/51-512.png');
     background-size: 100% 100%;
     padding: 7px;
     border: 4px solid rgba(255, 255, 255, 1)
@@ -215,7 +331,7 @@ div.portfoliocard ul.contact_information {
 }
 
 div.portfoliocard ul.contact_information li {
-    height: 25px;
+    height: 35px;
     width: 180px;
     line-height: 25px;
     font-weight: 300;
@@ -225,46 +341,8 @@ div.portfoliocard ul.contact_information li {
     padding: 5px 0px;
     background-repeat: no-repeat;
     background-size: 18px 18px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0px 1px 1px rgba(255, 255, 255, 0.6);
+    border-bottom: none;
     cursor: default;
-}
-
-div.portfoliocard ul.contact_information li:before {
-    content: "";
-    width: 25px;
-    height: 25px;
-    display: block;
-    float: left;
-    background-position: center;
-    background-size: 18px 18px;
-    background-repeat: no-repeat;
-    margin-right: 5px;
-    opacity: 0.7;
-}
-
-div.portfoliocard ul.contact_information li:hover:before {
-    opacity: 1;
-}
-
-div.portfoliocard ul.contact_information li.work:before {
-    background-image: url('http://schulzmarcel.de/x/icons/case_24.png');
-}
-
-div.portfoliocard ul.contact_information li.website:before {
-    background-image: url('http://schulzmarcel.de/x/icons/globe_24.png');
-}
-
-div.portfoliocard ul.contact_information li.mail:before {
-    background-image: url('http://schulzmarcel.de/x/icons/paper_plane_24.png');
-}
-
-div.portfoliocard ul.contact_information li.phone:before {
-    background-image: url('http://schulzmarcel.de/x/icons/phone_24.png');
-}
-
-div.portfoliocard ul.contact_information li.resume:before {
-    background-image: url('http://schulzmarcel.de/x/icons/inbox_24.png');
 }
 
 div.portfoliocard div.followers,

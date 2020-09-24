@@ -18,7 +18,8 @@ Route::get('/translate-to-en', 'TranslatorController@translateToEn');
 
 
 Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
-
+    Route::get('statistics', 'StatisticController@getStatistics');
+    Route::get('statistics/new-word', 'StatisticController@getNewWordStatisticsByWeek');
     Route::group(['prefix' => 'notification'], function () {
         Route::delete('/{notificationId}', 'NotificationController@removeNotification');
         Route::get('/get-schedule', 'NotificationController@getSchedule');
