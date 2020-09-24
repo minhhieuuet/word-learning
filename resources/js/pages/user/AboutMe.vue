@@ -33,7 +33,7 @@
                             <a-icon type="mail"></a-icon> {{user.email}}
                         </li>
                     </ul>
-                    <div style="text-align: center;">
+                    <div style="text-align: center;margin-top: 20px;">
                         <a-button type="dashed" icon="form" size="large">
                             Thay đổi thông tin
                         </a-button>
@@ -160,7 +160,6 @@ export default {
         });
         rf.getRequest('UserRequest').getCurrentUser().then(res => {
             this.user = res;
-            this.user.score = 602;
             for(let rank of this.ranks) {
                 if(this.user.score >= rank.start_score && this.user.score <= rank.end_score) {
                     this.currentRank = rank;

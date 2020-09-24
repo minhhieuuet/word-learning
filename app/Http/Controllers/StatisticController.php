@@ -12,27 +12,24 @@ class StatisticController extends Controller
 {
     public function getNewWordStatisticsByWeek(Request $request) {
         $userId = $request->user()->id;
-        $bucketId = Bucket::where('user_id', $userId)->first()->value('id');
+        $bucketId = Bucket::where('user_id', $userId)->first()->id;
         $now = Carbon::now();
         $startWeek = Carbon::now()->startOfWeek();
         $endWeek = Carbon::now()->endOfWeek()->addDays(1);
         $dateArr = [];
 
         do {
-        array_push($dateArr, $startWeek->format('Y-m-d'));
-        $startWeek = $startWeek->addDays(1);
+            array_push($dateArr, $startWeek->format('Y-m-d'));
+            $startWeek = $startWeek->addDays(1);
         }
         while($startWeek->format('Y-m-d') != $endWeek->format('Y-m-d'));
 
         $words = Category::where(['bucket_id' => $bucketId])->get()->map(function($category) {
-            return $category->words()->get()->map(function($word) {
-                return Carbon::parse($word->created_at)->format('Y-m-d');
-            });
+            return $category->words()->get();
         })->flatten()->filter(function ($value) { return !is_null($value); });
-
         $arr = collect($dateArr)->map(function($date) use ($words) {
             return $words->filter(function($word) use ($date) {
-                return $word == $date;
+                return Carbon::parse($word->created_at)->format('Y-m-d') == $date;
             })->count();
         });
         return $arr;
@@ -40,7 +37,7 @@ class StatisticController extends Controller
 
     public function getStatistics(Request $request) {
         $userId = $request->user()->id;
-        $bucketId = Bucket::where('user_id', $userId)->first()->value('id');
+        $bucketId = Bucket::where('user_id', $userId)->first()->id;
 
         $totalCategory = Category::where('bucket_id', $bucketId)->count();
         $totalSharingCategory = Category::where(['bucket_id' => $bucketId, 'is_public' => 1])->count();
