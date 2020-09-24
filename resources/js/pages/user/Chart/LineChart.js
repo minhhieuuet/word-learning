@@ -10,7 +10,7 @@ export default {
         {
           label: 'Từ mới đã thêm',
           backgroundColor: '#7ac70cdb',
-          data: [10, 19, 20, 40, 19, 25, 10]
+          data: [10, 19, 20, 40, 19, 25, 10],
         }
       ]
     }
@@ -19,7 +19,7 @@ export default {
     rf.getRequest('UserRequest').getNewWordStatistics().then(res => {
       this.datasets[0].data = res;
       this.renderChart({
-        labels: ['Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ 6', 'Thứ 7', 'Chủ nhật'],
+        labels: ['Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy', 'Chủ nhật'],
         datasets: this.datasets
       }, {responsive: true, maintainAspectRatio: false, scaleFontColor: "#FFFFFF"});
     })
