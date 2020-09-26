@@ -10,10 +10,6 @@ require('./bootstrap');
 import Vue from 'vue';
 Vue.config.silent = true
 
-const GoogleImages = require('google-images');
-
-Vue.prototype.$imageClient = new GoogleImages(process.env.MIX_GOOGLE_IMAGE_ID, process.env.MIX_GOOGLE_IMAGE_KEY);
-
 import './common/filters';
 import Clipboard from 'v-clipboard'
 import VeeValidate, { Validator } from 'vee-validate';

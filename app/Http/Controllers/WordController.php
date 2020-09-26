@@ -8,6 +8,7 @@ use App\Http\Requests\QuickWordRequest;
 use App\Http\Services\WordService;
 use App\Http\Services\ImageService;
 use App\Models\Word;
+use GuzzleHttp\Client;
 
 class WordController extends Controller
 {
@@ -27,6 +28,14 @@ class WordController extends Controller
     {
         $userId = $request->user()->id;
         return $this->wordService->getAllWords($userId, $request->all());
+    }
+
+    public function getSuggestImages(Request $request) {
+        $word = $request->input('word');
+        $client = new Client();
+        $res = $client->get("https://www.googleapis.com/customsearch/v1?q=$word&searchType=image&cx=".env('MIX_GOOGLE_IMAGE_ID')."&key=".env('MIX_GOOGLE_IMAGE_KEY'));
+        $response = $res->getBody(); 
+        return $response;
     }
 
     public function quickStore(QuickWordRequest $request) {

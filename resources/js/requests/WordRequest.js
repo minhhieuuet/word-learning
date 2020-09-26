@@ -5,6 +5,11 @@ export default class WordRequest extends BaseModelRequest {
         const url = '/word';
         return this.get(url, params);
     }
+
+    getSuggestImages(params) {
+        const url = '/word/suggest-image';
+        return this.get(url, params);
+    }
     store(params) {
         const url = '/word';
         return this.post(url, params);

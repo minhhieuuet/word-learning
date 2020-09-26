@@ -27,7 +27,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
         Route::post('/save-token', 'NotificationController@saveToken');
         Route::post('/save-schedule', 'NotificationController@saveSchedule');
     });
-
+    
     Route::group(['prefix' => 'category'], function () {
         Route::get('/public', 'CategoryController@getPublicCategories');
         Route::post('/clone', 'CategoryController@cloneCategory');
@@ -36,10 +36,10 @@ Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
         Route::get('/total-word', 'CategoryController@getTotalWordByCategories');
     });
     Route::resource('category', 'CategoryController');
-
+    
     Route::group(['prefix' => 'word'], function () {
-        Route::get('/youtube-videos', 'WordController@getYotubeVideos');
-
+        Route::get('/youtube-videos', 'WordController@getYotubeVideos'); 
+        Route::get('/suggest-image', 'WordController@getSuggestImages');
         Route::post('/quick-store', 'WordController@quickStore');
         Route::get('/change-important/{wordId}', 'WordController@changeImportant');
         Route::post('/update-image/{wordId}', 'WordController@updateImage');
