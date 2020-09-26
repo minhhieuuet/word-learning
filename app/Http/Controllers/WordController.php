@@ -23,9 +23,10 @@ class WordController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $userId = $request->user()->id;
+        return $this->wordService->getAllWords($userId, $request->all());
     }
 
     public function quickStore(QuickWordRequest $request) {

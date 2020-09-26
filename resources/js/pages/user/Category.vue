@@ -1,14 +1,19 @@
 <template>
 <div>
-    <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Danh mục từ" @back="() => null">
+    <a-page-header style="border: 1px solid rgb(235, 237, 240)" @back="() => null">
         <template slot="extra">
             <a-button icon="plus-circle" size="large" type="primary" @click="showQuickWordModal">
                 Thêm từ nhanh
             </a-button>
         </template>
+        <template slot="title">
+                Danh mục từ
+                <a-button id="show-list" type="dashed" icon="ordered-list" @click="handleShowList">
+                    Danh sách
+                </a-button>
+        </template>
     </a-page-header>
     <div class="category inline-flex">
-
         <div class="styles__container___3mCLH effectScale inline-flex" @click="createCategory()">
             <div class="styles__icon___25pzZ"><svg class="sc-bdVaJa fUuvxv" fill="#fff" width="2.2rem" height="2.2rem" viewBox="0 0 1024 1024" rotate="0">
                     <path d="M832 554.666h-277.334v277.334h-85.332v-277.334h-277.334v-85.332h277.334v-277.334h85.332v277.334h277.334v85.332z"></path>
@@ -65,6 +70,7 @@
     </div>
     <category-model @refresh="refresh()"></category-model>
     <QuickWordModel />
+    <SummaryModal :showSummary="isShowSummary"/>
 </div>
 </template>
 
@@ -72,19 +78,25 @@
 import rf from './../../requests/RequestFactory';
 import CategoryModel from '../../modals/Category';
 import QuickWordModel from '../../modals/QuickWord';
+import SummaryModal from '../../modals/Summary';
 
 export default {
     components: {
         CategoryModel,
-        QuickWordModel
+        QuickWordModel,
+        SummaryModal
     },
     data() {
         return {
             categories: [],
-            params: {}
+            params: {},
+            isShowSummary: false
         }
     },
     methods: {
+        handleShowList() {
+            this.isShowSummary = true;
+        },
         getCategories(params) {
             rf.getRequest('CategoryRequest').getCategories().then(res => {
                 this.categories = res;
@@ -146,6 +158,9 @@ export default {
 
 <style lang="scss" scoped>
 @media screen and (max-width: 900px) {
+    #show-list {
+        display: none;
+    }
     .category {
         height: 100% !important;
     }

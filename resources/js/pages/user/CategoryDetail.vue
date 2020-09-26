@@ -26,7 +26,7 @@
 
             </a-col>
             <a-col class="word-side" :span="10">
-
+                <a-input-search placeholder="Tìm kiếm" @search="onSearch" />
                 <a-tabs default-active-key="1">
                     <a-tab-pane key="1">
                         <span slot="tab">
@@ -381,6 +381,7 @@ export default {
     data() {
         return {
             words: [],
+            sourceWords: [],
             isLoading: false,
             categoryId: '',
             favouriteWords: [],
@@ -400,6 +401,20 @@ export default {
                 this.category = res;
             })
         },
+        onSearch(value) {
+            let searchKey = value.toLowerCase();
+            this.words = this.sourceWords;
+            if(searchKey) {
+                this.words = this.words.filter((word) => {
+                    let wordContent = word.word ? word.word.toLowerCase() : '';
+                    let wordHint = word.hint ? word.hint.toLowerCase() : '';
+                    let wordMeaning = word.meaning ? word.meaning.toLowerCase() : '';
+                    return wordContent.includes(searchKey) || wordHint.includes(searchKey) || wordMeaning.includes(searchKey);
+                });
+            } else {
+                this.words = this.sourceWords;
+            }
+        },
         playGame() {
             localStorage.setItem('selectedCategoryId', this.categoryId);
             this.$router.push({ name: 'Game' })
@@ -408,6 +423,7 @@ export default {
             const loading = this.$message.loading('Đang tải ...', 0);
             rf.getRequest('CategoryRequest').getWordsByCategory(categoryId).then(res => {
                 this.words = res;
+                this.sourceWords = res;
                 loading();
             })
         },
@@ -416,9 +432,6 @@ export default {
         },
         showReviewModalFromWord(wordId) {
             this.$modal.show('review', { categoryId: this.categoryId, startWordId: wordId });
-        },
-        onSeach(value) {
-            alert(value);
         },
         removeWord(wordId) {
             this.$swal({

@@ -18,6 +18,17 @@ class WordService
         $this->imageService = $imageService;
     }
     
+    public function getAllWords($userId, $params) {
+        $bucket = Bucket::where('user_id', $userId)->first();
+        $categories = $bucket->categories()->get();
+        return $categories->map(function($category) {
+            return $category->words()->get()->map(function($word) use ($category) {
+                $word->category = $category;
+                return $word;
+            });
+        })->flatten();
+    }
+
     public function getWords($params)
     {
         $limit = array_get($params, 'limit', 10);

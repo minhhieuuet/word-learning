@@ -1,11 +1,14 @@
 import BaseModelRequest from './BaseModelRequest';
 
 export default class WordRequest extends BaseModelRequest {
+    getAllWords(params) {
+        const url = '/word';
+        return this.get(url, params);
+    }
     store(params) {
         const url = '/word';
         return this.post(url, params);
     }
-    
     quickStore(params) {
         const url = '/word/quick-store';
         return this.post(url, params);

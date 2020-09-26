@@ -26,7 +26,9 @@ import Toasted from 'vue-toasted';
 import vue2Dropzone from 'vue2-dropzone';
 import VueLazyload from 'vue-lazyload';
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-import 'vue-material/dist/vue-material.min.css';
+import VueHtmlToPaper from 'vue-html-to-paper';
+
+// import 'vue-material/dist/vue-material.min.css';
 
 // import GlobalComponents from './globalComponents';
 // import GlobalDirectives from './globalDirectives';
@@ -53,6 +55,18 @@ Vue.use(VueSwal)
 Vue.use(VueLazyload, {
     loading: '/loading.gif'
 })
+Vue.use(VueHtmlToPaper, {
+        name: '_blank',
+        specs: [
+          'fullscreen=yes',
+          'titlebar=yes',
+          'scrollbars=yes'
+        ],
+        styles: [
+          'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+          'https://unpkg.com/kidlat-css/css/kidlat.css'
+        ]
+});
 Vue.use(VueMaterial);
 Vue.use(VeeValidate);
 Vue.use(VModal, { dialog: true });

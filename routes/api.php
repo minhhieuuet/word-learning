@@ -11,7 +11,6 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 Route::get('send', 'NotificationController@sendNotification');
-
 Route::post('/image/store', 'ImageController@store');
 Route::get('/translate', 'TranslatorController@translate');
 Route::get('/translate-to-en', 'TranslatorController@translateToEn');
@@ -40,6 +39,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
 
     Route::group(['prefix' => 'word'], function () {
         Route::get('/youtube-videos', 'WordController@getYotubeVideos');
+
         Route::post('/quick-store', 'WordController@quickStore');
         Route::get('/change-important/{wordId}', 'WordController@changeImportant');
         Route::post('/update-image/{wordId}', 'WordController@updateImage');
