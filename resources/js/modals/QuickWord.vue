@@ -66,7 +66,7 @@
         </a-row>
         <a-row v-if="suggestImages.length">
             <div class="image-list">
-                <img class="suggest-image" v-for="image in suggestImages" @click="chooseImage(image)" style="width: 100px;" :key="image" v-lazy="image.url" alt="">
+                <img class="suggest-image" v-for="image in suggestImages" @click="chooseImage(image)" style="width: 100px;" :key="image" v-lazy="image" alt="">
 
             </div>
         </a-row>
@@ -172,9 +172,14 @@ export default {
             });
         },
         getSuggestImages() {
-            this.$imageClient.search(this.word.word).then(images => {
-                this.suggestImages = images;
-            });
+            let params = {
+                word: this.word.word
+            }
+            rf.getRequest('WordRequest').getSuggestImages(params).then(res => {
+                this.suggestImages = res.items.map(item => {
+                    return item.link;
+                });
+            })
         },
         translate() {
             this.getSuggestImages();

@@ -151,14 +151,47 @@ export default {
     methods: {
         handleChange(pagination, filters, sorter, { currentDataSource }) {
             if(filters) {
-                if(filters.category && !filters.category.length) {
-                    this.words = this.sourceWords;
-                    this.onNormalSearch(this.searchKey);
-                    return;
+                if(filters.category) {
+                    if(filters.category) {
+                        if(!filters.category.length) {
+                            this.words = this.sourceWords;
+                            this.searchKey = '';
+                            return;
+                        }
+                    }
+                    if(filters.category.length) {
+                        let categories = filters.category;
+                        this.words = this.sourceWords.filter(word => {
+                            return categories.indexOf(word.category.title) >= 0;
+                        });
+                        return;
+                    }
+                }
+            }
+            if(sorter) {
+                console.log(sorter);
+                if(sorter.field == 'priority') {
+                    if(sorter.order == 'ascend') {
+                        this.words = this.words.sort((a, b) => {
+                            return b.priority - a.priority;
+                        });
+                    } else {
+                        this.words = this.words.sort((a, b) => {
+                            return a.priority - b.priority;
+                        });
+                    }
+                }
+
+                if(sorter.field == 'createdAt') {
+                    this.words = this.words.sort((a, b) => {
+                        let firstTime = a.created_at ? moment.utc(a.created_at).valueOf() : 0;
+                        let secondTime = b.created_at ? moment.utc(b.created_at).valueOf() : 0;
+                        return firstTime - secondTime;
+                    });
                 }
             }
             this.words = currentDataSource;
-            this.onNormalSearch(this.searchKey);
+            this.searchKey = '';
         },
         print() {
             this.$htmlToPaper('printMe');
