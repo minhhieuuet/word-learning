@@ -6,7 +6,27 @@
         <br />
         <a-input-search size="medium" placeholder="Tìm kiếm" style="width: 200px" v-model="searchKey" @search="onNormalSearch" />
         <a-button type="dashed" icon="printer" @click="print">In</a-button>
-        <div id="printMe" v-show="false">
+    </div>
+    <a-table @change="handleChange" :columns="dataColumns" :data-source.sync="words" :locale="locale" :pagination="{ pageSize: 20 }" :scroll="{ y: 340}">
+
+        <b slot="word" slot-scope="word">{{ word | capitalize}}</b>
+        <b slot="priority" slot-scope="priority">
+            <a-tag>{{ priority| formatPriorityToPercent}}%</a-tag>
+        </b>
+        <div slot="category" slot-scope="category">
+            <a :href="`/category/${category.slug}`" target="_blank" style="color: #1890ff;">{{category.title}}</a>
+        </div>
+        <img slot="image" style="max-height: 70px; max-width: 50px;" slot-scope="image" v-lazy="image" />
+        <p slot="created_at" slot-scope="created_at">
+            {{created_at | formatToDate}}
+        </p>
+        <template slot="footer" slot-scope="currentPageData">
+            <div style="text-align: right;">
+                Tổng số: {{words.length}} từ
+            </div>
+        </template>
+    </a-table>
+    <div id="printMe" v-show="false">
             <h1>Danh sách từ mới</h1>
             <p>Tổng số từ: {{words.length}}</p>
             <table class="table table-striped">
@@ -34,26 +54,6 @@
                 </tbody>
             </table>
         </div>
-    </div>
-    <a-table @change="handleChange" :columns="dataColumns" :data-source.sync="words" :locale="locale" :pagination="{ pageSize: 20 }" :scroll="{ y: 340}">
-
-        <b slot="word" slot-scope="word">{{ word | capitalize}}</b>
-        <b slot="priority" slot-scope="priority">
-            <a-tag>{{ priority| formatPriorityToPercent}}%</a-tag>
-        </b>
-        <div slot="category" slot-scope="category">
-            <a :href="`/category/${category.slug}`" target="_blank" style="color: #1890ff;">{{category.title}}</a>
-        </div>
-        <img slot="image" style="max-height: 70px; max-width: 50px;" slot-scope="image" v-lazy="image" />
-        <p slot="created_at" slot-scope="created_at">
-            {{created_at | formatToDate}}
-        </p>
-        <template slot="footer" slot-scope="currentPageData">
-            <div style="text-align: right;">
-                Tổng số: {{words.length}} từ
-            </div>
-        </template>
-    </a-table>
 </a-modal>
 </template>
 
@@ -116,6 +116,15 @@ export default {
         showSummary: Boolean
     },
     watch: {
+        showSummary: {
+            immediate: true,
+            deep: true,
+            handler(newValue, oldValue) {
+                if(!newValue) {
+                    this.$emit('close');
+                }
+            }
+        },
         searchKey: {
             immediate: true,
             deep: true,

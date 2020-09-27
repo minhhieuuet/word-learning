@@ -70,7 +70,7 @@
     </div>
     <category-model @refresh="refresh()"></category-model>
     <QuickWordModel />
-    <SummaryModal :showSummary="isShowSummary"/>
+    <SummaryModal :showSummary="isShowSummary" @close="isShowSummary = false"/>
 </div>
 </template>
 

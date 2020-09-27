@@ -26,7 +26,7 @@
 
             </a-col>
             <a-col class="word-side" :span="10">
-                <a-input-search placeholder="Tìm kiếm" @search="onSearch" />
+                <a-input-search placeholder="Tìm kiếm" v-model="searchKey" @search="onSearch" />
                 <a-tabs default-active-key="1">
                     <a-tab-pane key="1">
                         <span slot="tab">
@@ -378,6 +378,15 @@ export default {
         SpeakButton,
         StarButton
     },
+    watch: {
+        searchKey: {
+            immediate: true,
+            deep: true,
+            handler(newValue, oldValue) {
+                this.onSearch(newValue);
+            }
+        }
+    },
     data() {
         return {
             words: [],
@@ -386,7 +395,7 @@ export default {
             categoryId: '',
             favouriteWords: [],
             category: {},
-            seachKey: '',
+            searchKey: '',
             newWord: {
                 word: '',
                 image: '',
@@ -402,18 +411,18 @@ export default {
             })
         },
         onSearch(value) {
-            let searchKey = value.toLowerCase();
-            this.words = this.sourceWords;
-            if(searchKey) {
-                this.words = this.words.filter((word) => {
-                    let wordContent = word.word ? word.word.toLowerCase() : '';
-                    let wordHint = word.hint ? word.hint.toLowerCase() : '';
-                    let wordMeaning = word.meaning ? word.meaning.toLowerCase() : '';
-                    return wordContent.includes(searchKey) || wordHint.includes(searchKey) || wordMeaning.includes(searchKey);
-                });
-            } else {
+                let searchKey = value.toLowerCase();
                 this.words = this.sourceWords;
-            }
+                if(searchKey) {
+                    this.words = this.words.filter((word) => {
+                        let wordContent = word.word ? word.word.toLowerCase() : '';
+                        let wordHint = word.hint ? word.hint.toLowerCase() : '';
+                        let wordMeaning = word.meaning ? word.meaning.toLowerCase() : '';
+                        return wordContent.includes(searchKey) || wordHint.includes(searchKey) || wordMeaning.includes(searchKey);
+                    });
+                } else {
+                    this.words = this.sourceWords;
+                }
         },
         playGame() {
             localStorage.setItem('selectedCategoryId', this.categoryId);
