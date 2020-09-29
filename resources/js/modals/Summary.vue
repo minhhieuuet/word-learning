@@ -37,7 +37,7 @@
                     <th>Gợi ý</th>
                     <th>Thành thạo</th>
                     <th>Danh mục</th>
-                    <th>Ảnh</th>
+                    <!-- <th>Ảnh</th> -->
                     <th>Ngày tạo</th>
                 </thead>
                 <tbody>
@@ -48,7 +48,8 @@
                         <td>{{word.hint}}</td>
                         <td>{{word.priority | formatPriorityToPercent}}%</td>
                         <td>{{word.category.title}}</td>
-                        <td><img style="max-width: 70px; max-height: 70px;" :src="word.image"/></td>
+                        <!-- <td><img style="max-width: 70px; max-height: 70px;" :src="word.image"/></td> -->
+                        
                         <td>{{word.created_at | formatToDate}}</td>
                     </tr>
                 </tbody>
