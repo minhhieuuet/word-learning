@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style lang="scss">
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .html {
         scroll-behavior: smooth;
     }
@@ -135,6 +135,10 @@ export default {
         bottom: 0px;
         top: 0px;
     }
+}
+
+.ant-popover {
+    z-index: 100 !important;
 }
 
 .v--modal-box {

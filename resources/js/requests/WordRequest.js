@@ -1,11 +1,23 @@
 import BaseModelRequest from './BaseModelRequest';
 
-export default class TranslateRequest extends BaseModelRequest {
+export default class WordRequest extends BaseModelRequest {
+    getAllWords(params) {
+        const url = '/word';
+        return this.get(url, params);
+    }
+
+    getSuggestImages(params) {
+        const url = '/word/suggest-image';
+        return this.get(url, params);
+    }
     store(params) {
         const url = '/word';
         return this.post(url, params);
     }
-
+    quickStore(params) {
+        const url = '/word/quick-store';
+        return this.post(url, params);
+    }
     removeWord(wordId) {
         const url=`/word/${wordId}`;
         return this.del(url);
@@ -43,5 +55,10 @@ export default class TranslateRequest extends BaseModelRequest {
         const url = '/phrases';
         return this.get(url);
     }
+
+    getYoutubeVideos(params) {
+        const url = '/word/youtube-videos';
+        return this.get(url, params);
+    } 
 
 }

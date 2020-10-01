@@ -73,16 +73,9 @@ class GameService
         
           return [
               'content' => $word->meaning,
-              'options' => $randomWords
+              'options' => $randomWords->shuffle()
           ];
-
-
        });
-
-
-
-
-       return self::getRandomWord($words, 'CHALK AND CHEESE');
     }
 
     private static function getRandomWord($words, $ignoreWord) {

@@ -11,29 +11,36 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 Route::get('send', 'NotificationController@sendNotification');
-
 Route::post('/image/store', 'ImageController@store');
 Route::get('/translate', 'TranslatorController@translate');
+Route::get('/translate-to-en', 'TranslatorController@translateToEn');
+
 
 Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
-
+    Route::get('statistics', 'StatisticController@getStatistics');
+    Route::get('statistics/new-word', 'StatisticController@getNewWordStatisticsByWeek');
     Route::group(['prefix' => 'notification'], function () {
+        Route::delete('/{notificationId}', 'NotificationController@removeNotification');
         Route::get('/get-schedule', 'NotificationController@getSchedule');
         Route::post('test', 'NotificationController@sendTestNotification');
         Route::get('/get-token', 'NotificationController@getToken');
         Route::post('/save-token', 'NotificationController@saveToken');
         Route::post('/save-schedule', 'NotificationController@saveSchedule');
-
     });
-
+    
     Route::group(['prefix' => 'category'], function () {
+        Route::get('/public', 'CategoryController@getPublicCategories');
+        Route::post('/clone', 'CategoryController@cloneCategory');
+        Route::get('/share/{categoryId}', 'CategoryController@shareCategory');
         Route::get('/id-by-slug/{slug}', 'CategoryController@getIdBySlug');
         Route::get('/total-word', 'CategoryController@getTotalWordByCategories');
     });
     Route::resource('category', 'CategoryController');
-
-    Route::resource('/word', 'WordController');
+    
     Route::group(['prefix' => 'word'], function () {
+        Route::get('/youtube-videos', 'WordController@getYotubeVideos'); 
+        Route::get('/suggest-image', 'WordController@getSuggestImages');
+        Route::post('/quick-store', 'WordController@quickStore');
         Route::get('/change-important/{wordId}', 'WordController@changeImportant');
         Route::post('/update-image/{wordId}', 'WordController@updateImage');
         Route::group(['prefix' => 'priority'], function () {
@@ -42,6 +49,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
 
         });
     });
+    Route::resource('/word', 'WordController');
 
     Route::get('/word-by-category/{id}', 'CategoryController@getAllWordsByCategory');
 

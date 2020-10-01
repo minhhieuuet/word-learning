@@ -1,9 +1,9 @@
 <template>
 <modal name="review" class="review-modal" height="auto" width="620px" style="overflow: visible;" :scrollable="true" :click-to-close="true" @before-open="beforeOpen" @before-close="beforeClose">
-   <div class="close-button-mobile" @click="cancel">
+    <div class="close-button-mobile" @click="cancel">
         <a-button type="danger" shape="circle" icon="close" />
     </div>
-       
+
     <div class="content">
         <div class="plus-btn" v-if="showAddBtn">
             <a-tooltip>
@@ -19,7 +19,7 @@
 
                 <StarButton :word="currentWord" @refresh="getWordsByCategory()" />
 
-                <a-button type="primary" shape="circle" icon="drag" size="large" />
+                <a-button type="dashed" icon="youtube" size="medium" @click="openYoutubeReview" />
 
                 <div class="remove-btn" title="Xoá từ này">
                     <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
@@ -30,12 +30,12 @@
                     <a-col :xs="{ span: 24 }" :md="{ span: 12}">
 
                         <template v-if="editImageMode">
-                            <img class="word-img" :src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/default.jpg' )" :title="currentWord['meaning']">
+                            <img class="word-img" v-lazy="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/placeholder-images.png' )" :title="currentWord['meaning']">
                             <a-icon title="Huỷ bỏ" @click="discardImageChange" type="close-circle" theme="filled" class="discard-image-icon" />
                             <a-icon title="Lưu thay đổi" @click="saveImageChange" type="check-circle" theme="filled" class="submit-image-icon" />
                         </template>
                         <template v-else>
-                            <img class="word-img" :src="currentWord['image'] ? currentWord['image'] : '/images/default.jpg'" :title="currentWord['meaning']">
+                            <img class="word-img" v-lazy="currentWord['image'] ? currentWord['image'] : '/images/placeholder-images.png'" :title="currentWord['meaning']">
 
                             <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
                         </template>
@@ -96,6 +96,7 @@
                 <Recorder :word="currentWord['word']" />
 
                 <StarButton :word="currentWord" @refresh="getWordsByCategory()" />
+                <a-button type="dashed" icon="youtube" size="medium" @click="openYoutubeReview" />
 
                 <div class="remove-btn" title="Xoá từ này">
                     <a-button type="danger" shape="circle" icon="delete" size="large" @click="removeWord()" />
@@ -106,16 +107,16 @@
                     <a-col style="text-align: center; !important" :xs="{ span: 24 }" :md="{ span: 12}">
 
                         <template v-if="editImageMode">
-                            <img class="word-img" :src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/default.jpg' )" :title="currentWord['meaning']">
+                            <img class="word-img" :src="tempImageUrl ? tempImageUrl : (currentWord['image'] ? currentWord['image'] : '/images/placeholder-images.png' )" :title="currentWord['meaning']">
                             <a-icon title="Huỷ bỏ" @click="discardImageChange" type="close-circle" theme="filled" class="discard-image-icon" />
                             <a-icon title="Lưu thay đổi" @click="saveImageChange" type="check-circle" theme="filled" class="submit-image-icon" />
                         </template>
                         <template v-else>
-                            <img class="word-img" :src="currentWord['image'] ? currentWord['image'] : '/images/default.jpg'" :title="currentWord['meaning']">
+                            <img class="word-img" v-lazy="currentWord['image'] ? currentWord['image'] : '/images/placeholder-images.png'" :title="currentWord['meaning']">
 
                             <a-icon @click="handleEditImage()" class="camera-icon" type="camera" />
                         </template>
-                       
+
                         <input type="file" ref="image" @change="onImageChange" style="display: none" />
                     </a-col>
                     <a-col class="mobile-info-side" :xs="{ span: 24 }" :md="{ span: 12}">
@@ -141,33 +142,20 @@
                 </a-row>
             </div>
         </template>
-        
-        <div class="mobile-derection-btn-group" style="display: none;">
-            <a-button-group size="large" :block="true">
-            <a-button  style="height: 80px;" type="primary" @click="previousWord()" :disabled="(currentWordIndex == 0 && !showAddBtn) || !words.length">
-                <a-icon type="left" />Trở về
-            </a-button>
-            <a-button style="height: 80px;" type="primary"  @click="nextWord()" :disabled="showAddBtn">
-                Tiếp theo<a-icon type="right" />
-            </a-button>
-            </a-button-group>
-        </div>
 
-        <!-- Left button -->
-        <div v-show="(currentWordIndex != 0 || showAddBtn) && words.length" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowLeft___OPxnB" @click="previousWord()">
-            <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
-                <path d="M802.8 448h-428l166-158.8c23.8-25 23.8-65.4 0-90.4s-62.4-25-86.4 0l-276.4 268c-12 11.6-18 27.4-18 44.8v0.8c0 17.4 6 33.2 18 44.8l276.2 268c24 25 62.6 25 86.4 0s23.8-65.4 0-90.4l-166-158.8h428c33.8 0 61.2-28.6 61.2-64 0.2-36-27.2-64-61-64z"></path>
-            </svg>
-        </div>
-        <!-- Right button -->
-        <div v-show="!showAddBtn" class="arrow-btn styles__viewArrow___18Fs7 styles__viewArrowRight___xJqg7" @click="nextWord()">
-            <svg class="sc-bdVaJa fUuvxv" fill="rgb(0, 0, 0)" width="2rem" height="2rem" viewBox="0 0 1024 1024" rotate="0">
-                <path d="M569.8 825.2l276.2-268c12-11.6 18-27.4 18-44.8v-0.8c0-17.4-6-33.2-18-44.8l-276.2-268c-24-25-62.6-25-86.4 0s-23.8 65.4 0 90.4l166 158.8h-428c-34-0-61.4 28.6-61.4 64 0 36 27.4 64 61.2 64h428l-166 158.8c-23.8 25-23.8 65.4 0 90.4 24 25 62.6 25 86.6 0z"></path>
-            </svg>
+        <div class="mobile-direction-btn-group" style="display: none;">
+            <div class="direction-btn" >
+                <img v-show="(currentWordIndex != 0 || showAddBtn) && words.length" src="/images/arrow-left.png" @click="previousWord()" :disabled="(currentWordIndex == 0 && !showAddBtn) || !words.length">
+            </div>
+
+            <div class="direction-btn">
+                <img v-show="!showAddBtn" src="/images/arrow-right.png" @click="nextWord()" :disabled="showAddBtn">
+            </div>
         </div>
     </div>
 
     <word-modal @created="setNewestWord()" @refresh="reload()"></word-modal>
+    <YoutubeReviewModal />
 </modal>
 </template>
 
@@ -177,13 +165,15 @@ import SpeakButton from '../components/SpeakButton';
 import Recorder from '../components/Recorder';
 import StarButton from '../components/StarButton';
 import WordModal from '../modals/Word';
+import YoutubeReviewModal from '../modals/YoutubeReview';
 
 export default {
     components: {
         SpeakButton,
         Recorder,
         StarButton,
-        WordModal
+        WordModal,
+        YoutubeReviewModal
     },
     data() {
         return {
@@ -209,6 +199,8 @@ export default {
     methods: {
         async beforeOpen(event) {
             this.categoryId = event.params.categoryId;
+            let startWordId = event.params.startWordId;
+            //Get words by category
             await rf.getRequest('CategoryRequest').getWordsByCategory(this.categoryId).then(res => {
                 this.currentWordIndex = 0;
                 this.words = res;
@@ -216,11 +208,22 @@ export default {
                     this.showAddBtn = true;
                     return;
                 }
-                this.currentWord = res[0];
+
                 this.showAddBtn = false;
+                if (startWordId) {
+                    const findWordFunction = (word) => {
+                        return word.id == startWordId;
+                    }
+                    this.currentWord = this.words.find(findWordFunction);
+                    this.currentWordIndex = this.words.findIndex(findWordFunction);
+                    return;
+                }
+                this.currentWord = res[0];
             });
         },
-        beforeClose() {},
+        beforeClose() {
+            // window.removeEventListener('keyup', () => {});
+        },
         cancel() {
             this.$modal.hide('review');
         },
@@ -229,6 +232,7 @@ export default {
         },
         nextWord() {
             this.editMode = false;
+
             if (this.currentWordIndex < this.words.length) {
                 if (this.currentWordIndex == (this.words.length - 1)) {
                     this.showAddBtn = true;
@@ -241,6 +245,10 @@ export default {
         },
         previousWord() {
             this.editMode = false;
+            if (this.currentWordIndex == 0) {
+                return;
+            }
+
             if (this.showAddBtn) {
                 this.currentWordIndex == this.words.length - 1;
                 this.currentWord = this.words[this.currentWordIndex];
@@ -334,6 +342,9 @@ export default {
         },
         reload() {
             this.$emit('reload');
+        },
+        openYoutubeReview() {
+            this.$modal.show('youtubereview', { word: this.currentWord });
         }
     }
 }
@@ -344,10 +355,11 @@ export default {
     border: 1px solid rgb(115 59 59 / 50%) !important;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .review-modal {
+        overflow: scroll !important;
         .v--modal {
-            width: 100vh !important;
+            // width: 100vh !important;
             left: 0px !important;
             height: 100vh;
         }
@@ -355,35 +367,49 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .content {
         display: none;
     }
+    .plus-btn{
+        padding: 0px !important;
+        margin-bottom: 70px;
+    }
+    .camera-icon {
+        right: inherit !important;
+        margin-left: -20px;
+    }
+
     .word-info {
         border-radius: 0px !important;
     }
+
     .mobile-info-side {
         // h2 {
-            text-align: center !important;
+        text-align: center !important;
         // }
     }
+
     .arrow-btn {
         display: none !important;
     }
+
     .word-img {
         width: 15rem !important;
         height: 13rem !important;
     }
+
     .word-info {
         // width: 16.8rem !important;
-        width: 89% !important;
+        width: 91% !important;
         margin-left: 15px !important;
         text-align: left !important;
         display: block !important;
+        height: 90% !important;
     }
-    .tool-bar-mobile {
-        
-    }
+
+    .tool-bar-mobile {}
+
     .remove-btn {
         button {
             background-color: white;
@@ -391,21 +417,39 @@ export default {
             color: red;
         }
     }
+
     .content-mobile {
         display: block !important;
-        width: 49vh !important;
         left: 0px !important;
     }
 
     .review-modal {
-        width: 100vh !important;
+        // width: 100vh !important;
         left: 0px !important;
     }
-    .mobile-derection-btn-group {
+
+    .mobile-direction-btn-group {
         display: block !important;
         margin-top: 6px;
+        text-align: center;
+
+        .direction-btn {
+            display: inline;
+            margin: 10px 20px;
+            animation: gelatine 0.5s;
+
+            img {
+                width: 80px;
+
+                &:active {
+                    animation: gelatine2 0.25s;
+                }
+            }
+
+        }
+
         button {
-            width: 24vh;
+            // width: 31vh;
         }
     }
 
@@ -431,6 +475,26 @@ export default {
 }
 
 @keyframes gelatine {
+
+    from,
+    to {
+        transform: scale(1, 1);
+    }
+
+    25% {
+        transform: scale(0.97, 1.07);
+    }
+
+    50% {
+        transform: scale(1.0, 1.0);
+    }
+
+    75% {
+        transform: scale(0.97, 1.05);
+    }
+}
+
+@keyframes gelatine2 {
 
     from,
     to {

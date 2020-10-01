@@ -15,6 +15,7 @@ export default {
         speakWord() {
             var msg = new SpeechSynthesisUtterance();
             msg.text = this.$props.word;
+            msg.rate = 0.8;
             window.speechSynthesis.speak(msg);
         },
     },

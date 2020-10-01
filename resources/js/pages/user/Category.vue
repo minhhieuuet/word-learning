@@ -1,8 +1,19 @@
 <template>
 <div>
-    <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Danh mục từ" @back="() => null" />
+    <a-page-header style="border: 1px solid rgb(235, 237, 240)" @back="() => null">
+        <template slot="extra">
+            <a-button icon="plus-circle" size="large" type="primary" @click="showQuickWordModal">
+                Thêm từ nhanh
+            </a-button>
+        </template>
+        <template slot="title">
+                Danh mục từ
+                <a-button id="show-list" type="dashed" icon="ordered-list" @click="handleShowList">
+                    Danh sách
+                </a-button>
+        </template>
+    </a-page-header>
     <div class="category inline-flex">
-
         <div class="styles__container___3mCLH effectScale inline-flex" @click="createCategory()">
             <div class="styles__icon___25pzZ"><svg class="sc-bdVaJa fUuvxv" fill="#fff" width="2.2rem" height="2.2rem" viewBox="0 0 1024 1024" rotate="0">
                     <path d="M832 554.666h-277.334v277.334h-85.332v-277.334h-277.334v-85.332h277.334v-277.334h85.332v277.334h277.334v85.332z"></path>
@@ -20,17 +31,30 @@
         </div>
 
         <div v-for="(category, index) in categories" :key="category.id" v-if="category.is_visible" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
+            <div v-show="category.is_public" class="shop-icon">
+                <a-tooltip placement="top" title="Đang được chia sẻ">
+                    <a-icon type="share-alt"></a-icon>
+                </a-tooltip>
+            </div>
             <div class="setting-btn">
                 <a-popover placement="topLeft" trigger="click">
                     <template slot="content">
-                        <!-- <p><a-icon type="check-circle" style="color: green;" /> Đánh dấu</p> -->
-                        <div class="remove-category-btn" style="cursor: pointer;" @click="removeCategory(category.id)">
+                        <div class="category-btn share-btn" style="cursor: pointer;" @click="shareCategory(category.id)">
+                            <template v-if="!category.is_public">
+                                <a-icon type="share-alt" style="color: #63afff;"/> Chia sẻ
+                            </template>
+                             <template v-else>
+                                <a-icon type="share-alt" style="color: red;"/> Tắt chia sẻ
+                            </template>
+                        </div>
+                        <div class="category-btn" style="cursor: pointer;" @click="editCategory(category.id)">
+                            <a-icon type="edit" style="color: blue;" /> Sửa
+                        </div>
+                        <div class="category-btn" style="cursor: pointer;" @click="removeCategory(category.id)">
                             <a-icon type="delete" style="color: red;" /> Xoá
                         </div>
+
                     </template>
-                    <!-- <template slot="title">
-                            <span>Title</span>
-                        </template> -->
                     <a-button icon="setting"></a-button>
                 </a-popover>
             </div>
@@ -45,30 +69,54 @@
         </div>
     </div>
     <category-model @refresh="refresh()"></category-model>
+    <QuickWordModel />
+    <SummaryModal :showSummary="isShowSummary" @close="isShowSummary = false"/>
 </div>
 </template>
 
 <script>
 import rf from './../../requests/RequestFactory';
 import CategoryModel from '../../modals/Category';
+import QuickWordModel from '../../modals/QuickWord';
+import SummaryModal from '../../modals/Summary';
+
 export default {
     components: {
-        CategoryModel
+        CategoryModel,
+        QuickWordModel,
+        SummaryModal
     },
     data() {
         return {
             categories: [],
-            params: {}
+            params: {},
+            isShowSummary: false
         }
     },
     methods: {
+        handleShowList() {
+            this.isShowSummary = true;
+        },
         getCategories(params) {
             rf.getRequest('CategoryRequest').getCategories().then(res => {
                 this.categories = res;
             })
         },
+        shareCategory(categoryId) {
+            rf.getRequest('CategoryRequest').shareCategory(categoryId).then(category => {
+                this.refresh();
+                if(category.is_public) {
+                    this.$message.success('Chia sẻ danh mục thành công');
+                } else {
+                    this.$message.success('Danh mục đã được gỡ bỏ trên của hàng');
+                }
+            })
+        },
         createCategory() {
             this.$modal.show('category', { title: 'Thêm danh mục mới' });
+        },
+        editCategory(categoryId) {
+            this.$modal.show('category', { title: 'Sửa danh mục', categoryId: categoryId });
         },
         goToPhrase() {
             this.$router.push({ name: 'Phrase' })
@@ -78,6 +126,9 @@ export default {
         },
         refresh() {
             this.getCategories();
+        },
+        showQuickWordModal() {
+            this.$modal.show('quickword', { title: 'Thêm từ nhanh' });
         },
         removeCategory(categoryId) {
             this.$swal({
@@ -92,6 +143,7 @@ export default {
                 if (value) {
                     rf.getRequest('CategoryRequest').removeCategory(categoryId).then(res => {
                         this.refresh();
+                        this.$message.success('Xoá danh mục thành công');
                     });
                 }
             })
@@ -105,7 +157,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
+    #show-list {
+        display: none;
+    }
     .category {
         height: 100% !important;
     }
@@ -151,10 +206,36 @@ export default {
     }
 }
 
+.shop-icon {
+    position: absolute;
+    left: 0px;
+    color: white;
+    background-color: #398dec;
+    padding: 0px 1px 0px 0px;
+    border-radius: 0% 10% 10% 0%;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
 .category {
     width: 100%;
     flex-flow: wrap;
     padding: 20px;
+}
+
+.category-btn {
+    padding: 4px;
+
+    i {
+        margin-right: 2px;
+    }
+
+    &:hover {
+        color: rgb(36, 166, 226);
+    }
+}
+
+.share-btn {
+    // border-bottom: 0.1px solid rgba(0, 0, 0, 0.2);
 }
 
 .inline-flex {
@@ -354,7 +435,7 @@ export default {
 }
 
 .styles__txtNum___39eD4 {
-    padding: 0 1rem;
+    padding: 0 1.2rem;
     font-size: 12px;
     font-weight: bold;
     font-style: normal;
@@ -366,7 +447,7 @@ export default {
 }
 
 .styles__viewName___2PQg6 {
-    padding: 0 .5rem 0 1rem;
+    padding: 0 .5rem 0 1.2rem;
     font-size: 1.5rem;
     font-weight: 600;
     font-style: normal;

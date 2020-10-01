@@ -11,7 +11,7 @@ import Vue from 'vue';
 Vue.config.silent = true
 
 import './common/filters';
-
+import Clipboard from 'v-clipboard'
 import VeeValidate, { Validator } from 'vee-validate';
 import draggable from 'vuedraggable'
 import VueRouter from 'vue-router';
@@ -20,8 +20,11 @@ import VueMaterial from 'vue-material';
 import VModal from 'vue-js-modal';
 import Toasted from 'vue-toasted';
 import vue2Dropzone from 'vue2-dropzone';
+import VueLazyload from 'vue-lazyload';
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-import 'vue-material/dist/vue-material.min.css';
+import VueHtmlToPaper from 'vue-html-to-paper';
+
+// import 'vue-material/dist/vue-material.min.css';
 
 // import GlobalComponents from './globalComponents';
 // import GlobalDirectives from './globalDirectives';
@@ -36,16 +39,30 @@ import 'ant-design-vue/dist/antd.css';
 import Antd from 'ant-design-vue';
 import VueSwal from 'vue-swal'
 import Multiselect from 'vue-multiselect'
-import AnimatedVue from 'animated-vue'
-import 'animate.css/animate.css'
+import 'animate.css/animate.css';
 
-Vue.use(AnimatedVue)
+Vue.use(Clipboard)
 // register globally
 Vue.config.productionTip = true;
 
 
 Vue.component('multiselect', Multiselect)
 Vue.use(VueSwal)
+Vue.use(VueLazyload, {
+    loading: '/loading.gif'
+})
+Vue.use(VueHtmlToPaper, {
+        name: '_blank',
+        specs: [
+          'fullscreen=yes',
+          'titlebar=yes',
+          'scrollbars=yes'
+        ],
+        styles: [
+          'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+          'https://unpkg.com/kidlat-css/css/kidlat.css'
+        ]
+});
 Vue.use(VueMaterial);
 Vue.use(VeeValidate);
 Vue.use(VModal, { dialog: true });
@@ -56,10 +73,6 @@ Vue.component('data-table', DataTable);
 Vue.component('vue-dropzone', vue2Dropzone)
 Vue.use(VueRouter)
 Vue.use(MaterialDashboard)
-// Vue.use(GlobalComponents)
-// Vue.use(GlobalDirectives)
-// Vue.use(Notifications)
-
 // global library setup
 Object.defineProperty(Vue.prototype, '$Chartist', {
     get() {

@@ -5,7 +5,7 @@
             <h3>Trò chơi</h3>
             <div>
                 <label class="typo__label">Trước khi bắt đầu, vui lòng chọn một hoặc nhiều danh mục từ</label>
-                <multiselect v-model="selectedCategories" select-label=" Nhấn để chọn" deselect-label=" Nhấn để bỏ chọn" placeholder="Vui lòng chọn" :custom-label="titleWithCount" :close-on-select="false" style="width: 500px" label="title" track-by="id" :options="categories" :multiple="true" :taggable="true"></multiselect>
+                <multiselect v-model="selectedCategories" select-label=" Nhấn để chọn" deselect-label=" Nhấn để bỏ chọn" placeholder="Vui lòng chọn" :custom-label="titleWithCount" :close-on-select="false" style="width: 500px" label="title" track-by="id" :options="categories" :multiple="true" :taggable="false"></multiselect>
                 <span>Tổng số từ được chọn: {{totalSelectedWord}}</span>
             </div>
             <br>
@@ -93,6 +93,7 @@ export default {
             categories: [
 
             ],
+            selectedCategoryId: 0,
             mode: 'list',
             currentGameId: 0
         }
@@ -100,13 +101,14 @@ export default {
     methods: {
         getCategories() {
             rf.getRequest('CategoryRequest').getCategories().then(categories => {
+                let selectedCategoryId = localStorage.getItem('selectedCategoryId')
                 this.categories = categories;
+                this.selectedCategories = this.categories.filter(category => category.id == selectedCategoryId);
+                localStorage.removeItem('selectedCategoryId');
             })
         },
         titleWithCount({ title, total_word }) {
-            if (total_word) {
-                return `${title} [${total_word}]`
-            }
+            return `${title} [${total_word}]`
         },
         playGame(gameId) {
             this.mode = '';
@@ -129,15 +131,17 @@ export default {
 </script>
 
 <style lang="scss">
-@media screen and (max-width: 600px) { 
+@media screen and (max-width: 900px) {
     .game-list {
         padding: 10px;
         padding-top: 30px;
+
         .multiselect {
             width: 350px !important;
         }
     }
 }
+
 .multiselect__tag {
     background: #3d9fe8 !important;
 }
@@ -148,6 +152,8 @@ export default {
 }
 
 .game-list {
+    padding: 20px;
+
     .anticon-play-circle {
         font-size: 31px !important;
         line-height: 22px;

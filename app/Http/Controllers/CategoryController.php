@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
+
 use App\Http\Services\CategoryService;
 use App\Models\Category;
+
 class CategoryController extends Controller
 {
     protected $categoryService;
@@ -21,6 +24,20 @@ class CategoryController extends Controller
     {
         $userId = $request->user()->id;
         return $this->categoryService->getCategories($userId);
+    }
+    public function shareCategory(Request $request, $categoryId) {
+        $userId = $request->user()->id;
+        return $this->categoryService->shareCategory($userId, $categoryId);
+    }
+    public function cloneCategory(Request $request) {
+        $userId = $request->user()->id;
+        $categoryId = array_get($request, 'id');
+        return $this->categoryService->cloneCategory($userId, $categoryId);
+    }
+    public function getPublicCategories(Request $request) {
+        $userId = $request->user()->id;
+        $searchKey = $request->input('search') ? $request->input('search') : '';
+        return $this->categoryService->getPublicCategories($userId, $searchKey);
     }
 
     public function getAllWordsByCategory($id) {
@@ -53,7 +70,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         $userId = $request->user()->id;
         return $this->categoryService->storeCategory($userId, $request->all());
@@ -90,7 +107,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        return $this->categoryService->updateCategory($id, $request->all());
     }
 
     /**

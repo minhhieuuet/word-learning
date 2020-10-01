@@ -15,7 +15,9 @@ import AboutMe from '@/pages/user/AboutMe.vue';
 import Game1 from '@/pages/user/game/Game1.vue';
 import Game3 from '@/pages/user/game/Game3.vue';
 import Schedule from '@/pages/user/Schedule.vue';
+import Store from '@/pages/user/Store.vue';
 
+import NotFound from '@/pages/errors/404.vue';
 
 export default {
     mode: 'history',
@@ -92,6 +94,22 @@ export default {
                     path: 'schedule',
                     name: 'Schedule',
                     component: Schedule,
+                    meta: {
+                        requiresAuth: true
+                    }
+                },
+                {
+                    path: 'store',
+                    name: 'Store',
+                    component: Store,
+                    meta: {
+                        requiresAuth: true
+                    }
+                },
+                {
+                    path: '*',
+                    name: '404',
+                    component: NotFound,
                     meta: {
                         requiresAuth: true
                     }

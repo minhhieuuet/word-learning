@@ -20,13 +20,13 @@
         </md-field>
 
         <a-row>
-            Trạng thái
-            <a-switch default-checked @change="onStatusChange" />
+            Chia sẻ
+            <a-switch :checked="category.is_public" @change="onStatusChange" />
         </a-row>
 
         <a-row style="margin-top: 20px;">
             Ảnh bìa
-            <vue-dropzone ref="myVueDropzone" id="dropzone" accepted-file-types=".jpg,.png,.jpeg" :options="dropzoneOptions" @vdropzone-success="uploadSuccess" @vdropzone-complete="afterComplete">
+            <vue-dropzone ref="myVueDropzone" :style="{backgroundImage: `url(${oldCover})`}" id="dropzone" accepted-file-types=".jpg,.png,.jpeg" :options="dropzoneOptions" @vdropzone-success="uploadSuccess" @vdropzone-complete="afterComplete">
 
             </vue-dropzone>
         </a-row>
@@ -41,7 +41,9 @@
         </a-button>
     </div>
     <div class="md-right pc-btn-group">
-        <a-button type="primary" @click="submit">Thêm</a-button>
+        <a-button type="primary" @click="submit">
+            {{editingId ? 'Lưu' : 'Thêm'}}
+        </a-button>
         <a-button type="dashed" @click="cancel">Bỏ qua</a-button>
     </div>
 </modal>
@@ -54,10 +56,11 @@ export default {
         return {
             title: 'Category',
             editingId: '',
+            oldCover: '',
             category: {
                 title: '',
                 cover: '',
-                is_visible: true,
+                is_public: true,
             },
             dropzoneOptions: {
                 url: `${window.location.origin}/api/image/store`,
@@ -77,35 +80,52 @@ export default {
             this.title = event.params.title;
             if (event.params.categoryId) {
                 this.editingId = event.params.categoryId;
-                rf.getRequest('CategoryRequest').show(this.editingId).then((category) => {
+                rf.getRequest('CategoryRequest').getCategory(this.editingId).then((category) => {
+                    this.oldCover = category.cover;
                     this.category = category;
                 });
             }
         },
-        beforeClose() {},
+        beforeClose() {
+            this.editingId = '';
+            this.oldCover = '';
+            this.category = {
+                is_public: false
+            };
+        },
         afterComplete(file, response) {
             // console.log(response);
         },
         uploadSuccess(file, response) {
             this.category.cover = response;
+            document.getElementById('dropzone').style.backgroundImage = '';
         },
-        onStatusChange(isVisible) {
-            this.category.is_visible = isVisible;
+        onStatusChange(isPublic) {
+            this.category.is_public = isPublic;
         },
         async submit() {
+            if(this.editingId) {
+                this.updateCategory();
+                return;
+            }
             this.createOneCategory();
+        },
+        updateCategory() {
+            rf.getRequest('CategoryRequest').update(this.editingId, this.category).then((res) => {
+                this.$modal.hide('category');
+                this.$message.success('Cập nhật thành công');
+                this.$emit('refresh');
+            }).catch((err) => {
+                this.$message.error('Đã có lỗi xảy ra, vui lòng thử lại');
+            });
         },
         createOneCategory() {
             rf.getRequest('CategoryRequest').store(this.category).then((res) => {
                 this.$modal.hide('category');
+                this.$message.success('Tạo danh mục thành công');
                 this.$emit('refresh');
             }).catch((err) => {
-                // this.$toasted.show('Đã có lỗi xảy ra, vui lòng kiểm tra lại!', {
-                //   theme: 'bubble',
-                //   position: 'top-right',
-                //   duration : 1500,
-                //   type: 'danger'
-                // });
+                this.$message.error('Đã có lỗi xảy ra, vui lòng thử lại');
             });
         },
         cancel() {
@@ -116,11 +136,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
 
     .styles__container___16een {
         min-width: 10rem !important;
     }
+}
+
+#dropzone {
+    background-size: cover;
 }
 
 .content {

@@ -315,9 +315,9 @@ audio {
 
 #question-box {
     width: 960px;
+    height: 108px;
     margin: 0 auto;
     padding: 10px;
-    font-size: 1.5em;
 }
 
 .question-content {

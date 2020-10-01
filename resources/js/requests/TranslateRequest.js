@@ -5,5 +5,10 @@ export default class TranslateRequest extends BaseModelRequest {
         const url = '/translate';
         return this.get(url, params);
     }
+    
+    translateToEn(params) {
+        const url = '/translate-to-en';
+        return this.get(url, params);
+    }
 
 }

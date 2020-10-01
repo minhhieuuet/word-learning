@@ -8,19 +8,38 @@
     </a-button>
 
     <br>
-    <table>
-        <tr>
-            <th>STT</th>
-            <th>Token</th>
-            <th>Ngày tạo</th>
-        </tr>
+    <md-table>
+        <md-table-row>
+            <md-table-head>STT</md-table-head>
+            <md-table-head>Thiết bị</md-table-head>
+            <md-table-head>Token</md-table-head>
+            <md-table-head>Ngày tạo</md-table-head>
+            <md-table-head></md-table-head>
+        </md-table-row>
 
-        <tr v-for="(token, index) in tokens" :key="token.id">
-            <td>{{index + 1}}</td>
-            <td>{{token.token}}</td>
-            <td>{{token.created_at}}</td>
-        </tr>
-    </table>
+        <md-table-row v-for="(token, index) in tokens" :key="token.id">
+            <md-table-cell>{{index + 1}}</md-table-cell>
+            <md-table-cell>{{token.device_name}}</md-table-cell>
+            <md-table-cell>
+                <a-tooltip>
+                    <template slot="title">
+                        {{token.token}}
+                    </template>
+                    <div style="display: inline;float: left;">{{token.token.slice(0, 30)}} ...</div>
+                </a-tooltip>
+                <a-tooltip>
+                    <template slot="title">
+                        Sao chép
+                    </template>
+                    <a-button @click="copyToken(token.token)" style="float: left;" type="primary" icon="copy"></a-button>
+                </a-tooltip>
+            </md-table-cell>
+            <md-table-cell>{{token.created_at}}</md-table-cell>
+            <md-tabe-cell>
+                <a-button @click="deleteToken(token.id)" style="margin-top: 10px;" type="danger" icon="delete"></a-button>
+            </md-tabe-cell>
+        </md-table-row>
+    </md-table>
     <br>
     <table class="dayparts table">
         <thead>
@@ -51,9 +70,18 @@
     </table>
     <div style="margin-left: 30px;">
         <a-button @click="saveSchedule()" size="large" type="primary" icon="save" style="margin-top: 10px;">
-        Lưu
+            Lưu
         </a-button>
     </div>
+    <a-modal title="Tạo token mới" :visible="showCreateTokenModal" :confirm-loading="confirmLoading" @ok="createNotification()" @cancel="handleCancel">
+        <div>
+            <label>Thiết bị</label>
+            <a-input v-model="deviceName" />
+            <br>
+            <br>
+            <a-input addonBefore="Token" :value="newToken" disabled />
+        </div>
+    </a-modal>
 </div>
 </template>
 
@@ -87,7 +115,10 @@ export default {
     },
     data() {
         return {
+            showCreateTokenModal: false,
+            newToken: '',
             tokens: [],
+            deviceName: '',
             times: [{
                 hour: 7,
                 isActive: false
@@ -550,6 +581,10 @@ export default {
         }
     },
     methods: {
+        copyToken(token) {
+            this.$clipboard(token);
+            this.$message.success('Đã sao chép');
+        },
         saveSchedule() {
             let schedule = JSON.parse(JSON.stringify(this.days)).map(day => {
                 day.times = day.times.filter((time) => {
@@ -584,6 +619,13 @@ export default {
                 return day;
             })
         },
+        createNotification() {
+            rf.getRequest('NotificationRequest').saveToken({ token: this.newToken, device_name: this.deviceName }).then(res => {
+                this.getTokens();
+                this.showCreateTokenModal = false;
+                this.$message.success("Đăng ký thông báo cho thiết bị thành công");
+            });
+        },
         handlePushNotification() {
             const messaging = firebase.messaging();
             messaging
@@ -592,20 +634,39 @@ export default {
                     console.log("Notification permission granted.");
                     return messaging.getToken();
                 })
-                .then((token) => {
-                    rf.getRequest('NotificationRequest').saveToken({ token: token }).then(res => {
-                        console.log(res);
-                    })
-                    console.log("token is : " + token);
+                .then((newToken) => {
+                    let isExistedToken = this.tokens.find((token) => {
+                        return token.token.trim() == newToken.trim();
+                    });
+                    if (isExistedToken) {
+                        this.$message.warning("Thiết bị đã được đăng ký nhận thông báo từ trước");
+                        return;
+                    }
+                    this.newToken = newToken;
+                    this.showCreateTokenModal = true;
                 })
                 .catch(function (err) {
-                    console.log("Unable to get permission to notify.", err);
+                    console.log("Không thể đăng ký thông báo cho thiết bị này.");
                 });
         },
         handeTestNotification() {
             rf.getRequest('NotificationRequest').sendTestNotification().then(res => {
                 console.log(res);
             })
+        },
+        deleteToken(tokenId) {
+            rf.getRequest('NotificationRequest').removeToken(tokenId).then(res => {
+                console.log(res);
+                this.getTokens();
+            })
+        },
+        getTokens() {
+            rf.getRequest('NotificationRequest').getToken().then(res => {
+                this.tokens = res;
+            })
+        },
+        handleCancel() {
+            this.showCreateTokenModal = false;
         },
         clearAll: () => {
             for (i = 0; i < this.days.length; i++) {
@@ -631,9 +692,8 @@ export default {
                 });
             })
         });
-        rf.getRequest('NotificationRequest').getToken().then(res => {
-            this.tokens = res;
-        })
+        this.getTokens();
+
         var config = {
             apiKey: "AIzaSyBF0BWf1dDJkowVXJaUO1vISw1nM8I4tIo",
             authDomain: "fir-94e10.firebaseapp.com",
@@ -651,7 +711,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .day-label {
         // display: none;
     }

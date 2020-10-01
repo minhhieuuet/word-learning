@@ -1,12 +1,12 @@
 <template>
 <div>
-    <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Danh mục từ" :subTitle="category.title" @back="() => $router.go(-1)" />
+    <a-page-header style="border: 1px solid rgb(235, 237, 240)" title="Danh mục từ" :subTitle="category.title" @back="() => $router.push({path : '/'})" />
 
     <div class="main-content">
         <a-row style="padding-top: 20px">
             <a-col class="desc-side" :span="10">
                 <div class="frame">
-                    <img class="phrase-img" :src="category.cover" alt="">
+                    <img class="phrase-img" :src="category.cover ? category.cover : '/images/default-cover.jpg'" alt="">
                 </div>
                 <div class="phrase-desc hit-the-floor">
                     <h2>{{category.title}}</h2>
@@ -19,20 +19,14 @@
                     <a-button type="primary" size="large" style="background-color: rgb(135 106 253);" icon="eye" @click="openReviewModal()">
                         Trình chiếu
                     </a-button>
-                    <a-button type="primary" size="large" style="rgb(243 162 41);" icon="trophy">
+                    <a-button type="primary" size="large" style="rgb(243 162 41);" icon="trophy" @click="playGame()">
                         Trò chơi
                     </a-button>
                 </a-button-group>
-                <!-- 
-                <div class="styles__viewBtnPlay___3lqzv" style="padding-top: 20px">
-                    <div id="btnGameCenter" class="styles__button___dn9S6 effectScale">
-                        <div class="styles__text___GW6do" style="visibility: visible;">Chơi trò chơi</div>
-                    </div>
-                </div> -->
 
             </a-col>
             <a-col class="word-side" :span="10">
-
+                <a-input-search placeholder="Tìm kiếm" v-model="searchKey" @search="onSearch" />
                 <a-tabs default-active-key="1">
                     <a-tab-pane key="1">
                         <span slot="tab">
@@ -60,14 +54,25 @@
                                         </span><span>{{word.word | capitalize}}</span>
 
                                     </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(word.id)"></a-icon>
                                     <StarButton :word.sync="word" @refresh="refresh()" />
+
                                 </div>
                                 <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
                             </div>
                             <div class="styles__right___4LtJ-">
-                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                                <img :src="word.image" alt="ambitious">
+                                <div class="styles__status___2gUWg">
+                                    <a-popover placement="top" trigger="click">
+                                        <template slot="content">
+                                            <div style="cursor: pointer;" @click="removeWord(word.id)">
+                                                <a-icon type="delete" style="color: red;" /> Xoá
+                                            </div>
+                                        </template>
+                                        <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
+                                    </a-popover>
+                                </div>
+                                <img v-lazy="word.image" :alt="word.word">
                             </div>
                         </div>
                         <div>
@@ -99,28 +104,91 @@
                                         </span><span>{{word.word | capitalize}}</span>
 
                                     </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(word.id)"></a-icon>
+
                                     <StarButton :word.sync="word" @refresh="refresh()" />
                                 </div>
                                 <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
                             </div>
                             <div class="styles__right___4LtJ-">
-                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                                <img :src="word.image" alt="ambitious">
+                                <div class="styles__status___2gUWg">
+                                    <a-popover placement="top" trigger="click">
+                                        <template slot="content">
+                                            <div style="cursor: pointer;" @click="removeWord(word.id)">
+                                                <a-icon type="delete" style="color: red;" /> Xoá
+                                            </div>
+                                        </template>
+                                        <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
+                                    </a-popover>
+                                </div>
+                                <img v-lazy="word.image" :alt="word.word">
                             </div>
                         </div>
                         <div>
                         </div>
                     </a-tab-pane>
+
+
+                    <a-tab-pane key="3">
+                        <span slot="tab">
+                             <a-icon type="check-circle" />
+                            Hoàn thành
+                        </span>
+                        <div v-if="!words.filter(word => word.priority <= -5).length">
+                            <a-empty description="Danh sách trống" />
+                        </div>
+                        <div v-else class="styles__container___AS5GT" v-for="word in words.filter(word => word.priority <= -5)">
+                            <div style="margin-right: 10px;">
+                                <a-tooltip>
+                                    <template slot="title">
+                                        Độ thông thạo {{word.priority | formatPriorityToPercent}} %
+                                    </template>
+                                    <a-progress type="circle" :percent="word.priority | formatPriorityToPercent" :strokeWidth="10" :width="50" />
+                                </a-tooltip>
+                            </div>
+                            <div class="styles__center___1alr7">
+                                <div class="styles__viewTitle___trc68">
+
+                                    <SpeakButton :word="word.word" />
+
+                                    <div class="styles__textTitle___3ne0o"><span class="styles__textHighLight___EdWX6" :title="word.hint">
+                                        </span><span>{{word.word | capitalize}}</span>
+
+                                    </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(word.id)"></a-icon>
+
+                                    <StarButton :word.sync="word" @refresh="refresh()" />
+                                </div>
+                                <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
+                                <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
+                            </div>
+                            <div class="styles__right___4LtJ-">
+                                <div class="styles__status___2gUWg">
+                                    <a-popover placement="top" trigger="click">
+                                        <template slot="content">
+                                            <div style="cursor: pointer;" @click="removeWord(word.id)">
+                                                <a-icon type="delete" style="color: red;" /> Xoá
+                                            </div>
+                                        </template>
+                                        <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
+                                    </a-popover>
+                                </div>
+                                <img v-lazy="word.image" :alt="word.word">
+                            </div>
+                        </div>
+                        <div>
+                        </div>
+                    </a-tab-pane>
+
+
                 </a-tabs>
             </a-col>
         </a-row>
-        <review-modal @reload="refresh()"></review-modal>
-        <WordModal2 @refresh="refresh()"></WordModal2>
     </div>
     <div class="main-content-mobile" style="display:none;">
         <a-row>
-            <a-col class="desc-side-mobile" :style="{backgroundImage: `url(${category.cover})`}" :span="24">
+            <a-col class="desc-side-mobile" :style="{backgroundImage: `url(${category.cover ? category.cover : '/images/default-cover.jpg'})`}" :span="24">
                 <div class="phrase-desc hit-the-floor">
                     <h2>{{category.title}}</h2>
                 </div>
@@ -133,7 +201,7 @@
                     </a-button>
                     <a-button type="primary" size="large" style="background-color: rgb(135 106 253);width: 33%;" icon="eye" @click="openReviewModal()">
                     </a-button>
-                    <a-button type="primary" size="large" style="rgb(243 162 41);width: 33%;" icon="trophy">
+                    <a-button type="primary" size="large" style="rgb(243 162 41);width: 33%;" icon="trophy" @click="playGame()">
                     </a-button>
                 </a-button-group>
                 <a-tabs default-active-key="1">
@@ -163,14 +231,25 @@
                                         </span><span>{{word.word | capitalize}}</span>
 
                                     </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(word.id)"></a-icon>
+
                                     <StarButton :word.sync="word" @refresh="refresh()" />
                                 </div>
                                 <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
                             </div>
                             <div class="styles__right___4LtJ-">
-                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                                <img :src="word.image" alt="ambitious">
+                                <div class="styles__status___2gUWg">
+                                    <a-popover placement="left" trigger="click">
+                                        <template slot="content">
+                                            <div style="cursor: pointer;" @click="removeWord(word.id)">
+                                                <a-icon type="delete" style="color: red;" /> Xoá
+                                            </div>
+                                        </template>
+                                        <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
+                                    </a-popover>
+                                </div>
+                                <img v-lazy="word.image" :alt="word.word">
                             </div>
                         </div>
                         <div>
@@ -202,14 +281,25 @@
                                         </span><span>{{word.word | capitalize}}</span>
 
                                     </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(word.id)"></a-icon>
+
                                     <StarButton :word.sync="word" @refresh="refresh()" />
                                 </div>
                                 <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
                             </div>
                             <div class="styles__right___4LtJ-">
-                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                                <img :src="word.image" alt="ambitious">
+                                <div class="styles__status___2gUWg">
+                                    <a-popover placement="left" trigger="click">
+                                        <template slot="content">
+                                            <div style="cursor: pointer;" @click="removeWord(word.id)">
+                                                <a-icon type="delete" style="color: red;" /> Xoá
+                                            </div>
+                                        </template>
+                                        <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
+                                    </a-popover>
+                                </div>
+                                <img v-lazy="word.image" :alt="word.word">
                             </div>
                         </div>
                         <div>
@@ -241,14 +331,25 @@
                                         </span><span>{{word.word | capitalize}}</span>
 
                                     </div>
+                                    <a-icon style="margin-left: 5px;" type="eye" @click="showReviewModalFromWord(word.id)"></a-icon>
+
                                     <StarButton :word.sync="word" @refresh="refresh()" />
                                 </div>
                                 <div class="styles__desc___2IcIn"><span>{{word.meaning}}</span></div>
                                 <div class="styles__desc___2IcIn" v-if="word.hint">Gợi ý: <span>{{word.hint}}</span></div>
                             </div>
                             <div class="styles__right___4LtJ-">
-                                <!-- <div class="styles__status___2gUWg" style="background: rgb(172, 172, 172);"></div> -->
-                                <img :src="word.image" alt="ambitious">
+                                <div class="styles__status___2gUWg">
+                                    <a-popover placement="left" trigger="click">
+                                        <template slot="content">
+                                            <div style="cursor: pointer;" @click="removeWord(word.id)">
+                                                <a-icon type="delete" style="color: red;" /> Xoá
+                                            </div>
+                                        </template>
+                                        <a-button class="remove-word-icon" icon="setting" theme="filled"></a-button>
+                                    </a-popover>
+                                </div>
+                                <img v-lazy="word.image" :alt="word.word">
                             </div>
                         </div>
                         <div>
@@ -257,9 +358,9 @@
                 </a-tabs>
             </a-col>
         </a-row>
-        <review-modal @reload="refresh()"></review-modal>
-        <WordModal2 @refresh="refresh()"></WordModal2>
     </div>
+    <review-modal @reload="refresh()"></review-modal>
+    <WordModal2 @refresh="refresh()"></WordModal2>
 </div>
 </template>
 
@@ -277,12 +378,24 @@ export default {
         SpeakButton,
         StarButton
     },
+    watch: {
+        searchKey: {
+            immediate: true,
+            deep: true,
+            handler(newValue, oldValue) {
+                this.onSearch(newValue);
+            }
+        }
+    },
     data() {
         return {
             words: [],
+            sourceWords: [],
+            isLoading: false,
+            categoryId: '',
             favouriteWords: [],
             category: {},
-            seachKey: '',
+            searchKey: '',
             newWord: {
                 word: '',
                 image: '',
@@ -297,16 +410,54 @@ export default {
                 this.category = res;
             })
         },
+        onSearch(value) {
+                let searchKey = value.toLowerCase();
+                this.words = this.sourceWords;
+                if(searchKey) {
+                    this.words = this.words.filter((word) => {
+                        let wordContent = word.word ? word.word.toLowerCase() : '';
+                        let wordHint = word.hint ? word.hint.toLowerCase() : '';
+                        let wordMeaning = word.meaning ? word.meaning.toLowerCase() : '';
+                        return wordContent.includes(searchKey) || wordHint.includes(searchKey) || wordMeaning.includes(searchKey);
+                    });
+                } else {
+                    this.words = this.sourceWords;
+                }
+        },
+        playGame() {
+            localStorage.setItem('selectedCategoryId', this.categoryId);
+            this.$router.push({ name: 'Game' })
+        },
         getWordsByCategory(categoryId) {
+            const loading = this.$message.loading('Đang tải ...', 0);
             rf.getRequest('CategoryRequest').getWordsByCategory(categoryId).then(res => {
                 this.words = res;
+                this.sourceWords = res;
+                loading();
             })
         },
         openReviewModal() {
             this.$modal.show('review', { categoryId: this.categoryId });
         },
-        onSeach(value) {
-            alert(value);
+        showReviewModalFromWord(wordId) {
+            this.$modal.show('review', { categoryId: this.categoryId, startWordId: wordId });
+        },
+        removeWord(wordId) {
+            this.$swal({
+                icon: "error",
+                title: "Cảnh báo",
+                text: "Bạn có chắc chắn muốn xoá từ này ?",
+                buttons: true,
+                dangerMode: true,
+                buttons: ["Huỷ", "Xoá"],
+                className: "swal-delete-word"
+            }).then((value) => {
+                if (value) {
+                    rf.getRequest('WordRequest').removeWord(wordId).then(res => {
+                        this.refresh();
+                    })
+                }
+            })
         },
         createWord() {
             this.$modal.show('word2', { categoryId: this.categoryId, title: 'Thêm từ mới' });
@@ -335,7 +486,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 900px) {
     .main-content {
         display: none;
     }
@@ -354,6 +505,11 @@ export default {
         background-repeat: no-repeat;
         border: 1px solid rgba(99, 99, 99, 0.2);
     }
+}
+
+.remove-word-icon {
+    width: 1.2rem !important;
+    height: 1.5rem !important;
 }
 
 .desc-side {
@@ -516,9 +672,8 @@ export default {
 
 .styles__status___2gUWg {
     position: absolute;
-    top: .25rem;
-    right: .25rem;
-    border: 1px solid hsla(0, 0%, 100%, .8);
+    right: .1rem;
+    cursor: pointer;
     border-radius: 4px;
     width: 1rem;
     height: 1rem;

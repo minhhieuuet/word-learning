@@ -7,9 +7,28 @@ use App\Models\Word;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Models\Bucket;
+use App\Http\Services\ImageService;
+use Storage;
 
 class WordService
 {
+    protected $imageService;
+
+    public function __construct(ImageService $imageService) {
+        $this->imageService = $imageService;
+    }
+    
+    public function getAllWords($userId, $params) {
+        $bucket = Bucket::where('user_id', $userId)->first();
+        $categories = $bucket->categories()->get();
+        return $categories->map(function($category) {
+            return $category->words()->get()->map(function($word) use ($category) {
+                $word->category = $category;
+                return $word;
+            });
+        })->flatten();
+    }
+
     public function getWords($params)
     {
         $limit = array_get($params, 'limit', 10);
@@ -21,6 +40,26 @@ class WordService
         })->orderBy('created_at', 'desc')->paginate($limit);
     }
 
+    public function quickStore($userId, $params) {
+        $categories = array_get($params, 'categories');
+        $externalImage = array_get($params, 'external_image');
+        if($externalImage) {
+            $imageUrl = $this->imageService->saveImageFromUrl($externalImage);
+        } else {
+            $imageUrl = array_get($params, 'image');
+        }
+        
+        foreach($categories as $category) {
+            Word::create([
+                'category_id' => array_get($category, 'id'),
+                'word' => array_get($params, 'word'),
+                'hint' => array_get($params, 'hint'),
+                'meaning' => array_get($params, 'meaning'),
+                'image' => $imageUrl,
+                'is_important' => array_get($params, 'is_important')
+            ]);
+        }
+    }
     public function increasePriority($ids) {
         foreach($ids as $id) {
             $word = Word::find($id);
@@ -37,6 +76,9 @@ class WordService
         }
     }
 
+    public function getYoutubeVideos($word) {
+        return file_get_contents("https://api.tracau.vn/WBBcwnwQpV89/trans/$word");
+    }
 
     public function getRandomWord() {
         return Word::inRandomOrder()->limit(8)->get();;
@@ -65,13 +107,31 @@ class WordService
     }
 
     public function storeWord($params)
-    {
+    {   
+        $externalImage = array_get($params, 'external_image');
+        $categoryId = array_get($params, 'category_id');
+        $word = array_get($params, 'word');
+
+        if(Word::where(['category_id' => $categoryId, 'word' => $word])->count()) {
+            return response([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "word" => ["$word đã tồn tại trong danh mục, vui lòng chọn từ khác"]
+                ]
+            ], 422);
+        }
+
+        if($externalImage) {
+            $imageUrl = $this->imageService->saveImageFromUrl($externalImage);
+        } else {
+            $imageUrl = array_get($params, 'image');
+        }
         $word = Word::create([
-            'category_id' => array_get($params, 'category_id'),
-            'word' => array_get($params, 'word'),
+            'category_id' => $categoryId,
+            'word' => $word,
             'hint' => array_get($params, 'hint'),
             'meaning' => array_get($params, 'meaning'),
-            'image' => array_get($params, 'image'),
+            'image' => $imageUrl,
             'is_important' => array_get($params, 'is_important')
         ]);
 

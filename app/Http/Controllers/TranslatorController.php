@@ -21,4 +21,20 @@ class TranslatorController extends Controller
         echo $result['text'] . "\n";
         
     }
+
+    public function translateToEn(Request $request) {
+        $text = array_get($request, 'text') ?? '';
+        $translate = new TranslateClient([
+            'key' => env('GOOGLE_TRANSLATE_KEY')
+        ]);
+        
+        // Translate text from english to french.
+        $result = $translate->translate($text, [
+            'from' => 'vi',
+            'target' => 'en'
+        ]);
+        
+        echo $result['text'] . "\n";
+        
+    }
 }
