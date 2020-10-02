@@ -91,7 +91,7 @@ router.beforeEach((to, from, next) => {
 
     if (to.matched.some((record) => record.meta.requiresAuth === true) && window.isAdmin) {
 
-        return router.push({ path: '/admin' });
+        return router.push({ name: "AdminDashboard"});
     }
 
     if (to.matched.some((record) => record.meta.requiresAdmin === true) && !window.isAdmin) {
