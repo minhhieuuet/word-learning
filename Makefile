@@ -1,11 +1,3 @@
-ifndef u
-u:=sotatek
-endif
-
-ifndef env
-env:=dev
-endif
-
 OS:=$(shell uname)
 
 docker-start:

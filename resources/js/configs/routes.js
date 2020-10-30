@@ -122,15 +122,15 @@ export default {
             redirect: '/admin/dashboard',
             children: [{
                     path: 'dashboard',
-                    name: 'Trang chủ',
-                    component: AdminDashboard,
+                    name: 'AdminDashboard',
+                    component: AdminStudent,
                     meta: {
                         requiresAdmin: true
                     }
                 },
                 {
                     path: 'student',
-                    name: 'Sinh viên',
+                    name: 'Student',
                     component: AdminStudent,
                     meta: {
                         requiresAdmin: true
