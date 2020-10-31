@@ -16,7 +16,7 @@ docker-connect:
 	docker exec -it app bash
 
 init-app:
-	cp .env.example .env
+	# cp .env.example .env
 	composer install
 	npm install
 	php artisan key:generate
