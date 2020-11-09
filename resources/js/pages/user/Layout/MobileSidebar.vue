@@ -5,10 +5,10 @@
             <a-icon type="book" />
             <span class="nav-text">Quản lý từ</span>
         </a-menu-item>
-        <a-menu-item key="2" :class="{'ant-menu-item-selected': currentRouteName == 'Game' }">
+        <!-- <a-menu-item key="2" :class="{'ant-menu-item-selected': currentRouteName == 'Game' }">
             <a-icon type="sketch" />
             <span class="nav-text">Trò chơi</span>
-        </a-menu-item>
+        </a-menu-item> -->
         <a-menu-item key="3" :class="{'ant-menu-item-selected': currentRouteName == 'Schedule' }">
             <a-icon type="schedule" />
             <span class="nav-text">Nhắc từ</span>
@@ -17,10 +17,10 @@
             <a-icon type="shop" />
             <span class="nav-text">Cửa hàng</span>
         </a-menu-item>
-        <a-menu-item key="5" :class="{'ant-menu-item-selected': currentRouteName == 'AboutMe' }">
+        <!-- <a-menu-item key="5" :class="{'ant-menu-item-selected': currentRouteName == 'AboutMe' }">
             <a-icon type="user" />
             <span class="nav-text">Tôi</span>
-        </a-menu-item>
+        </a-menu-item> -->
     </a-menu>
 </a-drawer>
 </template>

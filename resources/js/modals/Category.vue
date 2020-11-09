@@ -60,7 +60,7 @@ export default {
             category: {
                 title: '',
                 cover: '',
-                is_public: true,
+                is_public: false,
             },
             dropzoneOptions: {
                 url: `${window.location.origin}/api/image/store`,
