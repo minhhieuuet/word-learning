@@ -9,7 +9,7 @@
 
         <div class="form">
             <md-field>
-                <label>Tên đầy đủ</label>
+                <label>Họ và tên</label>
                 <md-input v-model="full_name" autofocus></md-input>
             </md-field>
 
@@ -82,6 +82,26 @@ export default {
                 full_name: this.full_name,
                 email: this.email
             };
+            if(!this.password || !this.re_password) {
+                this.$toasted.show('Bạn chưa nhập mật khẩu', {
+                    theme: 'toasted-primary',
+                    position: 'top-center',
+                    class: 'custom-toast',
+                    icon : 'warning',
+                    duration : 1500,
+                });
+                return;
+            }
+            if(this.password != this.re_password) {
+                  this.$toasted.show('Mật khẩu không khớp', {
+                    theme: 'toasted-primary',
+                    position: 'top-center',
+                    class: 'custom-toast',
+                    icon : 'warning',
+                    duration : 1500,
+                });
+                return;
+            }
             this.register(params);
         },
         register(params) {

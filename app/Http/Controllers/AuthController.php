@@ -30,6 +30,14 @@ class AuthController extends Controller
             'full_name' => 'required|string',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string'
+        ], [
+            'name.required' => 'Tên đăng nhập là bắt buộc',
+            'name.unique' => 'Tên đăng nhập đã tồn tại',
+            'full_name.required' => 'Họ và tên là bắt buộc',
+            'email.required' => 'Email là bắt buộc',
+            'email.email' => 'Email sai định dạng',
+            'email.unique' => 'Email đã tồn tại',
+            'password.required' => 'Vui lòng nhập mật khẩu'
         ]);
         $user = new User([
             'name' => $request->name,
