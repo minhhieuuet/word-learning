@@ -17,7 +17,7 @@
                         Thêm từ
                     </a-button>
                     <a-button type="primary" size="large" style="background-color: rgb(135 106 253);" icon="eye" @click="openReviewModal()">
-                        Trình chiếu
+                        Ôn tập
                     </a-button>
                     <a-button type="primary" size="large" style="rgb(243 162 41);" icon="trophy" @click="playGame()">
                         Trò chơi

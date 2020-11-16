@@ -14,6 +14,13 @@ class CategoryService
         return Bucket::where('user_id', $userId)->first()->categories()->get();
     }
 
+    public function removeFromStore($categoryId) {
+        Category::find($categoryId)->update([
+            'is_public' => false
+        ]);
+        return 'done';
+    }
+
     public function shareCategory($userId, $categoryId)
     {
         $bucketId = Bucket::where('user_id', $userId)->first()->id;

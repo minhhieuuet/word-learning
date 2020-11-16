@@ -70,10 +70,12 @@ Route::group(['middleware' => ['auth:api', 'isAdmin'], 'prefix' => 'admin'], fun
     Route::put('student/{student}', 'StudentController@updateStudent');
     Route::delete('student/{student}', 'StudentController@deleteOneStudent');
     Route::delete('many-students', 'StudentController@deleteManyStudent');
+
+    Route::post('/category/remove-from-store/{categoryId}', 'CategoryController@removeFromStore');
 });
 
 Route::group(['middleware' => ['auth:api', 'isAdminOrSelf'], 'prefix' => 'user'], function () {
-    Route::get('/info', function () {
-        return "hihi";
-    });
+    // Route::post('/category/remove-from-store/{category}', function () {
+    //     return "hihi";
+    // });
 });

@@ -22,7 +22,7 @@
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <md-card>
           <md-card-header data-background-color="green">
-            <h4 class="title">Quản lí sinh viên</h4>
+            <h4 class="title">Quản lí người học</h4>
             <p class="category">Here is a subtitle for this table</p>
           </md-card-header>
           <md-card-content>
@@ -106,7 +106,7 @@ export default{
               return rf.getRequest('StudentRequest').removeOneStudent(studentId).then(() => {
                 this.$modal.hide('dialog');
                 this.$refs.datatable.refresh();
-                this.$toasted.show('Xóa sinh viên thành công!', {
+                this.$toasted.show('Xóa người học thành công!', {
                   theme: 'bubble',
                   position: 'top-right',
                   duration : 1500,
@@ -153,10 +153,10 @@ export default{
         });
       },
       createStudent() {
-        this.$modal.show('student', {title: 'Thêm sinh viên'});
+        this.$modal.show('student', {title: 'Thêm người học'});
       },
       editStudent(studentId) {
-        this.$modal.show('student', {title: 'Sửa thông tin sinh viên', studentId: studentId});
+        this.$modal.show('student', {title: 'Sửa thông tin người học', studentId: studentId});
       },
       listenSelectRow() {
         if (!this.$refs.datatable) {

@@ -73,6 +73,7 @@
             </div>
         </div>
         <div v-if="STEP == 3" class="end-screen">
+            <h1 :style="{color: 'white', paddingTop: '200px'}">Bạn đã thua cuộc</h1>
         </div>
 
     </div>

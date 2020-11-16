@@ -50,4 +50,8 @@ export default class CategoryRequest extends BaseModelRequest {
         return this.del(url);
     }
 
+    removeCategoryFromStore(categoryId) {
+        const url=`/admin/category/remove-from-store/${categoryId}`;
+        return this.post(url);
+    }
 }

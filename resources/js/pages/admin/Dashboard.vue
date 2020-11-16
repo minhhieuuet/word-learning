@@ -124,7 +124,7 @@
           </template>
         </stats-card>
       </div>
-      <div class="md-layout-item md-medium-size-50 md-xsmall-size-100 md-size-25">
+      <div class="md-layout-item md-medium-vze-50 md-xsmall-size-100 md-size-25">
         <stats-card data-background-color="blue">
           <template  slot="header">
             <i class="fab fa-twitter"></i>

@@ -176,7 +176,7 @@ export default {
         this.$modal.hide('student');
         this.$emit('refresh');
       });
-      this.$toasted.show('Cập nhật sinh viên thành công!', {
+      this.$toasted.show('Cập nhật người học thành công!', {
         theme: 'bubble',
         position: 'top-right',
         duration : 1500,

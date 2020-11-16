@@ -25,6 +25,9 @@ class CategoryController extends Controller
         $userId = $request->user()->id;
         return $this->categoryService->getCategories($userId);
     }
+    public function removeFromStore($categoryId) {
+        return $this->categoryService->removeFromStore($categoryId);
+    }
     public function shareCategory(Request $request, $categoryId) {
         $userId = $request->user()->id;
         return $this->categoryService->shareCategory($userId, $categoryId);
