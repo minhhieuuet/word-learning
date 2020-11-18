@@ -217,7 +217,6 @@ export default {
         },
         backToList() {
             this.$emit('backToList');
-            this.replay();
         }
     },
 
