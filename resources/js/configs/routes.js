@@ -55,7 +55,7 @@ export default {
                 },
                 {
                     path: 'store',
-                    name: 'Store',
+                    name: 'AdminStore',
                     component: AdminStore,
                     meta: {
                         requiresAdmin: true
