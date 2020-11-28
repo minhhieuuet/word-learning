@@ -4,6 +4,9 @@ export default class UserRequest extends BaseModelRequest {
   getModelName () {
     return 'users';
   }
+  updateProfile(params) {
+    return this.post('/update-profile', params);
+  }
   getStatistics() {
     return this.get('/statistics');
   }

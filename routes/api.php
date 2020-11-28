@@ -2,7 +2,6 @@
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('register', 'AuthController@register');
-
     Route::group([
         'middleware' => ['auth:api'],
     ], function () {
@@ -17,6 +16,7 @@ Route::get('/translate-to-en', 'TranslatorController@translateToEn');
 
 
 Route::group(['middleware' => 'auth:api', 'prefix' => '/'], function () {
+    Route::post('update-profile', 'AuthController@updateProfile');
     Route::get('statistics', 'StatisticController@getStatistics');
     Route::get('statistics/new-word', 'StatisticController@getNewWordStatisticsByWeek');
     Route::group(['prefix' => 'notification'], function () {
