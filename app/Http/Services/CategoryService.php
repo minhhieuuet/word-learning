@@ -25,6 +25,11 @@ class CategoryService
     {
         $bucketId = Bucket::where('user_id', $userId)->first()->id;
         $category = Category::where(['id' => $categoryId, 'bucket_id' => $bucketId])->first();
+        if(!$category->is_public) {
+            if($category->words()->count() < 10) {
+                return 'not_enough';
+            }
+        }
         $category->is_public = !$category->is_public;
         $category->save();
         return $category;

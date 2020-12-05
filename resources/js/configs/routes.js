@@ -40,7 +40,7 @@ export default {
             children: [{
                     path: 'dashboard',
                     name: 'AdminDashboard',
-                    component: AdminDashboard,
+                    component: AdminStudent,
                     meta: {
                         requiresAdmin: true
                     }

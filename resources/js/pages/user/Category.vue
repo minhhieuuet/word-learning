@@ -104,6 +104,11 @@ export default {
         },
         shareCategory(categoryId) {
             rf.getRequest('CategoryRequest').shareCategory(categoryId).then(category => {
+                console.log(category);
+                if(category == 'not_enough') {
+                    this.$message.error('Số lượng từ vựng của danh mục chưa đủ điều kiện để có thể chia sẻ');
+                    return;
+                }
                 this.refresh();
                 if(category.is_public) {
                     this.$message.success('Chia sẻ danh mục thành công');
