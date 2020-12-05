@@ -20,7 +20,9 @@ class StudentController extends Controller
     public function getStudents(Request $request){
       return $this->studentService->getStudents($request->all());
     }
-
+    public function getStudentInfo(User $student) {
+        return $this->studentService->getStudentInfo($student);
+    }
     public function getOneStudent(User $student){
       return $this->studentService->getOneStudent($student);
     }

@@ -45,6 +45,10 @@
                     <td class="text-center" v-html="item.full_name"></td>
                     <td class="text-center" v-html="item.created_at"></td>
                     <td class="text-center">
+                      <md-button class="md-just-icon md-simple md-primary" @click="showStudentInfo(item)">
+                          <md-icon>visibility</md-icon>
+                          <md-tooltip md-direction="top">Xem kết quả học tập</md-tooltip>
+                        </md-button>
                         <md-button class="md-just-icon md-simple md-primary" @click="editStudent(item.id)">
                           <md-icon>edit</md-icon>
                           <md-tooltip md-direction="top">Sửa</md-tooltip>
@@ -62,6 +66,7 @@
       </div>
       <v-dialog/>
       <StudentModal @refresh="refresh()"/>
+      <StatisticModal/>
     </div>
   </div>
 </template>
@@ -73,18 +78,21 @@ import {
 } from '@/components'
 
 import rf from '../../requests/RequestFactory';
-import StudentModal from '../../modals/Student'
+import StudentModal from '../../modals/Student';
+import StatisticModal from '../../modals/Statistic';
 
 export default{
   components: {
     OrderedTable,
     SimpleTable,
-    StudentModal
+    StudentModal,
+    StatisticModal
   },
   data () {
     return {
       searchInput: '',
-      selectedAll: false
+      selectedAll: false,
+      selectedStudent: {}
     }
   },
   methods: {
@@ -152,6 +160,10 @@ export default{
           ]
         });
       },
+      showStudentInfo(student) {
+        this.$modal.show('statistic', {title: `Thông tin người dùng ${student.full_name}`, id: student.id});
+
+      },
       createStudent() {
         this.$modal.show('student', {title: 'Thêm người học'});
       },
@@ -191,6 +203,8 @@ export default{
         this.$set(row, 'selected', this.selectedAll);
       });
     },
+  },
+  mounted () {
   }
 }
 </script>
