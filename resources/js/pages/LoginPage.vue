@@ -10,7 +10,7 @@
         <div class="form">
             <md-field>
                 <label>Tên đăng nhập</label>
-                <md-input type="text" :name="`${_uid}_name`" data-vv-validate-on="none" data-vv-as="name" v-validate="'required|max:30'" data-vv-scope="general" v-model="name" @keyup.enter="submit" autofocus></md-input>
+                <md-input type="text" :name="`${_uid}_name`" data-vv-validate-on="none" data-vv-as="name" v-validate="'required|max:30'" data-vv-scope="general" v-model="name" @keyup.enter="submit"></md-input>
 
             </md-field>
             <div v-if="errors.has(`general.${_uid}_name`)">
@@ -52,14 +52,14 @@ export default {
     name: 'LoginPage',
     data() {
         return {
-            name: '',
-            password: '',
+            name: 'user1',
+            password: '123456',
             isLoading: false,
             loading: false
         };
     },
     mounted() {
-        this.name = this.$route.query.name;
+        // this.name = this.$route.query.name;
     },
     methods: {
         redirectToRegister() {
