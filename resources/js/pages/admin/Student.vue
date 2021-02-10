@@ -22,7 +22,7 @@
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <md-card>
           <md-card-header data-background-color="green">
-            <h4 class="title">Quản lí sinh viên</h4>
+            <h4 class="title">Quản lí người học</h4>
             <p class="category">Here is a subtitle for this table</p>
           </md-card-header>
           <md-card-content>
@@ -45,6 +45,10 @@
                     <td class="text-center" v-html="item.full_name"></td>
                     <td class="text-center" v-html="item.created_at"></td>
                     <td class="text-center">
+                      <md-button class="md-just-icon md-simple md-primary" @click="showStudentInfo(item)">
+                          <md-icon>visibility</md-icon>
+                          <md-tooltip md-direction="top">Xem kết quả học tập</md-tooltip>
+                        </md-button>
                         <md-button class="md-just-icon md-simple md-primary" @click="editStudent(item.id)">
                           <md-icon>edit</md-icon>
                           <md-tooltip md-direction="top">Sửa</md-tooltip>
@@ -62,6 +66,7 @@
       </div>
       <v-dialog/>
       <StudentModal @refresh="refresh()"/>
+      <StatisticModal/>
     </div>
   </div>
 </template>
@@ -73,18 +78,21 @@ import {
 } from '@/components'
 
 import rf from '../../requests/RequestFactory';
-import StudentModal from '../../modals/Student'
+import StudentModal from '../../modals/Student';
+import StatisticModal from '../../modals/Statistic';
 
 export default{
   components: {
     OrderedTable,
     SimpleTable,
-    StudentModal
+    StudentModal,
+    StatisticModal
   },
   data () {
     return {
       searchInput: '',
-      selectedAll: false
+      selectedAll: false,
+      selectedStudent: {}
     }
   },
   methods: {
@@ -106,7 +114,7 @@ export default{
               return rf.getRequest('StudentRequest').removeOneStudent(studentId).then(() => {
                 this.$modal.hide('dialog');
                 this.$refs.datatable.refresh();
-                this.$toasted.show('Xóa sinh viên thành công!', {
+                this.$toasted.show('Xóa người học thành công!', {
                   theme: 'bubble',
                   position: 'top-right',
                   duration : 1500,
@@ -152,11 +160,15 @@ export default{
           ]
         });
       },
+      showStudentInfo(student) {
+        this.$modal.show('statistic', {title: `Thông tin người dùng ${student.full_name}`, id: student.id});
+
+      },
       createStudent() {
-        this.$modal.show('student', {title: 'Thêm sinh viên'});
+        this.$modal.show('student', {title: 'Thêm người học'});
       },
       editStudent(studentId) {
-        this.$modal.show('student', {title: 'Sửa thông tin sinh viên', studentId: studentId});
+        this.$modal.show('student', {title: 'Sửa thông tin người học', studentId: studentId});
       },
       listenSelectRow() {
         if (!this.$refs.datatable) {
@@ -191,6 +203,8 @@ export default{
         this.$set(row, 'selected', this.selectedAll);
       });
     },
+  },
+  mounted () {
   }
 }
 </script>

@@ -10,6 +10,9 @@ use Carbon\Carbon;
 class ImageService
 {
     public function storeImageToFolder($request, $folder) {
+        if(!$request->file('file')) {
+            return '';
+        }
         $image = $request->file('file');
         $fileName   = time() . '.' . $image->getClientOriginalExtension();
         $image->storeAs("public/$folder", $fileName);

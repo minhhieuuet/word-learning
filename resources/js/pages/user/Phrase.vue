@@ -11,7 +11,7 @@
                 </div>
                 <div style="text-align: center;">
                     <a-button type="primary" style="background-color: #921cb9;" icon="eye" @click="openReviewModal()">
-                        Trình chiếu
+                        Ôn tập
                     </a-button>
                     <a-button type="primary" style="background-color: #31b108;" icon="plus-circle" @click="createWord()">
                         Thêm từ

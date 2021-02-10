@@ -4,14 +4,15 @@
         <a-col span="12">
             <div class="portfoliocard">
                 <div class="coverphoto"></div>
-                <div class="profile_picture"></div>
+                <div class="profile_picture" :style="{backgroundImage: 'url('+(user.avatar ? user.avatar : '/images/default-avatar.webp')+')'}"></div>
                 <div class="left_col">
                     <div class="followers">
                         Điểm <a-icon type="trophy"></a-icon>
                         <div class="follow_count">{{user.score}}</div>
                     </div>
                     <div class="followers">
-                        Cấp độ <a-icon type="sketch" />
+                        Cấp độ
+                        <a-icon type="sketch" />
                         <div class="follow_count">
                             <a-tooltip placement="top">
                                 <template slot="title">
@@ -19,7 +20,7 @@
                                 </template>
                                 <img @click="showMedalModal()" class="rank-icon" :src="currentRank.image" />
                             </a-tooltip>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -34,11 +35,11 @@
                         </li>
                     </ul>
                     <div style="text-align: center;margin-top: 20px;">
-                        <a-button type="dashed" icon="form" size="large">
+                        <a-button type="dashed" icon="form" size="large" @click="showEditProfileModal">
                             Thay đổi thông tin
                         </a-button>
                     </div>
-                    <img src="/images/about-footer.gif"/>
+                    <img src="/images/about-footer.gif" />
                 </div>
             </div>
         </a-col>
@@ -79,6 +80,42 @@
             </a-col>
         </a-row>
     </a-modal>
+    <a-modal v-model="editProfileModalVisible" title="Sửa thông tin" width="650px" footer="">
+        <a-row>
+            <a-col :span="8">
+                <div>
+                    <img :style="{width: '200px', height: '200px'}" :src="tempImageUrl ? tempImageUrl : user.avatar" />
+                    <div class="edit-avatar-btn" @click="chooseImage">
+                        {{tempImageUrl ? 'Hủy thay đổi' : 'Đổi hình nền'}}
+                    </div>
+                    <input type="file" ref="image" @change="onImageChange" style="display: none">
+                </div>
+            </a-col>
+            <a-col :span="16" class="profile-edit">
+                <a-input class="profile-input" v-model="updatedUser.full_name" size="large" addonBefore="Tên">
+                    <a-icon slot="prefix" type="user" />
+                </a-input>
+                <a-input class="profile-input" v-model="updatedUser.email" size="large" addonBefore="Email">
+                    <a-icon slot="prefix" type="mail" />
+                </a-input>
+                <a-checkbox class="profile-input" size="large" @change="handleChangePasswordMode">
+                    Đổi mật khẩu
+                </a-checkbox>
+                <div v-show="changePasswordMode">
+                    <a-input-password v-model="updatedUser.password" :disabled="!changePasswordMode" class="profile-input" size="large" placeholder="Nhập mật khẩu mới" />
+                    <a-input-password v-model="updatedUser.re_password" :disabled="!changePasswordMode" class="profile-input" size="large" placeholder="Nhập lại mật khẩu" />
+                </div>
+                <div class="edit-profile-btn-group">
+                    <a-button type="primary" @click="submit">
+                        Lưu
+                    </a-button>
+                    <a-button type="dashed" @click="handeCloseEditProfile">
+                        Thoát
+                    </a-button>
+                </div>
+            </a-col>
+        </a-row>
+    </a-modal>
 </div>
 </template>
 
@@ -94,7 +131,12 @@ export default {
     data() {
         return {
             medalModalVisible: false,
+            editProfileModalVisible: false,
+            changePasswordMode: false,
             currentRank: {},
+            tempImage: {},
+            tempImageUrl: '',
+            editImageMode: false,
             statistics: {
                 total_word: 0,
                 total_category: 0,
@@ -111,7 +153,7 @@ export default {
                 start_score: 101,
                 end_score: 200,
                 image: '/images/rank/moon.png'
-            },{
+            }, {
                 title: 'Sao Thuỷ',
                 start_score: 201,
                 end_score: 300,
@@ -131,12 +173,12 @@ export default {
                 start_score: 501,
                 end_score: 600,
                 image: '/images/rank/jupiter.png'
-            },{
+            }, {
                 title: 'Lỗ Đen',
                 start_score: 601,
                 end_score: 700,
                 image: '/images/rank/blackHole.png'
-            },{
+            }, {
                 title: 'Mặt trời',
                 start_score: 701,
                 end_score: '',
@@ -146,30 +188,89 @@ export default {
                 email: '',
                 full_name: '',
                 score: 100
+            },
+            updatedUser: {
+                email: '',
+                full_name: '',
+                password: '',
+                re_password: '',
+                avatar: ''
             }
         }
     },
     methods: {
         showMedalModal() {
             this.medalModalVisible = true;
+        },
+        showEditProfileModal() {
+            this.editProfileModalVisible = true;
+        },
+        handleChangePasswordMode(e) {
+            this.changePasswordMode = e.target.checked;
+        },
+        handeCloseEditProfile() {
+            this.editProfileModalVisible = false;
+        },
+        onImageChange(e) {
+            const file = e.target.files[0];
+            this.tempImage = file;
+            this.tempImageUrl = URL.createObjectURL(file);
+            if (this.tempImageUrl) {
+                this.editImageMode = true;
+
+            }
+        },
+        chooseImage() {
+            if (this.tempImageUrl) {
+                this.tempImage = {};
+                this.tempImageUrl = '';
+            } else {
+                this.$refs.image.click();
+            }
+        },
+        submit() {
+            let formData = new FormData();
+            if (this.tempImageUrl) {
+                formData.append('file', this.tempImage);
+            }
+            formData.append('email', this.updatedUser.email);
+            formData.append('full_name', this.updatedUser.full_name);
+            if (this.changePasswordMode) {
+                formData.append('password', this.updatedUser.password);
+                formData.append('password_confirmation', this.updatedUser.re_password);
+            }
+            rf.getRequest('UserRequest').updateProfile(formData).then(res => {
+                this.editProfileModalVisible = false;
+                this.getUserInfo();
+                this.changePasswordMode = false;
+                this.$notification.success({
+                    message: 'Thành công',
+                    description:
+                    'Thông tin của bạn đã được cập nhật thành công.',
+                });
+            })
+        },
+        getUserInfo() {
+            rf.getRequest('UserRequest').getCurrentUser().then(res => {
+                this.user = res;
+                this.updatedUser.email = res.email;
+                this.updatedUser.full_name = res.full_name;
+                for (let rank of this.ranks) {
+                    if (this.user.score >= rank.start_score && this.user.score <= rank.end_score) {
+                        this.currentRank = rank;
+                        break;
+                    } else {
+                        this.currentRank = this.ranks.slice(-1).pop();
+                    }
+                }
+            });
         }
     },
     mounted() {
         rf.getRequest('UserRequest').getStatistics().then(res => {
-            console.log(res);
             this.statistics = res;
         });
-        rf.getRequest('UserRequest').getCurrentUser().then(res => {
-            this.user = res;
-            for(let rank of this.ranks) {
-                if(this.user.score >= rank.start_score && this.user.score <= rank.end_score) {
-                    this.currentRank = rank;
-                    break;
-                } else {
-                    this.currentRank = this.ranks.slice(-1).pop();
-                }
-            }
-        });
+        this.getUserInfo();
     },
 }
 </script>
@@ -187,18 +288,39 @@ export default {
 </style>
 <style lang="scss" scoped>
 @-webkit-keyframes rotation {
-		from {
-				-webkit-transform: rotate(0deg);
-		}
-		to {
-				-webkit-transform: rotate(359deg);
-		}
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(359deg);
+    }
 }
+
+.profile-edit {
+    .edit-profile-btn-group {
+        text-align: right;
+    }
+}
+
+.profile-input {
+    padding: 10px;
+}
+
 .rank-icon {
     cursor: pointer;
     width: 50px;
     -webkit-animation: rotation 12s infinite linear;
 }
+
+.edit-avatar-btn {
+    text-align: center;
+    background-color: rgb(81 76 76 / 63%);
+    color: white;
+    padding: 3px;
+    cursor: pointer;
+}
+
 .rank {
     margin: 10px;
     padding: 10px;
@@ -302,7 +424,7 @@ div.portfoliocard div.profile_picture {
     top: 65px;
     left: 40px;
     border-radius: 100%;
-    background-image: url('https://www.iconfinder.com/data/icons/professions-2-2/151/51-512.png');
+    // background-image: url('https://www.iconfinder.com/data/icons/professions-2-2/151/51-512.png');
     background-size: 100% 100%;
     padding: 7px;
     border: 4px solid rgba(255, 255, 255, 1)

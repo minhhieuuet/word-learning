@@ -4,6 +4,8 @@ import Register from '@/pages/RegisterPage.vue';
 import AdminDashboardLayout from '@/pages/admin/Layout/DashboardLayout.vue'
 import AdminDashboard from '@/pages/admin/Dashboard.vue';
 import AdminStudent from '@/pages/admin/Student.vue';
+import AdminStore from '@/pages/admin/Store.vue';
+
 
 import UserDashboardLayout from '@/pages/user/Layout/DashboardLayout.vue'
 import WordList from '@/pages/user/WordList.vue';
@@ -30,6 +32,36 @@ export default {
             path: '/register',
             name: 'Register',
             component: Register
+        },
+        {
+            path: '/admin',
+            component: AdminDashboardLayout,
+            redirect: '/admin/dashboard',
+            children: [{
+                    path: 'dashboard',
+                    name: 'AdminDashboard',
+                    component: AdminStudent,
+                    meta: {
+                        requiresAdmin: true
+                    }
+                },
+                {
+                    path: 'student',
+                    name: 'Student',
+                    component: AdminStudent,
+                    meta: {
+                        requiresAdmin: true
+                    }
+                },
+                {
+                    path: 'store',
+                    name: 'AdminStore',
+                    component: AdminStore,
+                    meta: {
+                        requiresAdmin: true
+                    }
+                },
+            ]
         },
         {
             path: '/',
@@ -114,28 +146,6 @@ export default {
                         requiresAuth: true
                     }
                 }
-            ]
-        },
-        {
-            path: '/admin',
-            component: AdminDashboardLayout,
-            redirect: '/admin/dashboard',
-            children: [{
-                    path: 'dashboard',
-                    name: 'AdminDashboard',
-                    component: AdminStudent,
-                    meta: {
-                        requiresAdmin: true
-                    }
-                },
-                {
-                    path: 'student',
-                    name: 'Student',
-                    component: AdminStudent,
-                    meta: {
-                        requiresAdmin: true
-                    }
-                },
             ]
         }
     ]

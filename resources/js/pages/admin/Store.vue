@@ -1,76 +1,59 @@
 <template>
 <div>
-    <a-page-header style="border: 1px solid rgb(235, 237, 240)" @back="() => null">
-        <template slot="extra">
-            <a-button icon="plus-circle" size="large" type="primary" @click="showQuickWordModal">
-                Thêm từ nhanh
-            </a-button>
-        </template>
-        <template slot="title">
-                Danh mục từ
-                <a-button id="show-list" type="dashed" icon="ordered-list" @click="handleShowList">
-                    Danh sách
-                </a-button>
-        </template>
-    </a-page-header>
     <div class="category inline-flex">
-        <div class="styles__container___3mCLH effectScale inline-flex" @click="createCategory()">
-            <div class="styles__icon___25pzZ"><svg class="sc-bdVaJa fUuvxv" fill="#fff" width="2.2rem" height="2.2rem" viewBox="0 0 1024 1024" rotate="0">
-                    <path d="M832 554.666h-277.334v277.334h-85.332v-277.334h-277.334v-85.332h277.334v-277.334h85.332v277.334h277.334v85.332z"></path>
-                </svg></div>
-            <div class="styles__text___NQdFz">Danh mục mới</div>
-        </div>
-
-        <div class="styles__container___16een inline-flex" @click="goToPhrase()">
-            <div class="styles__overLay___2RQuM" style="background-image: url('images/book.svg');">
-                <div class="styles__conName___Jiq61">
-                    <div class="styles__viewName___3mvLd">Cụm từ</div>
-                </div>
-                <div class="styles__txtNum___3JT46">{{categories[0] ? categories[0].total_word : '' }} cụm từ</div>
-            </div>
-        </div>
-
-        <div v-for="(category, index) in categories" :key="category.id" v-if="category.is_visible" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
-            <div v-show="category.is_public" class="shop-icon">
-                <a-tooltip placement="top" title="Đang được chia sẻ">
-                    <a-icon type="share-alt"></a-icon>
-                </a-tooltip>
+        <div v-for="(category, index) in categories" :key="category.id" :class="{'styles__container___2c6eo': true, 'inline-flex': true, 'last-category': (categories.length % 2 == 1 && index == categories.length - 1)}">
+            <div class="download-icon">
+                <a-icon type="download"></a-icon> {{category.download_time}}
             </div>
             <div class="setting-btn">
-                <a-popover placement="topLeft" trigger="click">
+                <a-popover placement="topLeft" trigger="hover">
                     <template slot="content">
-                        <div class="category-btn share-btn" style="cursor: pointer;" @click="shareCategory(category.id)">
-                            <template v-if="!category.is_public">
-                                <a-icon type="share-alt" style="color: #63afff;"/> Chia sẻ
-                            </template>
-                             <template v-else>
-                                <a-icon type="share-alt" style="color: red;"/> Tắt chia sẻ
-                            </template>
-                        </div>
-                        <div class="category-btn" style="cursor: pointer;" @click="editCategory(category.id)">
-                            <a-icon type="edit" style="color: blue;" /> Sửa
-                        </div>
-                        <div class="category-btn" style="cursor: pointer;" @click="removeCategory(category.id)">
-                            <a-icon type="delete" style="color: red;" /> Xoá
+                        <div class="category-btn share-btn" style="cursor: pointer;" @click="removeFromStore(category.id)">
+                            <a-icon type="delete" style="color: #ff1818;" /> Gỡ
                         </div>
 
                     </template>
                     <a-button icon="setting"></a-button>
                 </a-popover>
             </div>
-            <div :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" :class="{styles__overLay___1WcJB : true}" @click="goToCategory(category.slug)">
-
+            <div @click="showReviewCategory(category)" :style="{ backgroundImage: 'url(' + (category.cover ? category.cover : 'images/default-cover.jpg')  + ')' }" :class="{styles__overLay___1WcJB : true}">
                 <div class="styles__conName___2JHZN">
                     <div class="styles__viewName___2PQg6">{{category.title}}</div>
                 </div>
                 <!-- <div class="styles__txtDate___1BKAV">{{category.created_at}}</div> -->
                 <div class="styles__txtNum___39eD4">{{category ? category.total_word : ''}} từ</div>
+                <div class="author">
+                     Tạo bởi: <b class="bold">{{category.author}}</b>
+                </div>
             </div>
         </div>
     </div>
     <category-model @refresh="refresh()"></category-model>
+    <a-modal v-model="isShowReviewCategory" :title="`Danh mục: ${reviewCategory.title}`" width="400px" closable="true" footer=''>
+        <div>
+            <p>Người tạo:<b style="color: blue;font-weight: bold;"> {{reviewCategory.author}}</b></p>
+            <p>
+                <a-icon type="info-circle"></a-icon>
+                <i>Vui lòng tải về để xem bản đầy đủ</i>
+            </p>
+        </div>
+        <md-table v-if="reviewCategory.words ? reviewCategory.words.length : '0'">
+            <!-- <md-table-row>
+                <md-table-head>Từ</md-table-head>
+                <md-table-head>Nghĩa</md-table-head>
+                <md-table-head>Gợi ý</md-table-head>
+            </md-table-row> -->
+            <md-table-row v-for="word in reviewCategory.words" :key="word.id">
+                <md-table-cell>{{word.word}}</md-table-cell>
+                <md-table-cell>{{word.meaning}}</md-table-cell>
+                <md-table-cell class="hint">{{word.hint}}</md-table-cell>
+            </md-table-row>
+        </md-table>
+        <div v-else>
+            <a-empty description="Danh mục rỗng" />
+        </div>
+    </a-modal>
     <QuickWordModel />
-    <SummaryModal :showSummary="isShowSummary" @close="isShowSummary = false"/>
 </div>
 </template>
 
@@ -78,50 +61,49 @@
 import rf from './../../requests/RequestFactory';
 import CategoryModel from '../../modals/Category';
 import QuickWordModel from '../../modals/QuickWord';
-import SummaryModal from '../../modals/Summary';
 
 export default {
     components: {
         CategoryModel,
-        QuickWordModel,
-        SummaryModal
+        QuickWordModel
     },
     data() {
         return {
             categories: [],
             params: {},
-            isShowSummary: false
+            searchKey: '',
+            isShowReviewCategory: false,
+            reviewCategory: {}
         }
     },
     methods: {
-        handleShowList() {
-            this.isShowSummary = true;
-        },
-        getCategories(params) {
-            rf.getRequest('CategoryRequest').getCategories().then(res => {
-                this.categories = res;
+        getPublicCategories(params) {
+            rf.getRequest('CategoryRequest').getPublicCategories(params).then(res => {
+                this.categories = Object.values(res);
             })
         },
-        shareCategory(categoryId) {
-            rf.getRequest('CategoryRequest').shareCategory(categoryId).then(category => {
-                console.log(category);
-                if(category == 'not_enough') {
-                    this.$message.error('Số lượng từ vựng của danh mục chưa đủ điều kiện để có thể chia sẻ');
-                    return;
-                }
-                this.refresh();
-                if(category.is_public) {
-                    this.$message.success('Chia sẻ danh mục thành công');
-                } else {
-                    this.$message.success('Danh mục đã được gỡ bỏ trên của hàng');
-                }
-            })
+        showReviewCategory(category) {
+            this.reviewCategory = category;
+            rf.getRequest('CategoryRequest').getWordsByCategory(category.id).then(words => {
+                this.isShowReviewCategory = true;
+                this.reviewCategory.words = words.slice(0, 5);
+            });
         },
-        createCategory() {
-            this.$modal.show('category', { title: 'Thêm danh mục mới' });
+        onSearch() {
+            this.getPublicCategories({ search: this.searchKey });
         },
-        editCategory(categoryId) {
-            this.$modal.show('category', { title: 'Sửa danh mục', categoryId: categoryId });
+
+        removeFromStore(categoryId) {
+            console.log(categoryId);
+            const loading = this.$message.loading('Đang tải về, vui lòng đợi ...', 0);
+            rf.getRequest('CategoryRequest').removeCategoryFromStore(categoryId).then(res => {
+                loading();
+                this.$message.success('Gỡ danh mục thành công');
+                this.getPublicCategories();
+            }).catch(() => {
+                loading();
+                this.$message.error('Đã có lỗi xảy ra, vui lòng thử lại');
+            });
         },
         goToPhrase() {
             this.$router.push({ name: 'Phrase' })
@@ -130,7 +112,7 @@ export default {
             this.$router.push(`/category/${slug}`);
         },
         refresh() {
-            this.getCategories();
+            this.getPublicCategories();
         },
         showQuickWordModal() {
             this.$modal.show('quickword', { title: 'Thêm từ nhanh' });
@@ -148,26 +130,41 @@ export default {
                 if (value) {
                     rf.getRequest('CategoryRequest').removeCategory(categoryId).then(res => {
                         this.refresh();
-                        this.$message.success('Xoá danh mục thành công');
                     });
                 }
             })
         }
     },
     mounted() {
-        this.getCategories();
+        this.getPublicCategories();
     }
 
 }
 </script>
 
+<style lang="scss">
+.hint {
+    .md-table-cell-container {
+        text-align: inherit !important;
+    }
+}
+</style>
 <style lang="scss" scoped>
 @media screen and (max-width: 900px) {
-    #show-list {
-        display: none;
-    }
     .category {
         height: 100% !important;
+    }
+
+    .author {
+        color: white;
+        background-color: #3f85ef;
+        position: absolute;
+        padding: 5px;
+        bottom: 0;
+
+        .bold {
+            font-weight: bold;
+        }
     }
 
     .styles__container___16een,
@@ -194,6 +191,27 @@ export default {
         height: 6rem !important;
         margin: 0px auto !important;
         border-radius: 0% !important;
+    }
+}
+
+.download-icon {
+    position: absolute;
+    background-color: #067fe8;
+    color: white;
+    font-weight: bold;
+    padding-right: 2px;
+    border-radius: 0% 0% 20% 0%;
+}
+
+.author {
+    color: white;
+    background-color: #3f85ef;
+    position: absolute;
+    padding: 5px;
+    bottom: 0;
+
+    .bold {
+        font-weight: bold;
     }
 }
 
@@ -452,7 +470,7 @@ export default {
 }
 
 .styles__viewName___2PQg6 {
-    padding: 0 .5rem 0 1.2rem;
+    padding: 0.5rem .5rem 0 1.2rem;
     font-size: 1.5rem;
     font-weight: 600;
     font-style: normal;

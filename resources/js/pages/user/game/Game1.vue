@@ -73,6 +73,8 @@
             </div>
         </div>
         <div v-if="STEP == 3" class="end-screen">
+            <h1 :style="{color: 'white', paddingTop: '200px'}">Bạn đã thua cuộc</h1>
+            <a-button icon="home" type="dashed" size="large" @click="backToList()">Thoát</a-button>
         </div>
 
     </div>
@@ -213,10 +215,13 @@ export default {
                 document.getElementById(`answer-${this.indexToWord(i)}`).classList.remove('correct-answer');
             }
         },
+        backToList() {
+            this.$emit('backToList');
+        }
     },
 
     mounted() {
-       this.getData();
+        this.getData();
     }
 }
 </script>
