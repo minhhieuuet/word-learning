@@ -141,7 +141,7 @@ export default {
         },
         chooseImage(image) {
             this.$refs.myVueDropzone.removeAllFiles();
-            this.chosedImage = image.url;
+            this.chosedImage = image;
         },
         afterComplete(file, response) {
             this.chosedImage = '';

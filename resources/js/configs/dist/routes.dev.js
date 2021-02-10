@@ -86,7 +86,7 @@ var _default = {
       }
     }, {
       path: 'student',
-      name: 'Sinh viên',
+      name: 'người học',
       component: _Student["default"],
       meta: {
         requiresAdmin: true

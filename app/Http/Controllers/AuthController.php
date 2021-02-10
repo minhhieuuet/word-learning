@@ -6,13 +6,47 @@ use Carbon\Carbon;
 use App\User;
 use App\Models\Bucket;
 use App\Http\Services\BucketService;
+use App\Http\Services\ImageService;
 
 class AuthController extends Controller
 {
-    protected $bucketService;
+    protected $bucketService, $imageService;
     
-    public function __construct(BucketService $bucketService) {
+    public function __construct(BucketService $bucketService, ImageService $imageService) {
         $this->bucketService = $bucketService;
+        $this->imageService = $imageService;
+    }
+    public function updateProfile(Request $request) {
+        $user = $request->user();
+        $request->validate([
+            'full_name' => 'required|string',
+            'email' => "required|string|email|unique:users,email,$user->id",
+            'password' => 'string|min:6|confirmed',
+        ], [
+            'full_name.required' => 'Họ và tên là bắt buộc',
+            'email.required' => 'Email là bắt buộc',
+            'email.email' => 'Email sai định dạng',
+            'password.min' => 'Mật khẩu phải lớn hơn 6 kí tự',
+            'password.confirmed' => 'Mật khẩu không khớp',
+            'password.string' => 'Mật khẩu phải là một chuỗi kí tự'
+        ]);
+
+        $avatar = $this->imageService->storeImageToFolder($request, 'avatar');
+        if($request->has('password')) {
+            User::find($user->id)->update([
+                'full_name' => array_get($request, 'full_name'),
+                'email' => array_get($request, 'email'),
+                'password' => bcrypt(array_get($request, 'password')),
+                'avatar' => !!$avatar ? $avatar : $user->avatar
+            ]);
+        } else {
+            User::find($user->id)->update([
+                'full_name' => array_get($request, 'full_name'),
+                'email' => array_get($request, 'email'),
+                'avatar' => !!$avatar ? $avatar : $user->avatar
+            ]);
+        }
+        return User::find($user->id);
     }
     /**
      * Create user

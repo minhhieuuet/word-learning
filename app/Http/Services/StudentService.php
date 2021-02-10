@@ -5,7 +5,8 @@ namespace App\Http\Services;
 use App\User;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-
+use App\Models\Bucket;
+use App\Models\Category;
 class StudentService
 {
     public function getStudents($params)
@@ -31,7 +32,40 @@ class StudentService
 
         return $this->getOneStudent($student);
     }
+    public function getStudentInfo($student) {
+        $userId = $student->id;
+        $bucketId = Bucket::where('user_id', $userId)->first()->id;
 
+        $totalCategory = Category::where('bucket_id', $bucketId)->count();
+        $totalSharingCategory = Category::where(['bucket_id' => $bucketId, 'is_public' => 1])->count();
+        $totalClone = Category::where(['bucket_id' => $bucketId])->sum('download_time');
+        
+        $words = Category::where(['bucket_id' => $bucketId])->get()->map(function($category) {
+            return $category->words()->get();
+        })->flatten();
+        $totalWord = $words->count();
+        $totalDoneWord = $words->filter(function($word) {
+            return $word->priority <= -5;
+        })->count();
+        $totalLearningWord = $words->filter(function($word) {
+            return $word->priority > -5 && $word->priority < 0;
+        })->count();
+        $totalNewWord = $words->filter(function($word) {
+            return $word->priority >= 0;
+        })->count();
+
+        return [
+            'total_word' => $totalWord,
+            'total_category' => $totalCategory,
+            'total_sharing_category' => $totalSharingCategory,
+            'download_time' => $totalClone,
+            'word_count' => [
+                'done' => $totalDoneWord,
+                'learning' => $totalLearningWord,
+                'new' => $totalNewWord
+            ] 
+        ];
+    }
     public function updateStudent(User $student, $params)
     {
         $student->update([
