@@ -52,7 +52,7 @@ export default {
     name: 'LoginPage',
     data() {
         return {
-            name: 'user1',
+            name: 'minhhieuuet',
             password: '123456',
             isLoading: false,
             loading: false
