@@ -5,7 +5,6 @@
 /pulic/.DS_Store
 /storage/*.key
 /vendor
-/public/js/app.js
 .env
 .phpunit.result.cache
 Homestead.json
